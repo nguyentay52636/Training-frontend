@@ -1,7 +1,20 @@
-import React from 'react'
+import { PropsWithChildren, useEffect } from 'react';
+import SidebarNavigate from '../components/SidebarNavigate';
+import { Outlet } from 'react-router-dom';
+import { Header } from '@/components/Header';
 
-export default function AdminPages() {
+export default function AdminPages({ children }: PropsWithChildren) {
+  useEffect(() => {
+    console.log('admin page');
+  });
+
   return (
-    <div>AdminPages</div>
-  )
+    <div>
+      <Header />
+      <div className=' flex'>
+        <SidebarNavigate children={children} />
+        {children || <Outlet />}
+      </div>
+    </div>
+  );
 }
