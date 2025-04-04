@@ -1,16 +1,12 @@
-import { Footer } from '@/components/Footer';
-import { Header } from '@/components/Header';
+
+import SidebarNavigate from '@/modules/Admin/components/SidebarNavigate';
 import { PropsWithChildren } from 'react';
-import { Outlet } from 'react-router-dom';
+
 
 export default function MainLayout({ children }: PropsWithChildren) {
   return (
     <div>
-      {/* Header */}
-      <Header />
-      {children || <Outlet />}
-      {/* Footer */}
-      <Footer />
+    <SidebarNavigate children={children}/>
     </div>
   );
 }
