@@ -4,7 +4,7 @@ import { MainLayout } from '@/components/layouts';
 import AdminPages from './modules/Admin/pages/AdminPages';
 import ManagerPointPage from './modules/Admin/pages/ManagerPointPage';
 import ManagerAccountPage from './modules/Admin/pages/ManagerAccountPage';
-import { LoginForm } from './modules/Auth/components';
+import LoginPage from './modules/Auth/pages/LoginPage';
 
 function App() {
   const router = createBrowserRouter([
@@ -12,15 +12,21 @@ function App() {
 
     {
       path: '/',
-      element: <MainLayout />,
+      element: <LoginPage />,
       children: [
         {
           index: true,
-          element: <LoginForm />,
+          element: <MainLayout />,
         },
       ],
-    },
 
+
+    },
+    {
+      path: '/dashboard',
+      element: <AdminPages />
+
+    },
     {
       path: '/admin',
       element: <AdminPages />, // yeu cau dang nahp
