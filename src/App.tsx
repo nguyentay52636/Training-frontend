@@ -5,6 +5,7 @@ import AdminPages from './modules/Admin/pages/AdminPages';
 import ManagerPointPage from './modules/Admin/pages/ManagerPointPage';
 import ManagerAccountPage from './modules/Admin/pages/ManagerAccountPage';
 import LoginPage from './modules/Auth/pages/LoginPage';
+import { AccountManagement } from './modules/Auth/components/AccountManagement';
 
 function App() {
   const router = createBrowserRouter([
@@ -29,7 +30,7 @@ function App() {
     },
     {
       path: '/admin',
-      element: <AdminPages />, // yeu cau dang nahp
+      element: <AdminPages />,
       children: [
         {
           path: 'point',
@@ -37,7 +38,7 @@ function App() {
         },
         {
           path: 'account',
-          element: <ManagerAccountPage />,
+          element: <AccountManagement />,
         },
       ],
     },

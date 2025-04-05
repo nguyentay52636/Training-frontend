@@ -1,14 +1,25 @@
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/app-sidebar';
+import { Header } from '../Header';
+import { AccountManagement } from '@/modules/Auth/components/AccountManagement';
 
 export default function SiderBarNavigate({ children }: { children: React.ReactNode }) {
   return (
+
     <SidebarProvider>
-      <AppSidebar />
+      <div className="relative">
+        <Header />
+        <AppSidebar />
+
+
+      </div>
       <main>
-        <SidebarTrigger />
+        <div className="relative cursor-pointer">
+          <SidebarTrigger />
+        </div>
         {children}
       </main>
     </SidebarProvider>
+
   );
 }
