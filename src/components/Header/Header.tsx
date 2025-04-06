@@ -2,7 +2,6 @@ import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuL
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SVGProps } from "react";
-import { AccountManagement } from "@/modules/Auth/components/AccountManagement";
 
 
 export default function Header() {
@@ -70,16 +69,14 @@ export default function Header() {
           <Button
             variant="outline"
             size="icon"
-            className="rounded-full border-gray-300 bg-white hover:bg-blue-700 hover:border-blue-700 transition-colors duration-200"
+            className="rounded-full border-gray-300 bg-white  hover:border-blue-700 transition-colors duration-200 cursor-pointer"
           >
             <UserIcon className="h-5 w-5 text-black" />
             <span className="sr-only">Tài khoản người dùng</span>
           </Button>
         </div>
       </header>
-      <main className="">
-        <AccountManagement />
-      </main>
+
     </div>
   );
 }

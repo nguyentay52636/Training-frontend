@@ -17,10 +17,10 @@ export function LoginForm({ ...props }: React.ComponentProps<'div'>) {
 
   return (
     <div
-      className={cn('min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-gray-100')}
+      className={cn('min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-gray-100 bg-[url("https://thongtindaotao.sgu.edu.vn/assets/images/AQ1.png)]')}
       {...props}
     >
-      <Card className="w-full max-w-5xl overflow-hidden rounded-2xl shadow-lg border border-blue-100">
+      <Card className="w-full max-w-5xl overflow-hidden rounded-2xl shadow-lg border border-blue-100 py-0">
         <CardContent className="grid p-0 md:grid-cols-2">
 
           <form onSubmit={handleSubmit(handleLogin)} className="p-8 bg-white">

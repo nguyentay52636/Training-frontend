@@ -1,124 +1,153 @@
-import * as React from "react"
+import * as React from "react";
 import {
-
   BookOpen,
-  Bot,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react"
+  Users,
+  FileText,
+  BarChart,
+  Settings,
+  Home,
+  User,
+  GraduationCap,
+} from "lucide-react";
 
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
+import { NavMain } from "@/components/nav-main";
+import { NavProjects } from "@/components/nav-projects";
+import { NavUser } from "@/components/nav-user";
+import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
-// This is sample data.
+
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    name: "Admin SGU",
+    email: "admin@sgu.edu.vn",
+    avatar: "/avatars/admin.jpg",
   },
   teams: [
     {
-      name: "Đại học sài gòn",
-      logo: GalleryVerticalEnd,
+      name: "Đại học Sài Gòn",
+      logo: GraduationCap,
       plan: "Enterprise",
-    }
+    },
   ],
   navMain: [
     {
-      title: "Playground",
+      title: "Quản lý sinh viên",
       url: "#",
-      icon: SquareTerminal,
+      icon: Users,
       isActive: true,
       items: [
         {
-          title: "History",
+          title: "Danh sách sinh viên",
           url: "#",
         },
         {
-          title: "Starred",
+          title: "Thêm sinh viên",
           url: "#",
         },
         {
-          title: "Settings",
+          title: "Hồ sơ sinh viên",
           url: "#",
         },
       ],
     },
     {
-      title: "Models",
+      title: "Quản lý giảng viên",
       url: "#",
-      icon: Bot,
+      icon: User,
       items: [
         {
-          title: "Genesis",
+          title: "Danh sách giảng viên",
           url: "#",
         },
         {
-          title: "Explorer",
+          title: "Thêm giảng viên",
           url: "#",
         },
         {
-          title: "Quantum",
+          title: "Hồ sơ giảng viên",
           url: "#",
         },
       ],
     },
     {
-      title: "Documentation",
+      title: "Quản lý điểm",
+      url: "#",
+      icon: FileText,
+      items: [
+        {
+          title: "Nhập điểm",
+          url: "#",
+        },
+        {
+          title: "Xem điểm",
+          url: "#",
+        },
+        {
+          title: "Thống kê điểm",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Thống kê",
+      url: "#",
+      icon: BarChart,
+      items: [
+        {
+          title: "Thống kê sinh viên",
+          url: "#",
+        },
+        {
+          title: "Thống kê giảng viên",
+          url: "#",
+        },
+        {
+          title: "Thống kê học tập",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Tài liệu",
       url: "#",
       icon: BookOpen,
       items: [
         {
-          title: "Introduction",
+          title: "Hướng dẫn sử dụng",
           url: "#",
         },
         {
-          title: "Get Started",
+          title: "Tài liệu tham khảo",
           url: "#",
         },
         {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
+          title: "Câu hỏi thường gặp",
           url: "#",
         },
       ],
     },
     {
-      title: "Settings",
+      title: "Cài đặt",
       url: "#",
-      icon: Settings2,
+      icon: Settings,
       items: [
         {
-          title: "General",
+          title: "Tài khoản",
           url: "#",
         },
         {
-          title: "Team",
+          title: "Hệ thống",
           url: "#",
         },
         {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
+          title: "Thông báo",
           url: "#",
         },
       ],
@@ -128,31 +157,34 @@ const data = {
     {
       name: "Trang chủ",
       url: "#",
-      icon: Frame,
+      icon: Home,
     },
     {
       name: "Quản lý điểm",
       url: "#",
-      icon: PieChart,
+      icon: FileText,
     },
     {
       name: "Quản lý giảng viên",
       url: "#",
-      icon: Map,
+      icon: User,
     },
     {
       name: "Quản lý tài khoản",
       url: "#",
-      icon: Map,
+      icon: Settings,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar className="mt-[8rem] fixed font-bold bg-red-300! " collapsible="icon" {...props}>
-
-      <SidebarHeader>
+    <Sidebar
+      className="mt-[4rem] fixed font-bold  border-r shadow-md z-0"
+      collapsible="icon"
+      {...props}
+    >
+      <SidebarHeader className=" text-white py-3 px-4">
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
@@ -164,5 +196,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

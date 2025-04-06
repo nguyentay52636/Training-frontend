@@ -46,7 +46,6 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 
-// Định nghĩa kiểu dữ liệu cho giảng viên
 export type GiangVien = {
     maGiangVien: string;
     hoTenGV: string;
@@ -225,7 +224,6 @@ export function AccountManagement() {
                 </div>
             </div>
 
-            {/* Thanh tìm kiếm và nút thêm */}
             <div className="flex items-center justify-between py-6 bg-white rounded-xl shadow-sm px-6 mb-6">
                 <div className="relative w-full max-w-md">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />

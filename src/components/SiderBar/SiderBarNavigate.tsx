@@ -1,7 +1,6 @@
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/app-sidebar';
 import { Header } from '../Header';
-import { AccountManagement } from '@/modules/Auth/components/AccountManagement';
 
 export default function SiderBarNavigate({ children }: { children: React.ReactNode }) {
   return (
