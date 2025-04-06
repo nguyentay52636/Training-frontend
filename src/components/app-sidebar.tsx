@@ -8,6 +8,7 @@ import {
   Home,
   User,
   GraduationCap,
+  House,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -37,26 +38,7 @@ const data = {
     },
   ],
   navMain: [
-    {
-      title: "Quản lý sinh viên",
-      url: "#",
-      icon: Users,
-      isActive: true,
-      items: [
-        {
-          title: "Danh sách sinh viên",
-          url: "#",
-        },
-        {
-          title: "Thêm sinh viên",
-          url: "#",
-        },
-        {
-          title: "Hồ sơ sinh viên",
-          url: "#",
-        },
-      ],
-    },
+
     {
       title: "Quản lý giảng viên",
       url: "#",
@@ -184,7 +166,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       collapsible="icon"
       {...props}
     >
-      <SidebarHeader className=" text-white py-3 px-4">
+      <SidebarHeader className=" text-black py-3">
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
