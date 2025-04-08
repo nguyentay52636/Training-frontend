@@ -162,7 +162,7 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar
-      className="mt-[8rem] fixed font-bold  border-r shadow-md z-1"
+      className=" fixed font-bold  border-r shadow-md z-1"
       collapsible="icon"
       {...props}
     >

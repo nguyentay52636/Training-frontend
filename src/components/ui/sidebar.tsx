@@ -246,12 +246,12 @@ function SidebarTrigger({
   const { toggleSidebar } = useSidebar();
 
   return (
-    <div className="absolute top-31 right-0 z-10 text">
+    <div className="z-10">
       <Button
         data-sidebar="trigger"
         data-slot="sidebar-trigger"
         size="icon"
-        className={cn("size-12 text-white cursor-pointer", className)}
+        className={cn("size-14 text-white cursor-pointer", className)}
         onClick={(event) => {
           onClick?.(event);
           toggleSidebar();
@@ -322,7 +322,7 @@ function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="sidebar-header"
       data-sidebar="header"
-      className="mt-[2.8rem]"
+      className=""
       {...props}
     >
     </div>

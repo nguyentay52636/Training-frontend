@@ -3,14 +3,23 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SVGProps } from "react";
 
+interface HeaderProps {
+  sidebarOpen: boolean; // Truyền trạng thái sidebar vào header
+}
 
-export default function Header() {
+export default function Header({ sidebarOpen }: HeaderProps) {
   return (
     <div className="flex flex-col">
-      <header className="bg-gradient-to-r from-blue-200 to-indigo-700 text-white py-3 px-6 flex items-center justify-between shadow-lg fixed w-full z-10">
+      <header
+        className={`bg-gradient-to-r from-blue-200 to-indigo-700 text-white py-3 px-6 flex items-center justify-between shadow-lg fixed top-0 z-10 transition-all duration-300`}
+        style={{
+          width: `calc(100vw - ${sidebarOpen ? '256px' : '64px'})`, // Điều chỉnh chiều rộng dựa trên sidebar
+          left: sidebarOpen ? '256px' : '64px' // Điều chỉnh vị trí bên trái dựa trên sidebar
+        }}
+      >
         {/* Logo và tiêu đề */}
         <div className="flex items-center gap-3">
-          <div className="w-[100px] ">
+          <div className="w-[100px]">
             <img src="/public/sgu-logo.jpg" alt="SGU Logo" className="object-contain rounded-full" />
           </div>
           <span className="text-xl font-semibold tracking-wide">
@@ -59,7 +68,7 @@ export default function Header() {
         {/* Search và User Button */}
         <div className="flex items-center gap-4">
           <form className="relative">
-            <SearchIcon className="absolute left-3 top-1/5  text-gray-400" />
+            <SearchIcon className="absolute left-3 top-1/5 text-gray-400" />
             <Input
               type="search"
               placeholder="Tìm kiếm sinh viên, khóa học..."
@@ -69,18 +78,18 @@ export default function Header() {
           <Button
             variant="outline"
             size="icon"
-            className="rounded-full border-gray-300 bg-white  hover:border-blue-700 transition-colors duration-200 cursor-pointer"
+            className="rounded-full border-gray-300 bg-white hover:border-blue-700 transition-colors duration-200 cursor-pointer"
           >
             <UserIcon className="h-5 w-5 text-black" />
             <span className="sr-only">Tài khoản người dùng</span>
           </Button>
         </div>
       </header>
-
     </div>
   );
 }
 
+// Giữ nguyên các function SearchIcon và UserIcon
 function SearchIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
