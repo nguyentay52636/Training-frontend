@@ -1,14 +1,13 @@
 import * as React from "react";
 import {
   BookOpen,
-  Users,
   FileText,
   BarChart,
   Settings,
   Home,
   User,
   GraduationCap,
-  House,
+
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";

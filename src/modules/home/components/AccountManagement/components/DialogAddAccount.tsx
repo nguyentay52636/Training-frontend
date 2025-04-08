@@ -16,35 +16,35 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
-// Định nghĩa type GiangVien ngay trong file
-export type GiangVien = {
-    maGiangVien: string;
-    hoTenGV: string;
-    emailGV: string;
+// Định nghĩa type TaiKhoan ngay trong file
+export type TaiKhoan = {
+    maTaiKhoan: string;
+    hoTen: string;
+    email: string;
     sdt: string;
 };
 
 interface DialogAddAccountProps {
-    onAddGiangVien: (newGiangVien: GiangVien) => void;
+    onAddTaiKhoan: (newTaiKhoan: TaiKhoan) => void;
 }
 
-export default function DialogAddAccount({ onAddGiangVien }: DialogAddAccountProps) {
-    const [newGiangVien, setNewGiangVien] = useState<GiangVien>({
-        maGiangVien: "",
-        hoTenGV: "",
-        emailGV: "",
+export default function DialogAddAccount({ onAddTaiKhoan }: DialogAddAccountProps) {
+    const [newTaiKhoan, setNewTaiKhoan] = useState<TaiKhoan>({
+        maTaiKhoan: "",
+        hoTen: "",
+        email: "",
         sdt: "",
     });
 
-    const handleAddGiangVien = () => {
+    const handleAddTaiKhoan = () => {
         if (
-            newGiangVien.maGiangVien &&
-            newGiangVien.hoTenGV &&
-            newGiangVien.emailGV &&
-            newGiangVien.sdt
+            newTaiKhoan.maTaiKhoan &&
+            newTaiKhoan.hoTen &&
+            newTaiKhoan.email &&
+            newTaiKhoan.sdt
         ) {
-            onAddGiangVien(newGiangVien);
-            setNewGiangVien({ maGiangVien: "", hoTenGV: "", emailGV: "", sdt: "" });
+            onAddTaiKhoan(newTaiKhoan);
+            setNewTaiKhoan({ maTaiKhoan: "", hoTen: "", email: "", sdt: "" });
         } else {
             alert("Vui lòng điền đầy đủ thông tin!");
         }
@@ -54,54 +54,54 @@ export default function DialogAddAccount({ onAddGiangVien }: DialogAddAccountPro
         <Dialog>
             <DialogTrigger asChild>
                 <Button className="bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-full shadow-md">
-                    <Plus className="mr-2 h-5 w-5" /> Thêm Giảng Viên
+                    <Plus className="mr-2 h-5 w-5" /> Thêm Tài Khoản
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[500px] rounded-lg">
                 <DialogHeader>
-                    <DialogTitle className="text-blue-900 text-xl">Thêm Giảng Viên Mới</DialogTitle>
+                    <DialogTitle className="text-blue-900 text-xl">Thêm Tài Khoản Mới</DialogTitle>
                     <DialogDescription className="text-gray-600">
-                        Vui lòng nhập đầy đủ thông tin giảng viên để thêm vào hệ thống.
+                        Vui lòng nhập đầy đủ thông tin tài khoản để thêm vào hệ thống.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-5 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="maGiangVien" className="text-right font-medium text-gray-700">
-                            Mã Giảng Viên
+                        <Label htmlFor="maTaiKhoan" className="text-right font-medium text-gray-700">
+                            Mã Tài Khoản
                         </Label>
                         <Input
-                            id="maGiangVien"
-                            value={newGiangVien.maGiangVien}
+                            id="maTaiKhoan"
+                            value={newTaiKhoan.maTaiKhoan}
                             onChange={(e) =>
-                                setNewGiangVien({ ...newGiangVien, maGiangVien: e.target.value })
+                                setNewTaiKhoan({ ...newTaiKhoan, maTaiKhoan: e.target.value })
                             }
                             className="col-span-3 rounded-lg border-gray-200 focus:ring-blue-400"
-                            placeholder="VD: GV004"
+                            placeholder="VD: TK004"
                         />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="hoTenGV" className="text-right font-medium text-gray-700">
+                        <Label htmlFor="hoTen" className="text-right font-medium text-gray-700">
                             Họ Tên
                         </Label>
                         <Input
-                            id="hoTenGV"
-                            value={newGiangVien.hoTenGV}
+                            id="hoTen"
+                            value={newTaiKhoan.hoTen}
                             onChange={(e) =>
-                                setNewGiangVien({ ...newGiangVien, hoTenGV: e.target.value })
+                                setNewTaiKhoan({ ...newTaiKhoan, hoTen: e.target.value })
                             }
                             className="col-span-3 rounded-lg border-gray-200 focus:ring-blue-400"
                             placeholder="VD: Nguyễn Văn D"
                         />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="emailGV" className="text-right font-medium text-gray-700">
+                        <Label htmlFor="email" className="text-right font-medium text-gray-700">
                             Email
                         </Label>
                         <Input
-                            id="emailGV"
-                            value={newGiangVien.emailGV}
+                            id="email"
+                            value={newTaiKhoan.email}
                             onChange={(e) =>
-                                setNewGiangVien({ ...newGiangVien, emailGV: e.target.value })
+                                setNewTaiKhoan({ ...newTaiKhoan, email: e.target.value })
                             }
                             className="col-span-3 rounded-lg border-gray-200 focus:ring-blue-400"
                             placeholder="VD: email@sgu.edu.vn"
@@ -113,9 +113,9 @@ export default function DialogAddAccount({ onAddGiangVien }: DialogAddAccountPro
                         </Label>
                         <Input
                             id="sdt"
-                            value={newGiangVien.sdt}
+                            value={newTaiKhoan.sdt}
                             onChange={(e) =>
-                                setNewGiangVien({ ...newGiangVien, sdt: e.target.value })
+                                setNewTaiKhoan({ ...newTaiKhoan, sdt: e.target.value })
                             }
                             className="col-span-3 rounded-lg border-gray-200 focus:ring-blue-400"
                             placeholder="VD: 0931234567"
@@ -125,10 +125,10 @@ export default function DialogAddAccount({ onAddGiangVien }: DialogAddAccountPro
                 <DialogFooter>
                     <Button
                         type="submit"
-                        onClick={handleAddGiangVien}
+                        onClick={handleAddTaiKhoan}
                         className="bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 rounded-lg"
                     >
-                        Thêm Giảng Viên
+                        Thêm Tài Khoản
                     </Button>
                 </DialogFooter>
             </DialogContent>

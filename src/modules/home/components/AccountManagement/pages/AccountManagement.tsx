@@ -14,104 +14,140 @@ import { Colums } from "../components/Colums";
 import TableAccount from "../components/TableAccount";
 import FilterAndActionsAccount from "../components/FilterAndActionsAccount";
 import PaginationAcount from "../components/PaginationAcount";
-import DialogAddAccount from "../components/DialogAddAccount";
 
 
-type GiangVien = {
-    maGiangVien: string;
-    hoTenGV: string;
-    emailGV: string;
+type TaiKhoan = {
+    maTaiKhoan: string;
+    hoTen: string;
+    email: string;
     sdt: string;
 };
-const data: GiangVien[] = [
+
+const data: TaiKhoan[] = [
     {
-        maGiangVien: "GV001",
-        hoTenGV: "Nguyễn Văn A",
-        emailGV: "nguyenvana@sgu.edu.vn",
+        maTaiKhoan: "TK001",
+        hoTen: "Nguyễn Văn A",
+        email: "nguyenvana@sgu.edu.vn",
         sdt: "0901234567",
     },
     {
-        maGiangVien: "GV002",
-        hoTenGV: "Trần Thị B",
-        emailGV: "tranthib@sgu.edu.vn",
+        maTaiKhoan: "TK002",
+        hoTen: "Trần Thị B",
+        email: "tranthib@sgu.edu.vn",
         sdt: "0912345678",
     },
     {
-        maGiangVien: "GV003",
-        hoTenGV: "Lê Văn C",
-        emailGV: "levanc@sgu.edu.vn",
+        maTaiKhoan: "TK003",
+        hoTen: "Lê Văn C",
+        email: "levanc@sgu.edu.vn",
         sdt: "0923456789",
     },
     {
-        maGiangVien: "GV003",
-        hoTenGV: "Lê Văn C",
-        emailGV: "levanc@sgu.edu.vn",
+        maTaiKhoan: "TK003",
+        hoTen: "Lê Văn C",
+        email: "levanc@sgu.edu.vn",
         sdt: "0923456789",
     },
     {
-        maGiangVien: "GV003",
-        hoTenGV: "Lê Văn C",
-        emailGV: "levanc@sgu.edu.vn",
+        maTaiKhoan: "TK003",
+        hoTen: "Lê Văn C",
+        email: "levanc@sgu.edu.vn",
         sdt: "0923456789",
     },
     {
-        maGiangVien: "GV003",
-        hoTenGV: "Lê Văn C",
-        emailGV: "levanc@sgu.edu.vn",
+        maTaiKhoan: "TK003",
+        hoTen: "Lê Văn C",
+        email: "levanc@sgu.edu.vn",
         sdt: "0923456789",
     },
     {
-        maGiangVien: "GV003",
-        hoTenGV: "Lê Văn C",
-        emailGV: "levanc@sgu.edu.vn",
+        maTaiKhoan: "TK003",
+        hoTen: "Lê Văn C",
+        email: "levanc@sgu.edu.vn",
         sdt: "0923456789",
     },
     {
-        maGiangVien: "GV003",
-        hoTenGV: "Lê Văn C",
-        emailGV: "levanc@sgu.edu.vn",
+        maTaiKhoan: "TK003",
+        hoTen: "Lê Văn C",
+        email: "levanc@sgu.edu.vn",
         sdt: "0923456789",
     },
     {
-        maGiangVien: "GV003",
-        hoTenGV: "Lê Văn C",
-        emailGV: "levanc@sgu.edu.vn",
+        maTaiKhoan: "TK003",
+        hoTen: "Lê Văn C",
+        email: "levanc@sgu.edu.vn",
         sdt: "0923456789",
     },
     {
-        maGiangVien: "GV003",
-        hoTenGV: "Lê Văn C",
-        emailGV: "levanc@sgu.edu.vn",
+        maTaiKhoan: "TK003",
+        hoTen: "Lê Văn C",
+        email: "levanc@sgu.edu.vn",
         sdt: "0923456789",
     },
     {
-        maGiangVien: "GV003",
-        hoTenGV: "Lê Văn C",
-        emailGV: "levanc@sgu.edu.vn",
+        maTaiKhoan: "TK003",
+        hoTen: "Lê Văn C",
+        email: "levanc@sgu.edu.vn",
         sdt: "0923456789",
     },
     {
-        maGiangVien: "GV003",
-        hoTenGV: "Lê Văn C",
-        emailGV: "levanc@sgu.edu.vn",
+        maTaiKhoan: "TK003",
+        hoTen: "Lê Văn C",
+        email: "levanc@sgu.edu.vn",
         sdt: "0923456789",
     },
     {
-        maGiangVien: "GV003",
-        hoTenGV: "Lê Văn C",
-        emailGV: "levanc@sgu.edu.vn",
+        maTaiKhoan: "TK003",
+        hoTen: "Lê Văn C",
+        email: "levanc@sgu.edu.vn",
         sdt: "0923456789",
     },
     {
-        maGiangVien: "GV003",
-        hoTenGV: "Lê Văn C",
-        emailGV: "levanc@sgu.edu.vn",
+        maTaiKhoan: "TK003",
+        hoTen: "Lê Văn C",
+        email: "levanc@sgu.edu.vn",
+        sdt: "0923456789",
+    },
+    {
+        maTaiKhoan: "TK003",
+        hoTen: "Lê Văn C",
+        email: "levanc@sgu.edu.vn",
+        sdt: "0923456789",
+    },
+    {
+        maTaiKhoan: "TK003",
+        hoTen: "Lê Văn C",
+        email: "levanc@sgu.edu.vn",
+        sdt: "0923456789",
+    },
+    {
+        maTaiKhoan: "TK003",
+        hoTen: "Lê Văn C",
+        email: "levanc@sgu.edu.vn",
+        sdt: "0923456789",
+    },
+    {
+        maTaiKhoan: "TK003",
+        hoTen: "Lê Văn C",
+        email: "levanc@sgu.edu.vn",
+        sdt: "0923456789",
+    },
+    {
+        maTaiKhoan: "TK003",
+        hoTen: "Lê Văn C",
+        email: "levanc@sgu.edu.vn",
+        sdt: "0923456789",
+    },
+    {
+        maTaiKhoan: "TK003",
+        hoTen: "Lê Văn C",
+        email: "levanc@sgu.edu.vn",
         sdt: "0923456789",
     },
 ];
 
 interface FilterAndActionsAccountProps {
-    table: Table<GiangVien>;
+    table: Table<TaiKhoan>;
 }
 
 export default function AccountManagement() {
@@ -119,14 +155,14 @@ export default function AccountManagement() {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = useState({});
-    const [giangVienData, setGiangVienData] = useState<GiangVien[]>(data);
+    const [taiKhoanData, setTaiKhoanData] = useState<TaiKhoan[]>(data);
 
-    const handleAddGiangVien = (newGiangVien: GiangVien) => {
-        setGiangVienData([...giangVienData, newGiangVien]);
+    const handleAddTaiKhoan = (newTaiKhoan: TaiKhoan) => {
+        setTaiKhoanData([...taiKhoanData, newTaiKhoan]);
     };
 
-    const table = useReactTable<GiangVien>({
-        data: giangVienData,
+    const table = useReactTable<TaiKhoan>({
+        data: taiKhoanData,
         columns: Colums,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -153,16 +189,15 @@ export default function AccountManagement() {
                         Quản Lý tài khoản
                     </h1>
                     <p className="text-sm text-gray-500 mt-2">
-                        Quản lý thông tin giảng viên của SGU một cách hiệu quả và chuyên nghiệp
+                        Quản lý thông tin tài khoản của SGU một cách hiệu quả và chuyên nghiệp
                     </p>
                 </div>
             </div>
 
-            <FilterAndActionsAccount table={table} onAddGiangVien={handleAddGiangVien} />
-
+            <FilterAndActionsAccount table={table} onAddTaiKhoan={handleAddTaiKhoan} />
 
             <TableAccount
-                data={giangVienData}
+                data={taiKhoanData}
                 sorting={sorting}
                 columnFilters={columnFilters}
                 columnVisibility={columnVisibility}
@@ -174,7 +209,6 @@ export default function AccountManagement() {
             />
 
             <PaginationAcount table={table} />
-
         </div>
     );
 }

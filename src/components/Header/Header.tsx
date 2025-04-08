@@ -13,8 +13,8 @@ export default function Header({ sidebarOpen }: HeaderProps) {
       <header
         className={`bg-gradient-to-r from-blue-200 to-indigo-700 text-white py-3 px-6 flex items-center justify-between shadow-lg fixed top-0 z-10 transition-all duration-300`}
         style={{
-          width: `calc(100vw - ${sidebarOpen ? '256px' : '64px'})`, // Điều chỉnh chiều rộng dựa trên sidebar
-          left: sidebarOpen ? '256px' : '64px' // Điều chỉnh vị trí bên trái dựa trên sidebar
+          width: `calc(100vw - ${sidebarOpen ? '256px' : '64px'})`, 
+          left: sidebarOpen ? '256px' : '64px' 
         }}
       >
         {/* Logo và tiêu đề */}

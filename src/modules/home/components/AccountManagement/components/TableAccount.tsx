@@ -19,18 +19,10 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { Colums } from "../components/Colums";
-
-// Định nghĩa type GiangVien
-type GiangVien = {
-    maGiangVien: string;
-    hoTenGV: string;
-    emailGV: string;
-    sdt: string;
-};
+import { Colums, TaiKhoan } from "../components/Colums";
 
 interface TableAccountProps {
-    data: GiangVien[];
+    data: TaiKhoan[];
     sorting: SortingState;
     columnFilters: ColumnFiltersState;
     columnVisibility: VisibilityState;
@@ -105,7 +97,7 @@ export default function TableAccount({
                     ) : (
                         <TableRow>
                             <TableCell colSpan={Colums.length} className="h-24 text-center text-gray-500">
-                                Không tìm thấy giảng viên nào.
+                                Không tìm thấy tài khoản nào.
                             </TableCell>
                         </TableRow>
                     )}

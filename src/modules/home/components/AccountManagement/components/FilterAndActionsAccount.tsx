@@ -9,20 +9,20 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Table } from "@tanstack/react-table";
-import { GiangVien } from "./Colums";
+import { TaiKhoan } from "./DialogAddAccount";
 import DialogAddAccount from "./DialogAddAccount";
 import { useState, useEffect } from "react";
 
 interface FilterAndActionsAccountProps {
-    table: Table<GiangVien>;
-    onAddGiangVien: (newGiangVien: GiangVien) => void;
+    table: Table<TaiKhoan>;
+    onAddTaiKhoan: (newTaiKhoan: TaiKhoan) => void;
 }
 
-export default function FilterAndActionsAccount({ table, onAddGiangVien }: FilterAndActionsAccountProps) {
+export default function FilterAndActionsAccount({ table, onAddTaiKhoan }: FilterAndActionsAccountProps) {
     const [filterValue, setFilterValue] = useState<string>("");
 
     useEffect(() => {
-        const currentFilter = table.getColumn("hoTenGV")?.getFilterValue() as string;
+        const currentFilter = table.getColumn("hoTen")?.getFilterValue() as string;
         setFilterValue(currentFilter ?? "");
     }, [table]);
 
@@ -31,12 +31,12 @@ export default function FilterAndActionsAccount({ table, onAddGiangVien }: Filte
             <div className="relative w-full max-w-md">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-6 w-6" />
                 <Input
-                    placeholder="Tìm kiếm giảng viên theo họ tên..."
+                    placeholder="Tìm kiếm tài khoản theo họ tên..."
                     value={filterValue}
                     onChange={(event) => {
                         const value = event.target.value;
                         setFilterValue(value);
-                        table.getColumn("hoTenGV")?.setFilterValue(value);
+                        table.getColumn("hoTen")?.setFilterValue(value);
                     }}
                     className="pl-10 rounded-full border-gray-200 text-xl h-12 focus:ring-blue-400 shadow-sm font-bold"
                 />
@@ -68,7 +68,7 @@ export default function FilterAndActionsAccount({ table, onAddGiangVien }: Filte
                             ))}
                     </DropdownMenuContent>
                 </DropdownMenu>
-                <DialogAddAccount onAddGiangVien={onAddGiangVien} />
+                <DialogAddAccount onAddTaiKhoan={onAddTaiKhoan} />
             </div>
         </div>
     );

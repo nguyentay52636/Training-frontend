@@ -3,12 +3,13 @@ import "./App.css";
 import AdminPages from "./modules/Admin/pages/AdminPages";
 import LoginPage from "./modules/Auth/pages/LoginPage";
 
-import PointManagement from "./modules/home/components/PointManagement/PointManagement";
+import PointManagement from "./modules/home/components/PointManagement/pages/PointManagement";
 import LecturerManager from "./modules/home/components/ManagerLecturer/LecturerManager";
 import LessonPlanManager from "./modules/home/components/LessonPlan/LessonPlanManager";
 import TrainingProgramManager from "./modules/home/components/TrainingProgram/TrainingProgramManager";
 import ManagerDefault from "./modules/home/components/Default/ManagerDefault";
 import AccountManagement from "./modules/home/components/AccountManagement/pages/AccountManagement";
+import TeachingScheduleManager from "./modules/home/components/ TeachingAssignment/pages/TeachingScheduleManager";
 
 function App() {
   const router = createBrowserRouter([
@@ -26,6 +27,7 @@ function App() {
         { path: "account", element: <AccountManagement /> },
         { path: "lessonplan", element: <LessonPlanManager /> },
         { path: "trainingprogram", element: <TrainingProgramManager /> },
+        { path: "teachingdivison", element: <TeachingScheduleManager /> }
       ],
     },
   ]);

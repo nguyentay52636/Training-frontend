@@ -5,6 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { useState } from "react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -14,46 +15,38 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-// Định nghĩa type GiangVien ngay trong file
-export type GiangVien = {
-    maGiangVien: string;
-    hoTenGV: string;
-    emailGV: string;
+// Định nghĩa type TaiKhoan ngay trong file
+export type TaiKhoan = {
+    maTaiKhoan: string;
+    hoTen: string;
+    email: string;
     sdt: string;
 };
 
-export const Colums: ColumnDef<GiangVien>[] = [
+export const Colums: ColumnDef<TaiKhoan>[] = [
     {
         id: "select",
-        header: ({ table }) => (
-            <Checkbox
-                checked={
-                    table.getIsAllPageRowsSelected() ||
-                    (table.getIsSomePageRowsSelected() && "indeterminate")
-                }
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-                className="border-blue-300"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
-                className="border-blue-300"
-            />
-        ),
+        cell: () => {
+            const [isChecked, setIsChecked] = useState(false);
+            return (
+                <Checkbox
+                    checked={isChecked}
+                    onCheckedChange={() => setIsChecked(!isChecked)}
+                    aria-label="Select row"
+                    className="border-blue-500 font-bold"
+                />
+            );
+        },
         enableSorting: false,
         enableHiding: false,
     },
     {
-        accessorKey: "maGiangVien",
-        header: "Mã Giảng Viên",
-        cell: ({ row }) => <div className="font-medium">{row.getValue("maGiangVien")}</div>,
+        accessorKey: "maTaiKhoan",
+        header: "Mã Tài Khoản",
+        cell: ({ row }) => <div className="font-medium">{row.getValue("maTaiKhoan")}</div>,
     },
     {
-        accessorKey: "hoTenGV",
+        accessorKey: "hoTen",
         header: ({ column }) => (
             <Button
                 variant="ghost"
@@ -64,12 +57,12 @@ export const Colums: ColumnDef<GiangVien>[] = [
                 <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
         ),
-        cell: ({ row }) => <div>{row.getValue("hoTenGV")}</div>,
+        cell: ({ row }) => <div>{row.getValue("hoTen")}</div>,
     },
     {
-        accessorKey: "emailGV",
+        accessorKey: "email",
         header: "Email",
-        cell: ({ row }) => <div className="lowercase text-gray-600">{row.getValue("emailGV")}</div>,
+        cell: ({ row }) => <div className="lowercase text-gray-600">{row.getValue("email")}</div>,
     },
     {
         accessorKey: "sdt",
@@ -78,9 +71,10 @@ export const Colums: ColumnDef<GiangVien>[] = [
     },
     {
         id: "actions",
+        header: "Tác vụ",
         enableHiding: false,
         cell: ({ row }) => {
-            const giangVien = row.original;
+            const taiKhoan = row.original;
 
             return (
                 <DropdownMenu>
@@ -93,9 +87,9 @@ export const Colums: ColumnDef<GiangVien>[] = [
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Thao Tác</DropdownMenuLabel>
                         <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(giangVien.maGiangVien)}
+                            onClick={() => navigator.clipboard.writeText(taiKhoan.maTaiKhoan)}
                         >
-                            Sao chép mã giảng viên
+                            Sao chép mã tài khoản
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>Xem chi tiết</DropdownMenuItem>

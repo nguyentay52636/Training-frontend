@@ -1,25 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { useReactTable, Table } from "@tanstack/react-table";
+import React from "react";
 
-// Định nghĩa type GiangVien (giả sử từ file Colums)
-interface GiangVien {
-    maGiangVien: string;
-    hoTenGV: string;
-    emailGV: string;
-    sdt: string;
+interface PaginationAcountProps<TData> {
+    table: Table<TData>;
 }
 
-interface PaginationAcountProps {
-    table: Table<GiangVien>;
-}
-
-export default function PaginationAcount({ table }: PaginationAcountProps) {
+export default function PaginationAcount<TData>({ table }: PaginationAcountProps<TData>) {
     const pageIndex = table.getState().pagination.pageIndex;
     const pageSize = table.getState().pagination.pageSize;
     const totalRows = table.getFilteredRowModel().rows.length;
     const startRow = pageIndex * pageSize + 1;
     const endRow = Math.min((pageIndex + 1) * pageSize, totalRows);
 
+    // Set default page size to 10
+    React.useEffect(() => {
+        table.setPageSize(10);
+    }, []);
 
     if (totalRows <= 10) {
         return null;
@@ -30,18 +27,17 @@ export default function PaginationAcount({ table }: PaginationAcountProps) {
             {/* Thông tin tổng quan */}
             <div className="text-sm text-gray-600 mb-4 sm:mb-0">
                 Đã chọn {table.getFilteredSelectedRowModel().rows.length} trên{" "}
-                {totalRows} giảng viên.
+                {totalRows} bản ghi.
             </div>
 
             {/* Phân trang */}
             <div className="flex items-center flex-wrap gap-4">
-
                 <Button
                     variant="outline"
                     size="sm"
                     onClick={() => table.previousPage()}
                     disabled={!table.getCanPreviousPage()}
-                    className="rounded-full border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors"
+                    className="rounded-full bg-gradient-to-r from-blue-200 to-indigo-700 text-white hover:from-blue-300 hover:to-indigo-800 transition-all duration-300 border-0 shadow-md"
                 >
                     <span className="sr-only">Trang trước</span>
                     <svg
@@ -67,7 +63,7 @@ export default function PaginationAcount({ table }: PaginationAcountProps) {
                     size="sm"
                     onClick={() => table.nextPage()}
                     disabled={!table.getCanNextPage()}
-                    className="rounded-full border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors"
+                    className="rounded-full bg-gradient-to-r from-blue-200 to-indigo-700 text-white hover:from-blue-300 hover:to-indigo-800 transition-all duration-300 border-0 shadow-md"
                 >
                     Trang sau
                     <span className="sr-only">Trang sau</span>
@@ -82,7 +78,7 @@ export default function PaginationAcount({ table }: PaginationAcountProps) {
                     </svg>
                 </Button>
 
-                {/* Chọn số hàng trên mỗi trang (tùy chọn) */}
+                {/* Chọn số hàng trên mỗi trang */}
                 <select
                     value={pageSize}
                     onChange={(e) => {

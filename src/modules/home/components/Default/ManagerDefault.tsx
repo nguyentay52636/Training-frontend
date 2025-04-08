@@ -56,7 +56,6 @@ export default function ManagerDefault() {
                 <div className="flex justify-between items-center mb-4">
                     <div>
                         <h2 className="text-lg font-semibold text-gray-800">Tên chương trình:</h2>
-                        <p className="text-gray-600">BẮC:</p>
                     </div>
                     <button className="flex items-center gap-2 px-4 py-2 text-indigo-600 bg-white border border-indigo-300 rounded-lg hover:bg-indigo-50 transition-all">
                         <Edit className="w-5 h-5" />
