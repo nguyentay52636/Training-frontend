@@ -2,12 +2,12 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import AdminPages from "./modules/Admin/pages/AdminPages";
 import LoginPage from "./modules/Auth/pages/LoginPage";
-import { AccountManagement } from "./modules/Auth/components/AccountManagement";
-import PointManagement from "./modules/Auth/components/PointManagement/PointManagement";
-import LecturerManager from "./modules/Auth/components/ManagerLecturer/LecturerManager";
-import LessonPlanManager from "./modules/Auth/components/LessonPlan/LessonPlanManager";
-import TrainingProgramManager from "./modules/Auth/components/TrainingProgram/TrainingProgramManager";
-import ManagerDefault from "./modules/Auth/components/Default/ManagerDefault";
+import { AccountManagement } from "./modules/home/components/AccountManagement";
+import PointManagement from "./modules/home/components/PointManagement/PointManagement";
+import LecturerManager from "./modules/home/components/ManagerLecturer/LecturerManager";
+import LessonPlanManager from "./modules/home/components/LessonPlan/LessonPlanManager";
+import TrainingProgramManager from "./modules/home/components/TrainingProgram/TrainingProgramManager";
+import ManagerDefault from "./modules/home/components/Default/ManagerDefault";
 
 function App() {
   const router = createBrowserRouter([

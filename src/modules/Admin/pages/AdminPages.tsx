@@ -7,7 +7,7 @@ export default function AdminPages({ children }: PropsWithChildren) {
   return (
     <div className='relative'>
       <SiderBarNavigate children={children} />
-      {children || <Outlet />}
+      {/* {children || <Outlet />} */}
     </div>
   );
 }

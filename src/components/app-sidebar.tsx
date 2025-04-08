@@ -163,7 +163,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar
       className=" fixed font-bold  border-r shadow-md z-1"
-      collapsible="icon"
+      collapsible="offcanvas"
       {...props}
     >
       <SidebarHeader className=" text-black py-3">
