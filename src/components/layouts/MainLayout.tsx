@@ -8,8 +8,7 @@ export default function MainLayout({ children }: PropsWithChildren) {
 
   return (
     <div>
-      {children || <Outlet />}
-
+      {/* {children || <Outlet />} */}
     </div>
   );
 }

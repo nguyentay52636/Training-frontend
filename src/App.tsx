@@ -1,53 +1,35 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import './App.css';
-import { MainLayout } from '@/components/layouts';
-import AdminPages from './modules/Admin/pages/AdminPages';
-import ManagerPointPage from './modules/Admin/pages/ManagerPointPage';
-import ManagerAccountPage from './modules/Admin/pages/ManagerAccountPage';
-import LoginPage from './modules/Auth/pages/LoginPage';
-import { AccountManagement } from './modules/Auth/components/AccountManagement';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import "./App.css";
+import AdminPages from "./modules/Admin/pages/AdminPages";
+import LoginPage from "./modules/Auth/pages/LoginPage";
+import { AccountManagement } from "./modules/Auth/components/AccountManagement";
+import PointManagement from "./modules/Auth/components/PointManagement/PointManagement";
+import LecturerManager from "./modules/Auth/components/ManagerLecturer/LecturerManager";
+import LessonPlanManager from "./modules/Auth/components/LessonPlan/LessonPlanManager";
+import TrainingProgramManager from "./modules/Auth/components/TrainingProgram/TrainingProgramManager";
+import ManagerDefault from "./modules/Auth/components/Default/ManagerDefault";
 
 function App() {
   const router = createBrowserRouter([
-    // Main layout
-
     {
-      path: '/',
+      path: "/",
       element: <LoginPage />,
-      children: [
-        {
-          index: true,
-          element: <MainLayout />,
-        },
-      ],
-
-
     },
     {
-      path: '/dashboard',
-      element: <AdminPages />
-
-    },
-    {
-      path: '/admin',
+      path: "/dashboard",
       element: <AdminPages />,
       children: [
-        {
-          path: 'point',
-          element: <ManagerPointPage />,
-        },
-        {
-          path: 'account',
-          element: <AccountManagement />,
-        },
+        { index: true, element: <ManagerDefault /> },
+        { path: "lecturer", element: <LecturerManager /> },
+        { path: "point", element: <PointManagement /> },
+        { path: "account", element: <AccountManagement /> },
+        { path: "lessonplan", element: <LessonPlanManager /> },
+        { path: "trainingprogram", element: <TrainingProgramManager /> },
       ],
     },
   ]);
-  return (
-    <>
-      <RouterProvider router={router} />
-    </>
-  );
+
+  return <RouterProvider router={router} />;
 }
 
 export default App;

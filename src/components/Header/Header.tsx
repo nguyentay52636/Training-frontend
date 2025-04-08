@@ -6,7 +6,7 @@ import { SVGProps } from "react";
 
 export default function Header() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col">
       <header className="bg-gradient-to-r from-blue-200 to-indigo-700 text-white py-3 px-6 flex items-center justify-between shadow-lg fixed w-full z-10">
         {/* Logo và tiêu đề */}
         <div className="flex items-center gap-3">

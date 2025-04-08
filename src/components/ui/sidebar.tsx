@@ -29,7 +29,7 @@ const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 const SIDEBAR_WIDTH = "16rem";
 const SIDEBAR_WIDTH_MOBILE = "18rem";
-const SIDEBAR_WIDTH_ICON = "3rem";
+const SIDEBAR_WIDTH_ICON = "5rem";
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 
 type SidebarContextProps = {
@@ -229,7 +229,7 @@ function Sidebar({
         <div
           data-sidebar="sidebar"
           data-slot="sidebar-inner"
-          className="bg-white text-black flex h-full w-full flex-col justify-between"
+          className="bg-white text-black"
         >
           {children}
         </div>
@@ -246,19 +246,19 @@ function SidebarTrigger({
   const { toggleSidebar } = useSidebar();
 
   return (
-    <div className="absolute top-16 right-0 z-10">
+    <div className="absolute top-31 right-0 z-10 text">
       <Button
         data-sidebar="trigger"
         data-slot="sidebar-trigger"
         size="icon"
-        className={cn("size-10 mt-[4rem] bg-gray-800 hover:bg-gray-700 text-white", className)}
+        className={cn("size-12 text-white cursor-pointer", className)}
         onClick={(event) => {
           onClick?.(event);
           toggleSidebar();
         }}
         {...props}
       >
-        <ListCollapse className="text-white" />
+        <ListCollapse className="text-white size-7" />
       </Button>
     </div>
   );
@@ -322,16 +322,9 @@ function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="sidebar-header"
       data-sidebar="header"
-      className={cn(
-        "bg-white text-black flex flex-col gap-4 p-4 shadow-md border-b border-gray-200",
-        className
-      )}
+      className="mt-[2.8rem]"
       {...props}
     >
-      <div className="flex items-center gap-2 text-lg font-semibold text-blue-600">
-        <HomeIcon className="w-6 h-6" />
-        <span>Trang chủ</span>
-      </div>
     </div>
   );
 }
@@ -398,7 +391,7 @@ function SidebarGroupLabel({
       data-slot="sidebar-group-label"
       data-sidebar="group-label"
       className={cn(
-        "text-gray-500 ring-blue-200 flex h-8 shrink-0 items-center rounded-md px-3 text-sm font-medium outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
+        "text-gray-600 ring-blue-200 flex h-10 shrink-0 items-center rounded-md px-5 text-sm font-bold outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
         "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
         className
       )}
@@ -448,7 +441,7 @@ function SidebarMenu({ className, ...props }: React.ComponentProps<"ul">) {
     <ul
       data-slot="sidebar-menu"
       data-sidebar="menu"
-      className={cn("bg-white text-black flex w-full min-w-0 flex-col gap-0.5", className)}
+      className={cn("bg-white text-black flex w-full min-w-0 flex-col gap-1", className)}
       {...props}
     />
   );
@@ -466,18 +459,18 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">) {
 }
 
 const sidebarMenuButtonVariants = cva(
-  "peer/menu-button flex w-full items-center gap-3 overflow-hidden rounded-md px-4 py-2 text-left text-sm outline-hidden ring-blue-200 transition-[width,height,padding] duration-200 ease-in-out focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-blue-100 data-[active=true]:font-medium data-[active=true]:text-blue-800 data-[state=open]:hover:bg-[#333333] data-[state=open]:hover:text-white group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-5 [&>svg]:shrink-0 [&>svg]:text-gray-500 hover:[&>svg]:text-white data-[active=true]:[&>svg]:text-blue-800",
+  "peer/menu-button flex w-full items-center gap-3 overflow-hidden rounded-md px-5 py-3 text-left outline-hidden ring-blue-200 transition-[width,height,padding] duration-200 ease-in-out focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-blue-100 data-[active=true]:font-semibold data-[active=true]:text-blue-800 data-[state=open]:hover:bg-[#333333] data-[state=open]:hover:text-white group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-6 [&>svg]:shrink-0 [&>svg]:text-gray-500 hover:[&>svg]:text-white data-[active=true]:[&>svg]:text-blue-800",
   {
     variants: {
       variant: {
-        default: "hover:bg-[#333333] hover:text-white",
+        default: "ring-blue-200 hover:bg-gradient-to-r hover:from-blue-200 hover:to-indigo-700 hover:text-white",
         outline:
-          "bg-white text-black border border-gray-200 hover:bg-[#333333] hover:text-white",
+          "bg-white text-black border border-gray-200 ring-blue-200 hover:bg-gradient-to-r hover:from-blue-200 hover:to-indigo-700 hover:text-white",
       },
       size: {
-        default: "h-10 text-sm",
-        sm: "h-8 text-xs",
-        lg: "h-12 text-base group-data-[collapsible=icon]:p-0!",
+        default: "h-12 text-base",
+        sm: "h-10 text-sm",
+        lg: "h-14 text-lg group-data-[collapsible=icon]:p-0!",
       },
     },
     defaultVariants: {
@@ -486,6 +479,7 @@ const sidebarMenuButtonVariants = cva(
     },
   }
 );
+
 
 function SidebarMenuButton({
   asChild = false,
@@ -553,7 +547,7 @@ function SidebarMenuAction({
       data-slot="sidebar-menu-action"
       data-sidebar="menu-action"
       className={cn(
-        "text-gray-500 ring-blue-200 hover:bg-gray-200 hover:text-black peer-hover/menu-button:text-white absolute top-2.5 right-2 flex aspect-square w-5 items-center justify-center rounded-md p-0 outline-hidden transition-transform focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
+        "text-gray-500 ring-blue-200 hover:bg-gray-200 hover:text-black peer-hover/menu-button:text-white absolute top-2.5 right-2 flex aspect-square w-5 items-center justify-center rounded-md p-0 outline-hidden transition-transform focus-visible:ring-2 [&>svg]:size-7 [&>svg]:shrink-0",
         "after:absolute after:-inset-2 md:after:hidden",
         "peer-data-[size=sm]/menu-button:top-1",
         "peer-data-[size=default]/menu-button:top-2.5",
@@ -676,8 +670,8 @@ function SidebarMenuSubButton({
       data-size={size}
       data-active={isActive}
       className={cn(
-        "text-gray-700 ring-blue-200 hover:bg-[#333333] hover:text-white active:bg-[#333333] active:text-white [&>svg]:text-gray-500 flex h-8 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-3 outline-hidden focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
-        "data-[active=true]:bg-[#333333] data-[active=true]:text-white",
+        "text-gray-700 ring-blue-200 hover:bg-gradient-to-r hover:from-blue-200 hover:to-indigo-700 hover:text-white active:bg-[#333333] active:text-white [&>svg]:text-gray-500 flex h-8 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-3 outline-hidden focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
+        "data-[active=true]:bg-b data-[active=true]:text-white",
         size === "sm" && "text-xs h-7",
         size === "md" && "text-sm",
         "group-data-[collapsible=icon]:hidden",
@@ -685,6 +679,7 @@ function SidebarMenuSubButton({
       )}
       {...props}
     />
+
   );
 }
 
