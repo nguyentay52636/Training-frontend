@@ -8,7 +8,7 @@ import PaginationPoint from "../components/PaginationPoint";
 
 export default function PointManagement() {
     return (
-        <div className="container mx-auto p-6">
+        <div className="">
             {/* Title */}
             <div className="mb-8">
                 <h1 className="text-4xl font-bold text-blue-900 tracking-tight">Quản lý điểm</h1>
