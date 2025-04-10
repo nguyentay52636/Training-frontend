@@ -9,6 +9,7 @@ import {
 import { pointData } from './dataPoint';
 import PointAction from './PointAction';
 
+
 export default function PointTable() {
     return (
         <div className="w-full p-4 bg-white rounded-xl shadow-md">

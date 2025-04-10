@@ -10,6 +10,7 @@ import TrainingProgramManager from "./modules/home/components/TrainingProgram/Tr
 import ManagerDefault from "./modules/home/components/Default/ManagerDefault";
 import AccountManagement from "./modules/home/components/AccountManagement/pages/AccountManagement";
 import TeachingScheduleManager from "./modules/home/components/ TeachingAssignment/pages/TeachingScheduleManager";
+import SkeletonProgramManager from "./modules/home/components/TrainingProgram/pages/SkeletonProgramManager";
 
 function App() {
   const router = createBrowserRouter([
@@ -21,13 +22,23 @@ function App() {
       path: "/dashboard",
       element: <AdminPages />,
       children: [
-        { index: true, element: <ManagerDefault /> },
+        {
+          index: true, element: <ManagerDefault />,
+
+        },
         { path: "lecturer", element: <LecturerManager /> },
         { path: "point", element: <PointManagement /> },
         { path: "account", element: <AccountManagement /> },
         { path: "lessonplan", element: <LessonPlanManager /> },
-        { path: "trainingprogram", element: <TrainingProgramManager /> },
-        { path: "teachingdivison", element: <TeachingScheduleManager /> }
+        { path: "teachingdivison", element: <TeachingScheduleManager /> },
+        {
+          path: "trainingprogram/skeletonprogram",
+          element: <SkeletonProgramManager />
+        },
+        {
+          path: "trainingprogram",
+          element: <TrainingProgramManager />,
+        },
       ],
     },
   ]);
