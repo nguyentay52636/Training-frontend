@@ -1,25 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ChevronDown, Plus, Save, Trash2 } from "lucide-react";
-
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import DialogAddBlockNow from '../components/ProgramContent/components/AddBlocKnowledge/DialogAddlbocknow';
+import khoiKienThucData from '../components/ProgramContent/components/DataBlock';
+import BlocknowledgeActions from '../components/ProgramContent/components/BlocknowledgeActions';
 
 export default function SkeletonProgramManager() {
+    const [open, setOpen] = useState(false);
+
+    const handleCloseDialog = (isOpen: boolean) => {
+        if (!isOpen) {
+            setOpen(false);
+        }
+    };
     return (
-        <div className=" p-6 bg-white text-gray-800">
+        <div className="p-6 bg-white text-gray-800">
             {/* Menu ngang trên cùng */}
-
-            <div className="flex  items-center mb-6 border-b-2 border-gray-200 pb-3 flex justify-around ">
-                <div className=" font-bold text-[2.5rem]">
-                    <h1>Chương trình đào tạo</h1>
+            <div className="flex items-center mb-6 border-b-2 border-gray-200 pb-3 justify-around">
+                <div className="font-bold text-[2.5rem]">
+                    <h1>Thông tin chung</h1>
                 </div>
-
                 <div className="flex gap-8">
                     <Button
-                        className="bg-green-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-full shadow-md px-[40px]! py-5! cursor-pointer "
+                        className="bg-green-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-full shadow-md px-[40px]! py-5! cursor-pointer"
                     >
                         <Plus className="mr-2 h-5 w-5" /> Sửa
                     </Button>
@@ -36,45 +51,47 @@ export default function SkeletonProgramManager() {
                 </div>
             </div>
 
-            <div className=" bg-white p-4 rounded-xl shadow-lg">
+            <div className="bg-white p-6 rounded-xl shadow-lg">
                 <Tabs defaultValue="general" className="w-full">
-                    <TabsList className="grid w-full grid-cols-4 mb-6 bg-gray-200  rounded-md h-20  ">
+                    <TabsList className="grid w-full grid-cols-4 mb-6 bg-gray-200 rounded-md h-20 ">
                         <TabsTrigger
                             value="general"
-                            className="data-[state=active]:scale-x-100 transition-all"
-
+                            className="hover:bg-white! cursor-pointer"
                         >
-                            <div className="rounded-full bg-gradient-to-r from-blue-600 to-indigo-300 hover:from-blue-700 hover:to-indigo-800 px-6.5 py-4 font-bold text-xl mx-2  "> 1</div> <h1 className="font-bold text-xl">Thông tin chung</h1>
+                            <div className="rounded-full bg-gradient-to-r from-blue-600 to-indigo-300 hover:from-blue-700 hover:to-indigo-800 px-3 py-0.5 font-bold text-xl mx-2">1</div> <h1 className="font-bold text-xl">Thông tin chung</h1>
                         </TabsTrigger>
 
                         <TabsTrigger
                             value="objective"
-                            title="2   Đề cương chi tiết"
+                            title="2 Đề cương chi tiết"
+                            className="hover:bg-white! cursor-pointer"
+
                         >
-                            <div className="rounded-full bg-gradient-to-r from-blue-600 to-indigo-300 hover:from-blue-700 hover:to-indigo-800 bg-blue-200 px-6.5 py-4 font-bold text-xl mx-2"> 2</div> <h1 className="font-bold text-xl">Đề cương chi tiết</h1>
-
-
-
+                            <div className="rounded-full bg-gradient-to-r from-blue-600 to-indigo-300 hover:from-blue-700 hover:to-indigo-800 px-2.5 py-0.5 font-bold text-xl mx-2">2</div> <h1 className="font-bold text-xl">Đề cương chi tiết</h1>
                         </TabsTrigger>
+
                         <TabsTrigger
+                            className="hover:bg-white! cursor-pointer"
                             value="curriculum"
                             title="3 Nội dung chương trình"
-                        >
-                            <div className="rounded-full bg-gradient-to-r from-blue-600 to-indigo-300 hover:from-blue-700 hover:to-indigo-800 bg-blue-200 px-6.5 py-4 font-bold text-xl mx-2"> 3</div> <h1 className="font-bold text-xl">Chương trình đào tạo</h1>
 
+                        >
+                            <div className="rounded-full bg-gradient-to-r from-blue-600 to-indigo-300 hover:from-blue-700 hover:to-indigo-800 px-2.5 py-0.5 font-bold text-xl mx-2">3</div> <h1 className="font-bold text-xl">Danh mục khối kiến thức</h1>
                         </TabsTrigger>
+
                         <TabsTrigger
+                            className="hover:bg-white! cursor-pointer"
                             value="schedule"
                             title="4 Kế hoạch dạy học"
-                        >
-                            <div className="rounded-full bg-gradient-to-r from-blue-600 to-indigo-300 hover:from-blue-700 hover:to-indigo-800 bg-blue-200 px-6.5 py-4 font-bold text-xl mx-2"> 4</div> <h1 className="font-bold text-xl">Kế hoạch dạy học</h1>
 
+                        >
+                            <div className="rounded-full bg-gradient-to-r from-blue-600 to-indigo-300 hover:from-blue-700 hover:to-indigo-800 px-2.5 py-0.5 font-bold text-xl mx-2">4</div> <h1 className="font-bold text-xl">Kế hoạch dạy học</h1>
                         </TabsTrigger>
                     </TabsList>
 
-
-                    <TabsContent value="general" className="transition-opacity duration-300 ease-in-out opacity-100 data-[state=inactive]:opacity-0 ">
-                        <Card className="border-gray-200 shadow-sm transition-opacity duration-300 ease-in-out w-full">
+                    {/* Tab Content: Thông tin chung */}
+                    <TabsContent value="general">
+                        <Card className="border-gray-200 shadow-sm">
                             <CardHeader>
                                 <CardTitle className="text-2xl font-bold text-gray-800">Thông tin chung</CardTitle>
                             </CardHeader>
@@ -183,26 +200,76 @@ export default function SkeletonProgramManager() {
                         </Card>
                     </TabsContent>
 
-                    {/* Tab Content: Mục tiêu đào tạo */}
+                    {/* Tab Content: Mục tiêu đào tạo với thanh ngang và textarea có legend */}
                     <TabsContent value="objective">
                         <Card className="border-gray-200 shadow-sm">
                             <CardHeader>
-                                <CardTitle className="text-2xl font-bold text-gray-800">Mục tiêu đào tạo</CardTitle>
+                                <div className="flex justify-between items-center mb-4">
+                                    <CardTitle className="text-2xl font-bold text-gray-800">Đề cương chi tiết</CardTitle>
+                                    <div className="space-x-2">
+                                        <Button variant="outline" className="text-indigo-600 hover:bg-indigo-100">
+                                            Sửa
+                                        </Button>
+                                        <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                                            Lưu
+                                        </Button>
+                                    </div>
+                                </div>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-gray-600">Nội dung mục tiêu đào tạo sẽ được thêm vào đây.</p>
+                                <fieldset className="border border-gray-300 rounded-lg p-1">
+                                    <legend className="text-sm font-medium text-gray-700 px-2">Mô tả</legend>
+                                    <textarea
+                                        className="w-full h-64 p-4 border-0 rounded-lg focus:ring-2 focus:ring-indigo-500 text-gray-900 resize-none"
+                                        placeholder="Nhập nội dung đề cương chi tiết tại đây..."
+                                    />
+                                </fieldset>
                             </CardContent>
                         </Card>
                     </TabsContent>
 
                     {/* Tab Content: Nội dung chương trình */}
                     <TabsContent value="curriculum">
-                        <Card className="border-gray-200 shadow-sm">
-                            <CardHeader>
-                                <CardTitle className="text-2xl font-bold text-gray-800">Nội dung chương trình</CardTitle>
-                            </CardHeader>
+                        <Card className="border-gray-200 shadow-sm py-12">
+
                             <CardContent>
-                                <p className="text-gray-600">Nội dung chương trình sẽ được thêm vào đây.</p>
+                                <div className="flex justify-between space-x-4 mb-4">
+                                    <div className="">  <CardTitle className="text-2xl font-bold text-gray-800">Nội dung chương trình</CardTitle></div>
+                                    <div className="flex justify-center items-center">
+                                        <DialogAddBlockNow />
+                                    </div>
+                                </div>
+                                <div className="border-t border-gray-300 mb-4"></div>
+                                <div className="space-y-4">
+                                    {/* <div className="flex items-center justify-between">
+                                        <h3 className="text-xl font-semibold text-gray-700">Danh mục khối kiến thức</h3>
+                                    </div> */}
+                                    <div className='w-full'>
+                                        <Table>
+                                            <TableHeader>
+                                                <TableRow className="bg-blue-300! ">
+                                                    <TableHead className="text-bold">STT</TableHead>
+                                                    <TableHead className="text-bold">Tên khối kiến thức </TableHead>
+                                                    <TableHead className=''>Thao tác  </TableHead>
+                                                </TableRow>
+                                            </TableHeader>
+                                            <TableBody>
+                                                {khoiKienThucData.map(({ idKhoiKienThuc, tenKhoiKienThuc }) => (
+                                                    <TableRow key={idKhoiKienThuc} className='bg-background hover:bg-secondary'>
+                                                        <TableCell className='font-medium'>{idKhoiKienThuc}</TableCell>
+                                                        <TableCell className='font-medium'>{tenKhoiKienThuc}</TableCell>
+                                                        <TableCell>
+                                                            <BlocknowledgeActions />
+                                                        </TableCell>
+                                                    </TableRow>
+                                                )
+
+                                                )}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+
+                                </div>
                             </CardContent>
                         </Card>
                     </TabsContent>
