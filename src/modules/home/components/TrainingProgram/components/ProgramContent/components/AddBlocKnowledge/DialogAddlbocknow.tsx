@@ -7,7 +7,14 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Textarea } from "@/components/ui/textarea"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import khoiKienThucData from "../DataBlock";
 
 export default function DialogAddBlockNow() {
     return (
@@ -30,10 +37,21 @@ export default function DialogAddBlockNow() {
                         </DialogDescription>
                     </DialogHeader>
 
-                    <Textarea
-                        placeholder="Ví dụ: Kiến thức giáo dục đại cương"
-                        className="mt-4 h-80 resize-none text-[1.5rem]"
-                    />
+                    <Select>
+                        <SelectTrigger className="w-full mt-4 h-12 text-[1.1rem] text-black!">
+                            <SelectValue placeholder="Chọn tên khối kiến thức" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {khoiKienThucData.map((khoiKienThuc) => (
+                                <SelectItem
+                                    key={khoiKienThuc.idKhoiKienThuc}
+                                    value={String(khoiKienThuc.idKhoiKienThuc)}
+                                >
+                                    {khoiKienThuc.tenKhoiKienThuc}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
 
                     <div className="flex justify-end mt-4">
                         <Button
