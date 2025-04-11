@@ -31,6 +31,7 @@
     "axios": "^1.8.4",
     "babel-plugin-react-compiler": "^19.0.0-beta-e993439-20250328",
     "class-variance-authority": "^0.7.1",
+    "classnames": "^2.5.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.487.0",
     "react": "^19.0.0",
