@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, Plus, Save, Trash2 } from "lucide-react";
+import { ChevronDown, Pencil, Plus, Save, Trash2 } from "lucide-react";
 import {
     Table,
     TableBody,
@@ -19,12 +19,6 @@ import BlocknowledgeActions from '../components/ProgramContent/components/Blockn
 
 export default function SkeletonProgramManager() {
     const [open, setOpen] = useState(false);
-
-    const handleCloseDialog = (isOpen: boolean) => {
-        if (!isOpen) {
-            setOpen(false);
-        }
-    };
     return (
         <div className="p-6 bg-white text-gray-800">
             {/* Menu ngang trên cùng */}
@@ -249,24 +243,55 @@ export default function SkeletonProgramManager() {
                                             <TableHeader>
                                                 <TableRow className="bg-blue-300! ">
                                                     <TableHead className="text-bold">STT</TableHead>
-                                                    <TableHead className="text-bold">Tên khối kiến thức </TableHead>
-                                                    <TableHead className=''>Thao tác  </TableHead>
+                                                    <TableHead className="text-bold">Tên khối kiến thức & học phần</TableHead>
                                                 </TableRow>
                                             </TableHeader>
                                             <TableBody>
-                                                {khoiKienThucData.map(({ idKhoiKienThuc, tenKhoiKienThuc }) => (
-                                                    <TableRow key={idKhoiKienThuc} className='bg-background hover:bg-secondary'>
-                                                        <TableCell className='font-medium'>{idKhoiKienThuc}</TableCell>
-                                                        <TableCell className='font-medium'>{tenKhoiKienThuc}</TableCell>
-                                                        <TableCell>
-                                                            <BlocknowledgeActions />
+                                                {khoiKienThucData.map(({ idKhoiKienThuc, tenKhoiKienThuc, hocPhanList }) => (
+                                                    <TableRow key={idKhoiKienThuc} className="bg-background hover:bg-secondary">
+                                                        <TableCell className="font-bold">{idKhoiKienThuc}</TableCell>
+                                                        <TableCell className="font-medium">
+                                                            <div>
+
+                                                                <div className="flex justify-between items-center mb-2">
+                                                                    <div className="font-semibold text-blue-700 text-[1rem]">{tenKhoiKienThuc}</div>
+                                                                    <BlocknowledgeActions />
+                                                                </div>
+
+
+                                                                <ul className="list-disc list-inside pl-2 space-y-1 text-sm text-muted-foreground">
+                                                                    {hocPhanList.map((hp, index) => (
+                                                                        <li key={hp.maHP} className="flex items-center justify-between pr-2">
+                                                                            <span>
+                                                                                {index + 1}. {hp.tenHP} – {hp.soTinChi} tín chỉ
+                                                                            </span>
+                                                                            <div className="flex space-x-2">
+                                                                                <button
+
+                                                                                    className="text-blue-600 hover:text-blue-800"
+                                                                                    title="Chỉnh sửa"
+                                                                                >
+                                                                                    <Pencil size={16} />
+                                                                                </button>
+                                                                                <button
+
+                                                                                    className="text-red-600 hover:text-red-800"
+                                                                                    title="Xóa"
+                                                                                >
+                                                                                    <Trash2 size={16} />
+                                                                                </button>
+                                                                            </div>
+                                                                        </li>
+                                                                    ))}
+                                                                </ul>
+                                                            </div>
                                                         </TableCell>
                                                     </TableRow>
-                                                )
-
-                                                )}
+                                                ))}
                                             </TableBody>
                                         </Table>
+
+
                                     </div>
 
                                 </div>
