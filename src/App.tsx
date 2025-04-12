@@ -11,6 +11,7 @@ import ManagerDefault from "./modules/home/components/Default/ManagerDefault";
 import AccountManagement from "./modules/home/components/AccountManagement/pages/AccountManagement";
 import TeachingScheduleManager from "./modules/home/components/ TeachingAssignment/pages/TeachingScheduleManager";
 import SkeletonProgramManager from "./modules/home/components/TrainingProgram/pages/SkeletonProgramManager";
+import CourseManager from "./modules/home/components/TrainingProgram/components/ProgramContent/components/CourseDetails/CourseManager";
 
 function App() {
   const router = createBrowserRouter([
@@ -38,6 +39,10 @@ function App() {
         {
           path: "trainingprogram",
           element: <TrainingProgramManager />,
+        },
+        {
+          path: "course",
+          element: <CourseManager />,
         },
       ],
     },
