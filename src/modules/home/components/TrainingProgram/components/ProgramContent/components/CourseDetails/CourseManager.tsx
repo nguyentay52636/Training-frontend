@@ -1,14 +1,9 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
+
 import DialogAddCourse from "./components/DialogAddCourse";
+import TableCourse from "./components/TableCourse";
+import PaginationCourse from "./components/PaginationCourse";
 
 export default function CourseManager() {
     // Dữ liệu mẫu cho bảng
@@ -25,9 +20,10 @@ export default function CourseManager() {
 
 
             <div className="space-y-4">
-                <div className=" flex justify-around items-center">
-                    <div className="flex items-center space-x-4">
-                    </div>
+                <span className="my-8 block text-2xl text-">Danh sách các học phần trong khối</span>
+
+                <div className=" flex flex-1 items-center ml-4">
+
                     <div className="flex items-center space-x-4">
                         <DialogAddCourse />
                         <Button variant="outline" className=" mx-2 cursor-pointer bg-gray-700 text-white hover:bg-gray-800">
@@ -37,25 +33,10 @@ export default function CourseManager() {
 
                 </div>
                 <div>
-                    <span className="my-8 block text-2xl">Danh sách các học phần trong khối</span>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="w-[50px]">ID</TableHead>
-                                <TableHead>Tên học phần</TableHead>
-                                <TableHead>Giảng viên</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {courses.map((course) => (
-                                <TableRow key={course.id}>
-                                    <TableCell className="font-medium">{course.id}</TableCell>
-                                    <TableCell>{course.name}</TableCell>
-                                    <TableCell>{course.instructor}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                    <TableCourse />
+                    <div className="my-8 ">
+                        <PaginationCourse />
+                    </div>
                 </div>
             </div>
         </div>
