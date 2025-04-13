@@ -14,7 +14,7 @@ export default function TrainingProgramManager() {
 
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold text-gray-800 cursor-pointer">Chương trình đào tạo</h1>
-                <button onClick={() => navigate("/dashboard/trainingprogram/skeletonprogram")} className="w-full md:w-auto bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-xl shadow-lg px-8 py-4 flex items-center gap-3 transition-all duration-300 transform hover:scale-105 cursor-pointer"
+                <button onClick={() => navigate("/trangchu/chuong-trinh-dao-tao/khung-chuong-trinh/")} className="w-full md:w-auto bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-xl shadow-lg px-8 py-4 flex items-center gap-3 transition-all duration-300 transform hover:scale-105 cursor-pointer"
                 >
 
                     <Plus className="w-5 h-5" />

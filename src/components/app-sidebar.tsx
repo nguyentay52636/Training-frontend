@@ -7,7 +7,6 @@ import {
   Home,
   User,
   GraduationCap,
-
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -21,7 +20,6 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
-
 
 const data = {
   user: {
@@ -37,127 +35,126 @@ const data = {
     },
   ],
   navMain: [
-
     {
       title: "Quản lý giảng viên",
-      url: "#",
+      url: "/trangchu/quan-ly-giang-vien", // Đường dẫn gốc khớp với routing
       icon: User,
       items: [
         {
           title: "Danh sách giảng viên",
-          url: "#",
+          url: "/trangchu/quan-ly-giang-vien/danh-sach-giang-vien",
         },
         {
-          title: "Thống kê giảng dạy",
-          url: "#",
-        },
-        {
-          title: "Hồ sơ giảng viên",
-          url: "#",
-        },
-        {
-          title: "Thông kê mẫu phân công",
-          url: "#",
+          title: "Phân công giảng dạy",
+          url: "/trangchu/quan-ly-giang-vien/lich-giang-day",
         },
       ],
     },
     {
       title: "Quản lý điểm",
-      url: "#",
+      url: "/trangchu/quan-ly-diem",
       icon: FileText,
       items: [
         {
-          title: "Nhập điểm",
-          url: "#",
-        },
-        {
-          title: "Xem điểm",
-          url: "#",
-        },
-        {
           title: "Thống kê điểm",
-          url: "#",
+          url: "/trangchu/quan-ly-diem/thong-ke",
         },
+        {
+          title: "Xem diểm",
+          url: "/trangchu/quan-ly-diem/xem-diem",
+        },
+
       ],
     },
     {
       title: "Thống kê",
-      url: "#",
+      url: "/trangchu/thong-ke",
       icon: BarChart,
       items: [
         {
           title: "Thống kê sinh viên",
-          url: "#",
+          url: "/trangchu/thong-ke/sinh-vien",
         },
         {
           title: "Thống kê giảng viên",
-          url: "#",
+          url: "/trangchu/thong-ke/giang-vien",
         },
         {
           title: "Thống kê học tập",
-          url: "#",
+          url: "/trangchu/thong-ke/hoc-tap",
         },
       ],
     },
     {
       title: "Tài liệu",
-      url: "#",
+      url: "/trangchu/tai-lieu",
       icon: BookOpen,
       items: [
         {
           title: "Hướng dẫn sử dụng",
-          url: "#",
+          url: "/trangchu/tai-lieu/huong-dan",
         },
         {
           title: "Tài liệu tham khảo",
-          url: "#",
+          url: "/trangchu/tai-lieu/tham-khao",
         },
         {
           title: "Câu hỏi thường gặp",
-          url: "#",
+          url: "/trangchu/tai-lieu/cau-hoi",
         },
       ],
     },
     {
       title: "Cài đặt",
-      url: "#",
+      url: "/trangchu/cai-dat",
       icon: Settings,
       items: [
         {
           title: "Tài khoản",
-          url: "#",
+          url: "/trangchu/cai-dat/tai-khoan",
         },
         {
           title: "Hệ thống",
-          url: "#",
+          url: "/trangchu/cai-dat/he-thong",
         },
         {
           title: "Thông báo",
-          url: "#",
+          url: "/trangchu/cai-dat/thong-bao",
         },
       ],
+    },
+    {
+      title: "Lịch giảng dạy",
+      url: "/trangchu/lich-giang-day",
+      icon: FileText,
+      items: [],
     },
   ],
   projects: [
     {
       name: "Trang chủ",
-      url: "#",
+      url: "/trangchu",
       icon: Home,
     },
     {
       name: "Quản lý điểm",
-      url: "#",
+      url: "/trangchu/quan-ly-diem",
       icon: FileText,
     },
     {
       name: "Quản lý giảng viên",
-      url: "#",
+      url: "/trangchu/quan-ly-giang-vien",
       icon: User,
     },
     {
       name: "Quản lý tài khoản",
-      url: "#",
+      url: "/trangchu/cai-dat/tai-khoan", // Cập nhật để khớp với navMain
       icon: Settings,
+    },
+    {
+      name: "Lịch giảng dạy",
+      url: "/trangchu/lich-giang-day",
+      icon: FileText,
     },
   ],
 };
@@ -165,11 +162,11 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar
-      className=" fixed font-semibold  border-r shadow-md z-2"
+      className="fixed font-semibold border-r shadow-md z-50"
       collapsible="offcanvas"
       {...props}
     >
-      <SidebarHeader className=" text-black py-8">
+      <SidebarHeader className="text-black py-8">
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>

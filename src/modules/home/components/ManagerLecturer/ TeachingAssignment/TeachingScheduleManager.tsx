@@ -1,7 +1,6 @@
 
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import TableTeachingSchedule from './components/TableTeachingSchedule';
 import DialogAddTeachingSchedule from './components/AddTeachingSchedule/DialogAddTeachingSchedule';
 import PaginationTeachingSchedule from './components/PaginationTeachingSchedule';
