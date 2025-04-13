@@ -1,17 +1,16 @@
-import React from "react";
 import { Button } from "@/components/ui/button";
 
 import DialogAddCourse from "./components/DialogAddCourse";
 import TableCourse from "./components/TableCourse";
 import PaginationCourse from "./components/PaginationCourse";
+import { useState } from "react";
 
 export default function CourseManager() {
-    // Dữ liệu mẫu cho bảng
-    const courses = [
-        { id: 1, name: "Giới thiệu Lý luận chính trị", instructor: "Nguyen Van A" },
-        { id: 2, name: "Triết học Mác - Lênin", instructor: "Tran Thi B" },
-        { id: 3, name: "Kinh tế chính trị", instructor: "Le Van C" },
-    ];
+    const [selectedCourseId, setSelectedCourseId] = useState<string | null>(null);
+    const clickRowOpenCourse = (courseId: string) => {
+        setSelectedCourseId(courseId);
+    }
+
 
     return (
         <div className=" bg-white p-4">
@@ -33,7 +32,8 @@ export default function CourseManager() {
 
                 </div>
                 <div>
-                    <TableCourse />
+                    <TableCourse onRowClick={clickRowOpenCourse} />
+
                     <div className="my-8 ">
                         <PaginationCourse />
                     </div>

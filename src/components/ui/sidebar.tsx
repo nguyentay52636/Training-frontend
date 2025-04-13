@@ -251,7 +251,7 @@ function SidebarTrigger({
         data-sidebar="trigger"
         data-slot="sidebar-trigger"
         size="icon"
-        className={cn("size-14 text-white cursor-pointer", className)}
+        className={cn("size-14 text-black! cursor-pointer bg-gray-500", className)}
         onClick={(event) => {
           onClick?.(event);
           toggleSidebar();
@@ -334,7 +334,7 @@ function SidebarFooter({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="sidebar-footer"
       data-sidebar="footer"
-      className={cn("bg-white text-black flex flex-col gap-2 p-2 border-t border-gray-200", className)}
+      className={cn("bg-white text-black flex flex-col gap-2 p-2 border-t border-gray-200 absolute bottom-0", className)}
       {...props}
     />
   );
@@ -360,7 +360,7 @@ function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="sidebar-content"
       data-sidebar="content"
       className={cn(
-        "bg-white text-black flex min-h-0 flex-1 flex-col gap-1 overflow-auto group-data-[collapsible=icon]:overflow-hidden p-2",
+        "bg-white text-black flex min-h-0 flex-1 flex-col gap-1 overflow-auto group-data-[collapsible=icon]:overflow-hidden p-4 my-4!",
         className
       )}
       {...props}

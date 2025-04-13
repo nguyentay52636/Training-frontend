@@ -9,7 +9,7 @@ import LessonPlanManager from "./modules/home/components/LessonPlan/LessonPlanMa
 import TrainingProgramManager from "./modules/home/components/TrainingProgram/pages/TrainingProgramManager";
 import ManagerDefault from "./modules/home/components/Default/ManagerDefault";
 import AccountManagement from "./modules/home/components/AccountManagement/pages/AccountManagement";
-import TeachingScheduleManager from "./modules/home/components/ TeachingAssignment/pages/TeachingScheduleManager";
+import TeachingScheduleManager from "./modules/home/components/ManagerLecturer/ TeachingAssignment/TeachingScheduleManager";
 import SkeletonProgramManager from "./modules/home/components/TrainingProgram/pages/SkeletonProgramManager";
 import CourseManager from "./modules/home/components/TrainingProgram/components/ProgramContent/components/CourseDetails/CourseManager";
 
@@ -24,7 +24,7 @@ function App() {
       element: <AdminPages />,
       children: [
         {
-          index: true, element: <ManagerDefault />,
+          index: true, element: <TrainingProgramManager />,
 
         },
         { path: "lecturer", element: <LecturerManager /> },
@@ -36,10 +36,10 @@ function App() {
           path: "trainingprogram/skeletonprogram",
           element: <SkeletonProgramManager />
         },
-        {
-          path: "trainingprogram",
-          element: <TrainingProgramManager />,
-        },
+        // {
+        //   path: "trainingprogram",
+        //   element: <TrainingProgramManager />,
+        // },
         {
           path: "course",
           element: <CourseManager />,

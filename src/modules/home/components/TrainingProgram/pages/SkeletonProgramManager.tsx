@@ -17,6 +17,7 @@ import DialogAddBlockNow from '../components/ProgramContent/components/AddBlocKn
 import khoiKienThucData from '../components/ProgramContent/components/DataBlock';
 import BlocknowledgeActions from '../components/ProgramContent/components/BlocknowledgeActions';
 import { cn } from '@/lib/utils';
+import PaginationSkeleton from '../components/ProgramContent/components/CourseDetails/components/PaginationSkeleton';
 
 // Header component
 const Header = () => (
@@ -114,7 +115,6 @@ const TabNavigation = () => (
 
 );
 
-// GeneralInfoTab component
 const GeneralInfoTab = () => (
     <TabsContent value='general'>
         <Card className='border-gray-200 shadow-sm'>
@@ -233,11 +233,11 @@ const ObjectiveTab = () => (
             <CardHeader>
                 <div className='flex justify-between items-center mb-4'>
                     <CardTitle className='text-2xl font-bold text-gray-800'>Đề cương chi tiết</CardTitle>
-                    <div className='space-x-2'>
-                        <Button variant='outline' className='text-indigo-600 hover:bg-indigo-100'>
+                    <div className='space-x-2 flex'>
+                        <Button className="w-full md:w-auto bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-xl shadow-lg px-8 py-4 flex items-center gap-3 transition-all duration-300 transform hover:scale-105 cursor-pointer">
                             Sửa
                         </Button>
-                        <Button className='bg-indigo-600 hover:bg-indigo-700 text-white'>Lưu</Button>
+                        <Button className="w-full md:w-auto bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-xl shadow-lg px-8 py-4 flex items-center gap-3 transition-all duration-300 transform hover:scale-105 cursor-pointer">Lưu</Button>
                     </div>
                 </div>
             </CardHeader>
@@ -277,6 +277,8 @@ const CurriculumTab = () => (
                                 <TableRow className='bg-blue-300! '>
                                     <TableHead className='text-bold'>STT</TableHead>
                                     <TableHead className='text-bold'>Tên khối kiến thức & học phần</TableHead>
+                                    <TableHead className="">Thao tác</TableHead>
+
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -318,6 +320,9 @@ const CurriculumTab = () => (
                                 ))}
                             </TableBody>
                         </Table>
+                        <div className=" mt-6">
+                            <PaginationSkeleton />
+                        </div>
                     </div>
                 </div>
             </CardContent>
@@ -340,17 +345,17 @@ const ScheduleTab = () => (
 );
 
 // Navigation Buttons component
-const NavigationButtons = () => (
-    <div className='flex justify-end mt-6 space-x-4'>
-        <Button variant='outline' className='text-indigo-600 hover:bg-indigo-100'>
-            Sửa
-        </Button>
-        <Button variant='outline' className='text-indigo-600 hover:bg-indigo-100'>
-            Xóa
-        </Button>
-        <Button className='bg-indigo-600 hover:bg-indigo-700 text-white'>Lưu</Button>
-    </div>
-);
+// const NavigationButtons = () => (
+//     <div className='flex justify-end mt-6 space-x-4'>
+//         <Button variant='outline' className='text-indigo-600 hover:bg-indigo-100'>
+//             Sửa
+//         </Button>
+//         <Button variant='outline' className='text-indigo-600 hover:bg-indigo-100'>
+//             Xóa
+//         </Button>
+//         <Button className='bg-indigo-600 hover:bg-indigo-700 text-white'>Lưu</Button>
+//     </div>
+// );
 
 export default function SkeletonProgramManager() {
     const [open, setOpen] = useState(false);
@@ -365,7 +370,7 @@ export default function SkeletonProgramManager() {
                     <CurriculumTab />
                     <ScheduleTab />
                 </Tabs>
-                <NavigationButtons />
+                {/* <NavigationButtons /> */}
             </div>
         </div>
     );

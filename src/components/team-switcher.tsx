@@ -42,7 +42,7 @@ export function TeamSwitcher({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground bg-gradient-to-r from-blue-200 to-indigo-700 text-white py-3!"
             >
               <div className=" text-sidebar-primary-foreground flex aspect-square size-12 items-center justify-center rounded-lg font-bold my-4">
-                <activeTeam.logo className="size-10" />
+                <activeTeam.logo className="size-12" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-bold text-[18px]">{activeTeam.name}</span>

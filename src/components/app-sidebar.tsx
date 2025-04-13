@@ -48,11 +48,15 @@ const data = {
           url: "#",
         },
         {
-          title: "Thêm giảng viên",
+          title: "Thống kê giảng dạy",
           url: "#",
         },
         {
           title: "Hồ sơ giảng viên",
+          url: "#",
+        },
+        {
+          title: "Thông kê mẫu phân công",
           url: "#",
         },
       ],
@@ -161,11 +165,11 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar
-      className=" fixed font-bold  border-r shadow-md z-1"
+      className=" fixed font-semibold  border-r shadow-md z-2"
       collapsible="offcanvas"
       {...props}
     >
-      <SidebarHeader className=" text-black py-3">
+      <SidebarHeader className=" text-black py-8">
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
