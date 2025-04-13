@@ -48,7 +48,7 @@ export default function ManagerDefault() {
                     </div>
                 </div>
 
-                {/* Nút Làm mới */}
+           
                 <Button
                     variant="outline"
                     className="w-full md:w-auto flex items-center gap-2 px-6 py-3 text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 shadow-md transition-all duration-200"
@@ -57,7 +57,7 @@ export default function ManagerDefault() {
                     Làm mới
                 </Button>
 
-                {/* Nút Lọc */}
+
                 <Button
                     className="w-full md:w-auto flex items-center gap-2 px-6 py-3 text-white bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl hover:from-blue-700 hover:to-indigo-800 shadow-md transition-all duration-200 transform hover:scale-105"
                 >

@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/input";
-import { Search, X } from "lucide-react";
+import { Filter, RefreshCcw, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SearchOptionsDropdownMenu from "../../ManagerLecturer/components/SearchOptionsDropdownMenu";
 import PointTable from "../components/PointTable/PointTable";
@@ -19,12 +19,33 @@ export default function PointManagement() {
 
             <div className="flex flex-col md:flex-row items-center justify-between py-6 bg-white rounded-xl shadow-md px-6 mb-6">
                 {/* Search Input */}
-                <div className="relative w-full max-w-md mb-4 md:mb-0">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                    <Input
-                        placeholder="Tìm kiếm sinh viên theo họ tên..."
-                        className="pl-10 pr-4 py-2 rounded-full border-gray-200 focus:ring-blue-400 focus:border-blue-400 shadow-sm transition-all duration-200"
-                    />
+                <div className="flex justify-center items-center">
+                    <div className="relative w-full max-w-md mb-4 md:mb-0 mr-10">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                        <Input
+                            placeholder="Tìm kiếm sinh viên theo họ tên..."
+                            className="pl-10 pr-4 py-2 rounded-full border-gray-200 focus:ring-blue-400 focus:border-blue-400 shadow-sm transition-all duration-200"
+                        />
+
+
+                    </div>
+                    <div className="flex justify-center">
+                        <Button
+                            variant="outline"
+                            className="w-full md:w-auto flex items-center gap-2 px-6 py-3 text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 shadow-md transition-all duration-200 mx-4"
+                        >
+                            <RefreshCcw className="w-5 h-5" />
+                            Làm mới
+                        </Button>
+
+
+                        <Button
+                            className="w-full md:w-auto flex items-center gap-2 px-6 py-3 text-white bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl hover:from-blue-700 hover:to-indigo-800 shadow-md transition-all duration-200 transform hover:scale-105"
+                        >
+                            <Filter className="w-5 h-5" />
+                            Lọc
+                        </Button>
+                    </div>
                 </div>
 
                 {/* Buttons and Dropdown */}
