@@ -68,9 +68,9 @@ export default function TableAccount({
             <Table>
                 <TableHeader>
                     {table.getHeaderGroups().map((headerGroup) => (
-                        <TableRow key={headerGroup.id} className="bg-gradient-to-r from-blue-50 to-indigo-50">
+                        <TableRow key={headerGroup.id} className="bg-indigo-600 text-white!">
                             {headerGroup.headers.map((header) => (
-                                <TableHead key={header.id} className="text-blue-900 font-semibold py-4">
+                                <TableHead key={header.id} className="text-white! font-semibold py-4">
                                     {header.isPlaceholder
                                         ? null
                                         : flexRender(header.column.columnDef.header, header.getContext())}

@@ -10,12 +10,17 @@ import AccountManagement from "./modules/home/components/AccountManagement/pages
 import SkeletonProgramManager from "./modules/home/components/TrainingProgram/pages/SkeletonProgramManager";
 import CourseManager from "./modules/home/components/TrainingProgram/components/ProgramContent/components/CourseDetails/CourseManager";
 import TeachingScheduleManager from "./modules/home/components/ManagerLecturer/ TeachingAssignment/TeachingScheduleManager";
+import NotFound from "./modules/home/pages/NotFound";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <LoginPage />,
+    },
+    {
+      path: "*",
+      element: <NotFound />
     },
     {
       path: "/trangchu",
@@ -49,7 +54,7 @@ function App() {
           element: <TrainingProgramManager />
         },
         {
-          path: "trangchu/chuong-trinh-dao-tao/khung-chuong-trinh/khoahoc",
+          path: "lich-giang-day",
           element: <CourseManager />,
         },
         {

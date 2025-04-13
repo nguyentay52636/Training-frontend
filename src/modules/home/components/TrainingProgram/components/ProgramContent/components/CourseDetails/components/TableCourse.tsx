@@ -19,17 +19,17 @@ export default function TableCourse({ onRowClick }: TableCourseProps) {
         <div className="w-full p-4 bg-white rounded-xl shadow-md">
             <Table>
                 <TableHeader>
-                    <TableRow className="bg-blue-300">
-                        <TableHead>Chọn</TableHead>
-                        <TableHead>STT</TableHead>
-                        <TableHead>Mã học phần</TableHead>
-                        <TableHead>Tên học phần</TableHead>
-                        <TableHead>Số tín chỉ</TableHead>
-                        <TableHead>Lý thuyết</TableHead>
-                        <TableHead>Thực hành</TableHead>
-                        <TableHead>Thực tập</TableHead>
-                        <TableHead>Tổng số tiết</TableHead>
-                        <TableHead>Loại</TableHead>
+                    <TableRow className=" bg-indigo-600 text-white!">
+                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Chọn</TableHead>
+                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">STT</TableHead>
+                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Mã học phần</TableHead>
+                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Tên học phần</TableHead>
+                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Số tín chỉ</TableHead>
+                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Lý thuyết</TableHead>
+                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Thực hành</TableHead>
+                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Thực tập</TableHead>
+                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Tổng số tiết</TableHead>
+                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Loại</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>

@@ -15,15 +15,15 @@ export default function LecturerTable() {
     <div className='w-full'>
       <Table>
         <TableHeader>
-          <TableRow>
-            <TableHead>Mã giảng viên</TableHead>
-            <TableHead>Họ và tên giảng viên</TableHead>
-            <TableHead>Chức danh</TableHead>
-            <TableHead>Năm phong</TableHead>
-            <TableHead>Trình đọ </TableHead>
-            <TableHead>Năm tốt nghiệp </TableHead>
-            <TableHead>Nước </TableHead>
-            <TableHead className=' text-center'>Hành động </TableHead>
+          <TableRow className=" bg-indigo-600 text-white!">
+            <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Mã giảng viên</TableHead>
+            <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Họ và tên giảng viên</TableHead>
+            <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Chức danh</TableHead>
+            <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Năm phong</TableHead>
+            <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Trình đọ </TableHead>
+            <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Năm tốt nghiệp </TableHead>
+            <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Nước </TableHead>
+            <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Hành động </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

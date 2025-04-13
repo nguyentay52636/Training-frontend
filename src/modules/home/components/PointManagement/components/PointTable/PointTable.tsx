@@ -15,29 +15,30 @@ export default function PointTable() {
         <div className="w-full p-4 bg-white rounded-xl shadow-md">
             <Table>
                 <TableHeader>
-                    <TableRow className="bg-blue-300">
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-gray-700">
+
+                    <TableRow className=" bg-indigo-600 text-white!">
+                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white">
                             STT
                         </TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-gray-700">
+                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">
                             Mã sinh viên
                         </TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-gray-700">
+                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">
                             Họ và tên
                         </TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-gray-700">
+                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">
                             Chuyên cần
                         </TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-gray-700">
+                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">
                             Thực hành
                         </TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-gray-700">
+                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">
                             Giữa kỳ
                         </TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-gray-700">
+                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">
                             Cuối kỳ
                         </TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-center text-gray-700">
+                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-center text-white!">
                             Hành động
                         </TableHead>
                     </TableRow>

@@ -37,7 +37,7 @@ const data = {
   navMain: [
     {
       title: "Quản lý giảng viên",
-      url: "/trangchu/quan-ly-giang-vien", // Đường dẫn gốc khớp với routing
+      url: "/trangchu/quan-ly-giang-vien", 
       icon: User,
       items: [
         {
@@ -104,6 +104,8 @@ const data = {
         },
       ],
     },
+
+
     {
       title: "Cài đặt",
       url: "/trangchu/cai-dat",
@@ -122,12 +124,6 @@ const data = {
           url: "/trangchu/cai-dat/thong-bao",
         },
       ],
-    },
-    {
-      title: "Lịch giảng dạy",
-      url: "/trangchu/lich-giang-day",
-      icon: FileText,
-      items: [],
     },
   ],
   projects: [
@@ -148,7 +144,7 @@ const data = {
     },
     {
       name: "Quản lý tài khoản",
-      url: "/trangchu/cai-dat/tai-khoan", // Cập nhật để khớp với navMain
+      url: "/trangchu/quan-ly-tai-khoan", // Cập nhật để khớp với navMain
       icon: Settings,
     },
     {

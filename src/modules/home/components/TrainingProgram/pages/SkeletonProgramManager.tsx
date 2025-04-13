@@ -27,13 +27,13 @@ const Header = () => (
         </div>
         <div className='flex gap-8'>
             <Button className='bg-green-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-full shadow-md px-[40px]! py-5! cursor-pointer'>
-                <Plus className='mr-2 h-5 w-5' /> Sửa
+                <Plus className='mr-2 h-5 w-8' /> Sửa
             </Button>
             <Button className='bg-red-600 hover:from-blue-700 hover:to-indigo-800 text-white rounded-full shadow-md px-[40px]! py-5! cursor-pointer'>
-                <Trash2 className='mr-2 h-5 w-5' /> Xoá
+                <Trash2 className='mr-2 h-5 w-8' /> Xoá
             </Button>
             <Button className='bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-full shadow-md px-[40px]! py-5! cursor-pointer'>
-                <Save className='mr-2 h-5 w-5' /> Lưu
+                <Save className='mr-2 h-5 w-8' /> Lưu
             </Button>
         </div>
     </div>
@@ -234,10 +234,10 @@ const ObjectiveTab = () => (
                 <div className='flex justify-between items-center mb-4'>
                     <CardTitle className='text-2xl font-bold text-gray-800'>Đề cương chi tiết</CardTitle>
                     <div className='space-x-2 flex'>
-                        <Button className="w-full md:w-auto bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-xl shadow-lg px-8 py-4 flex items-center gap-3 transition-all duration-300 transform hover:scale-105 cursor-pointer">
+                        <Button className="w-8 h-5 w-full md:w-auto bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-xl shadow-lg px-8 py-4 flex items-center gap-3 transition-all duration-300 transform hover:scale-105 cursor-pointer">
                             Sửa
                         </Button>
-                        <Button className="w-full md:w-auto bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-xl shadow-lg px-8 py-4 flex items-center gap-3 transition-all duration-300 transform hover:scale-105 cursor-pointer">Lưu</Button>
+                        <Button className="w-8 h-5  w-full md:w-auto bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-xl shadow-lg px-8 py-4 flex items-center gap-3 transition-all duration-300 transform hover:scale-105 cursor-pointer">Lưu</Button>
                     </div>
                 </div>
             </CardHeader>
