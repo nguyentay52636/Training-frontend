@@ -18,6 +18,7 @@ import khoiKienThucData from '../components/ProgramContent/components/DataBlock'
 import BlocknowledgeActions from '../components/ProgramContent/components/BlocknowledgeActions';
 import { cn } from '@/lib/utils';
 import PaginationSkeleton from '../components/ProgramContent/components/CourseDetails/components/PaginationSkeleton';
+import Schedule from '../components/Schedule';
 
 // Header component
 const Header = () => (
@@ -302,13 +303,13 @@ const CurriculumTab = () => (
                                                             </span>
                                                             <div className='flex space-x-2'>
                                                                 <button
-                                                                    className='text-blue-600 hover:text-blue-800'
+                                                                    className='text-blue-600 hover:text-blue-800 cursor-pointer'
                                                                     title='Chỉnh sửa'
                                                                 >
-                                                                    <Pencil size={16} />
+                                                                    <Pencil size={20} />
                                                                 </button>
-                                                                <button className='text-red-600 hover:text-red-800' title='Xóa'>
-                                                                    <Trash2 size={16} />
+                                                                <button className='text-red-600 hover:text-red-800  cursor-pointer' title='Xóa'>
+                                                                    <Trash2 size={20} />
                                                                 </button>
                                                             </div>
                                                         </li>
@@ -344,18 +345,6 @@ const ScheduleTab = () => (
     </TabsContent>
 );
 
-// Navigation Buttons component
-// const NavigationButtons = () => (
-//     <div className='flex justify-end mt-6 space-x-4'>
-//         <Button variant='outline' className='text-indigo-600 hover:bg-indigo-100'>
-//             Sửa
-//         </Button>
-//         <Button variant='outline' className='text-indigo-600 hover:bg-indigo-100'>
-//             Xóa
-//         </Button>
-//         <Button className='bg-indigo-600 hover:bg-indigo-700 text-white'>Lưu</Button>
-//     </div>
-// );
 
 export default function SkeletonProgramManager() {
     const [open, setOpen] = useState(false);
@@ -368,9 +357,8 @@ export default function SkeletonProgramManager() {
                     <GeneralInfoTab />
                     <ObjectiveTab />
                     <CurriculumTab />
-                    <ScheduleTab />
+                    <Schedule />
                 </Tabs>
-                {/* <NavigationButtons /> */}
             </div>
         </div>
     );
