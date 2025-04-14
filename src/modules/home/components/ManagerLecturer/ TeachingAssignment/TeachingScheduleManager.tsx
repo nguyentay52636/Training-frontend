@@ -9,7 +9,7 @@ export default function TeachingScheduleManager() {
         <div>
             {/* Title */}
             <div className='mb-8 '>
-                <h1 className='text-4xl font-bold text-blue-900 tracking-tight'>Quản Lý Giảng Viên</h1>
+                <h1 className='text-4xl font-bold text-blue-900 tracking-tight'>Lịch giảng dạy</h1>
                 <p className='text-sm text-gray-500 mt-2'>
                     Quản lý thông tin giảng viên của SGU một cách hiệu quả và chuyên nghiệp
                 </p>

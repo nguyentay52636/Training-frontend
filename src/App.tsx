@@ -11,6 +11,8 @@ import SkeletonProgramManager from "./modules/home/components/TrainingProgram/pa
 import CourseManager from "./modules/home/components/TrainingProgram/components/ProgramContent/components/CourseDetails/CourseManager";
 import TeachingScheduleManager from "./modules/home/components/ManagerLecturer/ TeachingAssignment/TeachingScheduleManager";
 import NotFound from "./modules/home/pages/NotFound";
+import { LecturerEditProfile } from "./modules/Auth/pages/EditProfile";
+import ManagerPlanGroup from "./modules/home/components/PlanGroup/ManagerPlanGroup";
 
 function App() {
   const router = createBrowserRouter([
@@ -36,6 +38,9 @@ function App() {
           children: [
             { path: "danh-sach-giang-vien", element: <LecturerManager /> },
             { path: "lich-giang-day", element: <TeachingScheduleManager /> },
+            {
+              path: "ke-hoach-mo-nhom", element: <ManagerPlanGroup />
+            }
           ],
         },
         {
@@ -49,6 +54,8 @@ function App() {
         { path: "quan-ly-tai-khoan", element: <AccountManagement /> },
         { path: "ke-hoach-day-hoc", element: <LessonPlanManager /> },
 
+
+
         {
           path: "chuong-trinh-dao-tao",
           element: <TrainingProgramManager />
@@ -57,6 +64,12 @@ function App() {
           path: "lich-giang-day",
           element: <CourseManager />,
         },
+        {
+          path: "cai-dat/tai-khoan",
+          element: <LecturerEditProfile />
+        },
+
+
         {
           path: "chuong-trinh-dao-tao/khung-chuong-trinh", element: <SkeletonProgramManager />
         }

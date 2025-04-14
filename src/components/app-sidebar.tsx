@@ -48,6 +48,10 @@ const data = {
           title: "Phân công giảng dạy",
           url: "/trangchu/quan-ly-giang-vien/lich-giang-day",
         },
+        {
+          title: "Kế hoạch mở nhóm",
+          url: "/trangchu/quan-ly-giang-vien/ke-hoach-mo-nhom",
+        },
       ],
     },
     {
@@ -144,7 +148,7 @@ const data = {
     },
     {
       name: "Quản lý tài khoản",
-      url: "/trangchu/quan-ly-tai-khoan", // Cập nhật để khớp với navMain
+      url: "/trangchu/quan-ly-tai-khoan",
       icon: Settings,
     },
     {

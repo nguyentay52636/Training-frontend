@@ -16,10 +16,10 @@ interface TableCourseProps {
 
 export default function TableCourse({ onRowClick }: TableCourseProps) {
     return (
-        <div className="w-full p-4 bg-white rounded-xl shadow-md">
+        <div className="w-full p-4 bg-white rounded-xl">
             <Table>
                 <TableHeader>
-                    <TableRow className=" bg-indigo-600 text-white!">
+                    <TableRow className=" bg-indigo-600 text-white! hover:bg-indigo-600!">
                         <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Chọn</TableHead>
                         <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">STT</TableHead>
                         <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Mã học phần</TableHead>

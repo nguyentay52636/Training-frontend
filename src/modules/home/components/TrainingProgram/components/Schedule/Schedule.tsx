@@ -10,7 +10,8 @@ import {
 import MajorTable from './MajorTable';
 import { cn } from '@/lib/utils';
 import { ArrowDownToLine, ArrowUpToLine, Plus } from 'lucide-react';
-import DiaLogAddSchedule from './DiaLogAddSchedule';
+import DiaLogAddSchedule from './DialogAddSchedule';
+
 
 const majors = ['Kỹ thuật phần mềm'];
 
