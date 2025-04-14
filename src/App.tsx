@@ -13,6 +13,7 @@ import TeachingScheduleManager from "./modules/home/components/ManagerLecturer/ 
 import NotFound from "./modules/home/pages/NotFound";
 import { LecturerEditProfile } from "./modules/Auth/pages/EditProfile";
 import ManagerPlanGroup from "./modules/home/components/PlanGroup/ManagerPlanGroup";
+import ManagerLectureSkeleton from "./modules/home/components/SkeletonLecture/ManagerLectureSkeleton";
 
 function App() {
   const router = createBrowserRouter([
@@ -34,7 +35,7 @@ function App() {
         },
         {
           path: "quan-ly-giang-vien",
-          element: <LecturerManager />,
+          element: <ManagerLectureSkeleton />,
           children: [
             { path: "danh-sach-giang-vien", element: <LecturerManager /> },
             { path: "lich-giang-day", element: <TeachingScheduleManager /> },
