@@ -37,7 +37,7 @@ const data = {
   navMain: [
     {
       title: "Quản lý giảng viên",
-      url: "/trangchu/quan-ly-giang-vien", 
+      url: "/trangchu/quan-ly-giang-vien/danh-sach-giang-vien",
       icon: User,
       items: [
         {
@@ -143,7 +143,7 @@ const data = {
     },
     {
       name: "Quản lý giảng viên",
-      url: "/trangchu/quan-ly-giang-vien",
+      url: "/trangchu/quan-ly-giang-vien/danh-sach-giang-vien",
       icon: User,
     },
     {
