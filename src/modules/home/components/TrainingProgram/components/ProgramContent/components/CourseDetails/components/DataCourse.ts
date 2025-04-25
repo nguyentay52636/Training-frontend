@@ -8,7 +8,7 @@ export interface HocPhan {
     loaiHocPhan: string;
     tongSoTiet: number;
     heSoHocPhan: number;
-    hocKy: number; // Added for semester filtering
+    hocKy: number; 
 }
 
 export const hocPhanData: HocPhan[] = [

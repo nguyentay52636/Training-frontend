@@ -9,23 +9,19 @@ export default function SiderBarNavigate({ children }: { children?: React.ReactN
 
   return (
     <SidebarProvider>
-      <div className="flex h-screen w-full overflow-hidden">
-        {/* Sidebar */}
-        <div className={`${isSidebarOpen ? 'w-64' : 'w-16'} transition-all duration-300 bg-white border-r border-gray-200`}>
-          <AppSidebar />
-        </div>
 
-        {/* Nội dung chính */}
-        <div className="flex-1 flex flex-col min-w-0">
-          <Header sidebarOpen={isSidebarOpen} />
-          <SidebarTrigger onClick={() => setIsSidebarOpen(!isSidebarOpen)} />
-          <main className="flex-1 flex flex-col gap-4 p-6 overflow-y-auto bg-gray-100">
-            <div className="flex items-center gap-2 my-12">
-            </div>
-            {children || <Outlet />}
-          </main>
-        </div>
+      {/* Sidebar */}
+      <AppSidebar />
+      {/* Nội dung chính */}
+      <div className="flex-1 flex flex-col min-w-0">
+        <SidebarTrigger onClick={() => setIsSidebarOpen(!isSidebarOpen)} />
+        <main className="flex-1 flex flex-col gap-4 p-6 overflow-y-auto bg-gray-100">
+          <div className="flex items-center gap-2 my-12">
+          </div>
+          {children || <Outlet />}
+        </main>
       </div>
+
     </SidebarProvider>
   );
 }
