@@ -9,6 +9,7 @@ export interface UserType {
   user: boolean;
 }
 export  interface PointType { 
+  idCotDiem?: number;
   maSV: string;
   tenSV: string;
   diemChuyenCan: number;

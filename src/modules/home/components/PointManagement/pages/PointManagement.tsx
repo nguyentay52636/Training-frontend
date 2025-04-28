@@ -5,8 +5,29 @@ import SearchOptionsDropdownMenu from "../../ManagerLecturer/components/SearchOp
 import PointTable from "../components/PointTable/PointTable";
 import DialogAddPoint from "../components/DialogAddPoint";
 import PaginationPoint from "../components/PaginationPoint";
+import ExportExcel from "../components/ExportExcel";
+import { useState, useEffect } from "react";
+import { PointType } from "@/lib/apis/types";
+import { getAllPoint } from "@/lib/apis/pointApi";
 
 export default function PointManagement() {
+    const [points, setPoints] = useState<PointType[]>([]);
+
+    useEffect(() => {
+        const fetchPoints = async () => {
+            try {
+                const data = await getAllPoint();
+                if (data) {
+                    setPoints(data);
+                }
+            } catch (error) {
+                console.error('Error fetching points:', error);
+            }
+        };
+
+        fetchPoints();
+    }, []);
+
     return (
         <div className="">
             {/* Title */}
@@ -52,10 +73,7 @@ export default function PointManagement() {
                 <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
                     <div className="flex gap-4">
                         <SearchOptionsDropdownMenu />
-                        <Button className="w-32 bg-green-700 hover:bg-green-800 text-white rounded-full shadow-md transition-all duration-200 flex items-center justify-center">
-                            <X className="mr-2 h-4 w-4" />
-                            Xuất Excel
-                        </Button>
+                        <ExportExcel points={points} />
                         <Button className="w-32 bg-green-700 hover:bg-green-800 text-white rounded-full shadow-md transition-all duration-200 flex items-center justify-center">
                             <X className="mr-2 h-4 w-4" />
                             Nhập Excel
