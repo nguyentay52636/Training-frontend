@@ -13,12 +13,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useState } from "react";
 import { PointType } from "@/lib/apis/types";
+import { createPoint } from "@/lib/apis/pointApi";
+import { toast } from 'react-toastify';
+
 
 
 
 // Schema validation với zod
 const formSchema = z.object({
-    idCotDiem: z.number().min(1, "ID cột điểm phải lớn hơn 0"),
     maSV: z.string().min(1, "Mã sinh viên không được để trống").max(10, "Mã sinh viên quá dài"),
     tenSV: z.string().min(1, "Họ và tên không được để trống").max(100, "Họ và tên quá dài"),
     diemChuyenCan: z.number().min(0, "Điểm phải từ 0").max(10, "Điểm không được vượt quá 10"),
@@ -33,11 +35,12 @@ const formSchema = z.object({
 
 export default function AddPointForm({ onClose }: { onClose: (isOpen: boolean) => void }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [point, setPoint] = useState<PointType>();
 
     const form = useForm<PointType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            idCotDiem: undefined,
             maSV: "",
             tenSV: "",
             diemChuyenCan: undefined,
@@ -54,10 +57,31 @@ export default function AddPointForm({ onClose }: { onClose: (isOpen: boolean) =
     const handleAddPoint = async (values: PointType) => {
         setIsSubmitting(true);
         try {
-            console.log("Dữ liệu điểm số:", values);
-            onClose(false);
-        } catch (error) {
-            console.error("Lỗi khi thêm điểm:", error);
+            const response = await createPoint(values);
+            if (response) {
+                toast.success('Thêm điểm thành công!', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+                onClose(false);
+            }
+        } catch (error: any) {
+            toast.error(error.message || "Có lỗi xảy ra khi thêm điểm", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
         } finally {
             setIsSubmitting(false);
         }
@@ -70,28 +94,6 @@ export default function AddPointForm({ onClose }: { onClose: (isOpen: boolean) =
                 className="space-y-8 bg-gradient-to-br from-white via-gray-50 to-blue-50 rounded-xl"
             >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <FormField
-                        name="idCotDiem"
-                        control={form.control}
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormControl>
-                                    <div className="flex flex-col gap-3">
-                                        <FormLabel className="text-lg font-semibold text-gray-800">ID Cột Điểm</FormLabel>
-                                        <Input
-                                            type="number"
-                                            className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
-                                            {...field}
-                                            onChange={(e) => field.onChange(parseInt(e.target.value) || undefined)}
-                                            placeholder="VD: 10"
-                                        />
-                                    </div>
-                                </FormControl>
-                                <FormMessage className="text-red-500 text-sm" />
-                            </FormItem>
-                        )}
-                    />
-
                     <FormField
                         name="maSV"
                         control={form.control}

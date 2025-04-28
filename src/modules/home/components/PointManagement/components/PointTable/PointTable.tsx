@@ -20,7 +20,9 @@ export default function PointTable() {
         const fetchPoints = async () => {
             try {
                 const data = await getAllPoint();
-                setPoints(data);
+                if (data) {
+                    setPoints(data);
+                }
             } catch (error) {
                 console.error('Error fetching points:', error);
             } finally {
@@ -68,7 +70,7 @@ export default function PointTable() {
                 </TableHeader>
                 <TableBody>
                     {points.map((point, index) => (
-                        <TableRow key={point.idCotDiem} className="hover:bg-muted/50 transition">
+                        <TableRow className="hover:bg-muted/50 transition">
                             <TableCell className="font-medium">{index + 1}</TableCell>
                             <TableCell>{point.maSV}</TableCell>
                             <TableCell>{point.tenSV}</TableCell>
