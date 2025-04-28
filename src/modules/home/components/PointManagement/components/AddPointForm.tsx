@@ -12,20 +12,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useState } from "react";
+import { PointType } from "@/lib/apis/types";
 
-type StudentPointType = {
-    idCotDiem: number;
-    maSV: string;
-    tenSV: string;
-    diemChuyenCan: number;
-    diemThucHanh: number;
-    diemGiuaKy: number;
-    diemCuoiKy: number;
-    bangDiemMon: string;
-    hocKy: number;
-    nam: string;
-    lop: string;
-};
+
 
 // Schema validation với zod
 const formSchema = z.object({
@@ -45,7 +34,7 @@ const formSchema = z.object({
 export default function AddPointForm({ onClose }: { onClose: (isOpen: boolean) => void }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const form = useForm<StudentPointType>({
+    const form = useForm<PointType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             idCotDiem: undefined,
@@ -62,7 +51,7 @@ export default function AddPointForm({ onClose }: { onClose: (isOpen: boolean) =
         },
     });
 
-    const handleAddPoint = async (values: StudentPointType) => {
+    const handleAddPoint = async (values: PointType) => {
         setIsSubmitting(true);
         try {
             console.log("Dữ liệu điểm số:", values);

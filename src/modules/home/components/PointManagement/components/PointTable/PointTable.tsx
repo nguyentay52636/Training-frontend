@@ -6,17 +6,40 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { pointData } from './dataPoint';
-import PointAction from './PointAction';
 
+import PointAction from './PointAction';
+import { useEffect, useState } from 'react';
+import { PointType } from '@/lib/apis/types';
+import { getAllPoint } from '@/lib/apis/pointApi';
 
 export default function PointTable() {
+    const [points, setPoints] = useState<PointType[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchPoints = async () => {
+            try {
+                const data = await getAllPoint();
+                setPoints(data);
+            } catch (error) {
+                console.error('Error fetching points:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPoints();
+    }, []);
+
+    if (loading) {
+        return <div className="w-full p-4 text-center">Loading...</div>;
+    }
+
     return (
         <div className="w-full p-4 bg-white rounded-xl shadow-md">
             <Table>
                 <TableHeader>
-
-                    <TableRow className=" bg-indigo-600 text-white!">
+                    <TableRow className="bg-indigo-600 text-white!">
                         <TableHead className="text-lg font-semibold tracking-wide uppercase text-white">
                             STT
                         </TableHead>
@@ -44,7 +67,7 @@ export default function PointTable() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {pointData.map((point, index) => (
+                    {points.map((point, index) => (
                         <TableRow key={point.idCotDiem} className="hover:bg-muted/50 transition">
                             <TableCell className="font-medium">{index + 1}</TableCell>
                             <TableCell>{point.maSV}</TableCell>
