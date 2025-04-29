@@ -6,9 +6,12 @@ import PointTable from "../components/PointTable/PointTable";
 import DialogAddPoint from "../components/DialogAddPoint";
 import PaginationPoint from "../components/PaginationPoint";
 import ExportExcel from "../components/ExportExcel";
+
 import { useState, useEffect } from "react";
 import { PointType } from "@/lib/apis/types";
 import { getAllPoint } from "@/lib/apis/pointApi";
+import { toast } from "sonner";
+import ExcelImport from "../components/ExcelImport/ExcelImport";
 
 export default function PointManagement() {
     const [points, setPoints] = useState<PointType[]>([]);
@@ -27,6 +30,11 @@ export default function PointManagement() {
 
         fetchPoints();
     }, []);
+
+    const handleImportSuccess = (importedPoints: PointType[]) => {
+        setPoints(prevPoints => [...importedPoints, ...prevPoints]);
+        toast.success('Đã nhập Excel thành công!');
+    };
 
     return (
         <div className="">
@@ -47,8 +55,6 @@ export default function PointManagement() {
                             placeholder="Tìm kiếm sinh viên theo họ tên..."
                             className="pl-10 pr-4 py-2 rounded-full border-gray-200 focus:ring-blue-400 focus:border-blue-400 shadow-sm transition-all duration-200"
                         />
-
-
                     </div>
                     <div className="flex justify-center">
                         <Button
@@ -58,7 +64,6 @@ export default function PointManagement() {
                             <RefreshCcw className="w-5 h-5" />
                             Làm mới
                         </Button>
-
 
                         <Button
                             className="w-full md:w-auto flex items-center gap-2 px-6 py-3 text-white bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl hover:from-blue-700 hover:to-indigo-800 shadow-md transition-all duration-200 transform hover:scale-105"
@@ -74,10 +79,7 @@ export default function PointManagement() {
                     <div className="flex gap-4">
                         <SearchOptionsDropdownMenu />
                         <ExportExcel points={points} />
-                        <Button className="w-32 bg-green-700 hover:bg-green-800 text-white rounded-full shadow-md transition-all duration-200 flex items-center justify-center">
-                            <X className="mr-2 h-4 w-4" />
-                            Nhập Excel
-                        </Button>
+                        <ExcelImport onImportSuccess={handleImportSuccess} />
                         <DialogAddPoint />
                     </div>
                 </div>

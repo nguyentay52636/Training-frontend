@@ -12,15 +12,18 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
+    DialogFooter,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 import PointAction from './PointAction';
 import DialogViewDetailPoint from './DialogViewDetailPoint';
 
 import { useEffect, useState } from 'react';
 import { PointType } from '@/lib/apis/types';
-import { getAllPoint } from '@/lib/apis/pointApi';
+import { getAllPoint, deletePoint } from '@/lib/apis/pointApi';
 import UpdatePointForm from '../UpdatePointForm';
+import { toast } from 'sonner';
 
 export default function PointTable() {
     const [points, setPoints] = useState<PointType[]>([]);
@@ -28,21 +31,24 @@ export default function PointTable() {
     const [selectedPoint, setSelectedPoint] = useState<PointType | null>(null);
     const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
     const [isViewDetailOpen, setIsViewDetailOpen] = useState(false);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [pointToDelete, setPointToDelete] = useState<PointType | null>(null);
+
+    const fetchPoints = async () => {
+        try {
+            setLoading(true);
+            const data = await getAllPoint();
+            if (data) {
+                setPoints(data);
+            }
+        } catch (error) {
+            console.error('Error fetching points:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchPoints = async () => {
-            try {
-                const data = await getAllPoint();
-                if (data) {
-                    setPoints(data);
-                }
-            } catch (error) {
-                console.error('Error fetching points:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchPoints();
     }, []);
 
@@ -52,23 +58,49 @@ export default function PointTable() {
     };
 
     const handleUpdateSuccess = () => {
-        // Refresh the points list after successful update
-        const fetchPoints = async () => {
-            try {
-                const data = await getAllPoint();
-                if (data) {
-                    setPoints(data);
+        if (selectedPoint) {
+            setPoints(prevPoints => {
+                const index = prevPoints.findIndex(p => p.maSV === selectedPoint.maSV);
+                if (index !== -1) {
+                    const newPoints = [...prevPoints];
+                    newPoints[index] = selectedPoint;
+                    return newPoints;
+                } else {
+                    return [selectedPoint, ...prevPoints];
                 }
-            } catch (error) {
-                console.error('Error fetching points:', error);
-            }
-        };
-        fetchPoints();
+            });
+        }
+        setIsUpdateDialogOpen(false);
     };
 
     const handleViewDetail = (point: PointType) => {
         setSelectedPoint(point);
         setIsViewDetailOpen(true);
+    };
+
+    const handleDeleteClick = (point: PointType) => {
+        setPointToDelete(point);
+        setIsDeleteDialogOpen(true);
+    };
+
+    const handleDeleteConfirm = async () => {
+        if (!pointToDelete?.idCotDiem) {
+            toast.error('Không tìm thấy ID điểm cần xóa');
+            return;
+        }
+
+        try {
+            const response = await deletePoint(pointToDelete.idCotDiem);
+            if (response) {
+                setPoints(prevPoints => prevPoints.filter(p => p.idCotDiem !== pointToDelete.idCotDiem));
+                toast.success(`Đã xóa điểm của sinh viên ${pointToDelete.tenSV} (${pointToDelete.maSV}) thành công!`);
+            }
+        } catch (error: any) {
+            toast.error(error.message || 'Có lỗi xảy ra khi xóa điểm');
+        } finally {
+            setIsDeleteDialogOpen(false);
+            setPointToDelete(null);
+        }
     };
 
     if (loading) {
@@ -77,7 +109,6 @@ export default function PointTable() {
 
     return (
         <div className="w-full p-4 bg-white rounded-xl shadow-md">
-        
             <Table>
                 <TableHeader>
                     <TableRow className="bg-indigo-600 text-white!">
@@ -109,7 +140,7 @@ export default function PointTable() {
                 </TableHeader>
                 <TableBody>
                     {points.map((point, index) => (
-                        <TableRow className="hover:bg-muted/50 transition">
+                        <TableRow key={point.maSV} className="hover:bg-muted/50 transition">
                             <TableCell className="font-medium">{index + 1}</TableCell>
                             <TableCell>{point.maSV}</TableCell>
                             <TableCell>{point.tenSV}</TableCell>
@@ -119,7 +150,12 @@ export default function PointTable() {
                             <TableCell>{point.diemCuoiKy}</TableCell>
                             <TableCell>
                                 <div className="flex justify-center">
-                                    <PointAction point={point} onEdit={handleEdit} onViewDetail={handleViewDetail} />
+                                    <PointAction
+                                        point={point}
+                                        onEdit={handleEdit}
+                                        onViewDetail={handleViewDetail}
+                                        onDelete={handleDeleteClick}
+                                    />
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -145,6 +181,35 @@ export default function PointTable() {
                             />
                         )}
                     </div>
+                </DialogContent>
+            </Dialog>
+
+            {/* Delete Confirmation Dialog */}
+            <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle className="text-red-600 text-xl font-bold">Xác nhận xóa</DialogTitle>
+                        <DialogDescription className="text-gray-600">
+                            Bạn có chắc chắn muốn xóa điểm của sinh viên {pointToDelete?.tenSV} ({pointToDelete?.maSV})?
+                            Hành động này không thể hoàn tác.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="flex gap-2 justify-end mt-4">
+                        <Button
+                            variant="outline"
+                            onClick={() => setIsDeleteDialogOpen(false)}
+                            className="border-gray-300 hover:bg-gray-100"
+                        >
+                            Hủy
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            onClick={handleDeleteConfirm}
+                            className="bg-red-600 hover:bg-red-700"
+                        >
+                            Xóa
+                        </Button>
+                    </DialogFooter>
                 </DialogContent>
             </Dialog>
 
