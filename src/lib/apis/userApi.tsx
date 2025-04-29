@@ -20,3 +20,19 @@ export const deleteUserAPI = async (userID: number) => {
     throw new Error(error);
   }
 };
+
+export const searchUserAPI = async (keyword?: string) => {
+  try {
+    const { data } = await baseApi.get<UserType[]>('/nguoidung/timkiem', {
+      params: {
+        keyword: keyword || '',
+      },
+    });
+    return data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const addUserAPI = async ()=>{}

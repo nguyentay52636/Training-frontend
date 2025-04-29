@@ -4,8 +4,12 @@ import AddLecturerDialog from './components/AddLecturer/AddLecturerDialog';
 import SearchOptionsDropdownMenu from './components/SearchOptionsDropdownMenu';
 import LecturerTable from './components/LecturerTable';
 import { Button } from '@/components/ui/button';
+import { useGetAllTeacherQuery } from './components/query';
+import { useState } from 'react';
 
 export default function LecturerManager() {
+  const [keyword, setKeyword] = useState('');
+  const { data } = useGetAllTeacherQuery({ keyword });
   return (
     <div>
       {/* Title */}
@@ -20,6 +24,7 @@ export default function LecturerManager() {
         <div className='relative w-full max-w-md'>
           <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5' />
           <Input
+            onChange={(e) => setKeyword(e.target.value)}
             placeholder='Tìm kiếm giảng viên theo họ tên...'
             className='pl-10 rounded-full border-gray-200 focus:ring-blue-400 shadow-sm'
           />
@@ -31,7 +36,7 @@ export default function LecturerManager() {
         </div>
       </div>
 
-      <LecturerTable />
+      {data && <LecturerTable lectureData={data} />}
 
       <div className='mx-auto gap-x-5 mt-8 flex justify-center'>
         <Button className='hover:bg-secondary' variant='outline'>
