@@ -1,7 +1,5 @@
-import React from 'react'
+import React from 'react';
 
 export default function authPages() {
-    return (
-        <div>authPages</div>
-    )
+  return <div>authPages</div>;
 }

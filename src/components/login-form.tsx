@@ -4,16 +4,30 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useForm } from 'react-hook-form';
+import { useAppDispatch } from '@/redux/hooks/hooks';
+import { login } from '@/redux/slices/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 export function LoginForm({ ...props }: React.ComponentProps<'div'>) {
-  const { register, handleSubmit } = useForm<{ email: string; password: string }>({
+  const { register, handleSubmit } = useForm<{ userName: string; password: string }>({
     defaultValues: {
-      email: '',
+      userName: '',
       password: '',
     },
   });
 
-  const handleLogin = (value: { email: string; password: string }) => console.log(value);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const handleLogin = async (value: { userName: string; password: string }) => {
+    try {
+      await dispatch(login(value)).unwrap();
+      navigate('/trangchu', {
+        replace: true,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div
@@ -36,13 +50,12 @@ export function LoginForm({ ...props }: React.ComponentProps<'div'>) {
 
               {/* Trường Email */}
               <div className='grid gap-3'>
-                <Label htmlFor='email' className='text-gray-700 font-medium'>
-                  Email
+                <Label htmlFor='username' className='text-gray-700 font-medium'>
+                  Username
                 </Label>
                 <Input
-                  {...register('email')}
-                  id='email'
-                  type='email'
+                  {...register('userName')}
+                  id='username'
                   placeholder='VD: email@sgu.edu.vn'
                   required
                   className='rounded-lg border-blue-200 focus:ring-blue-400 shadow-sm'

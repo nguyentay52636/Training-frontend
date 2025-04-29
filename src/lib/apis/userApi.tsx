@@ -1,5 +1,5 @@
 import baseApi from './baseApi';
-import { UserType } from './types';
+import { Role, UserType } from './types';
 
 export const getAllUserAPI = async () => {
   try {
@@ -35,4 +35,24 @@ export const searchUserAPI = async (keyword?: string) => {
   }
 };
 
-export const addUserAPI = async ()=>{}
+export const addUserAPI = async () => {};
+
+export const loginAPI = async (userData: { userName: string; password: string }) => {
+  try {
+    const { data } = await baseApi.post<UserType>('/nguoidung/dangnhap', userData);
+    return data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const registerAPI = async (userData: { email: string; password: string; role: Role }) => {
+  try {
+    const { data } = await baseApi.post('/nguoidung/dangky', userData);
+    return data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};

@@ -6,7 +6,7 @@ export interface UserType {
   role: number;
   admin: boolean;
   giangVien: boolean;
-  user: boolean;
+  user: Role;
 }
 export interface PointType {
   idCotDiem?: number;
@@ -37,4 +37,10 @@ export interface SpecializedType {
   tenChuyenNganh: string;
   idHocPhan: string;
   hocKyThucHien: number;
+}
+
+export enum Role {
+  User = 0,
+  GiangVien = 1,
+  Admin = 2,
 }
