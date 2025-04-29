@@ -13,11 +13,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useState } from "react";
 import { PointType } from "@/lib/apis/types";
-import { createPoint } from "@/lib/apis/pointApi";
+import { updatePoint } from "@/lib/apis/pointApi";
 import { toast } from 'react-toastify';
-
-
-
 
 // Schema validation với zod
 const formSchema = z.object({
@@ -33,33 +30,31 @@ const formSchema = z.object({
     lop: z.string().min(1, "Lớp không được để trống").max(20, "Tên lớp quá dài"),
 });
 
-export default function AddPointForm({ onClose }: { onClose: (isOpen: boolean) => void }) {
+interface UpdatePointFormProps {
+    point: PointType;
+    onClose: (isOpen: boolean) => void;
+    onUpdateSuccess: () => void;
+}
+
+export default function UpdatePointForm({ point, onClose, onUpdateSuccess }: UpdatePointFormProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [point, setPoint] = useState<PointType>();
 
     const form = useForm<PointType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            maSV: "",
-            tenSV: "",
-            diemChuyenCan: undefined,
-            diemThucHanh: undefined,
-            diemGiuaKy: undefined,
-            diemCuoiKy: undefined,
-            bangDiemMon: "",
-            hocKy: undefined,
-            nam: "",
-            lop: "",
+            ...point
         },
     });
 
-    const handleAddPoint = async (values: PointType) => {
+    const handleUpdatePoint = async (values: PointType) => {
         setIsSubmitting(true);
         try {
-            const response = await createPoint(values);
+            if (!point.idCotDiem) {
+                throw new Error("Không tìm thấy ID điểm cần cập nhật");
+            }
+            const response = await updatePoint(point.idCotDiem, values);
             if (response) {
-                toast.success('Thêm điểm thành công!', {
+                toast.success('Cập nhật điểm thành công!', {
                     position: "top-right",
                     autoClose: 3000,
                     hideProgressBar: false,
@@ -69,10 +64,11 @@ export default function AddPointForm({ onClose }: { onClose: (isOpen: boolean) =
                     progress: undefined,
                     theme: "light",
                 });
+                onUpdateSuccess();
                 onClose(false);
             }
         } catch (error: any) {
-            toast.error(error.message || "Có lỗi xảy ra khi thêm điểm", {
+            toast.error(error.message || "Có lỗi xảy ra khi cập nhật điểm", {
                 position: "top-right",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -90,7 +86,7 @@ export default function AddPointForm({ onClose }: { onClose: (isOpen: boolean) =
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit(handleAddPoint)}
+                onSubmit={form.handleSubmit(handleUpdatePoint)}
                 className="space-y-8 bg-gradient-to-br from-white via-gray-50 to-blue-50 rounded-xl"
             >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -323,10 +319,10 @@ export default function AddPointForm({ onClose }: { onClose: (isOpen: boolean) =
                         disabled={isSubmitting}
                         className="rounded-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 px-8 py-3 text-lg text-white font-semibold shadow-md transition-all duration-200"
                     >
-                        {isSubmitting ? "Đang xử lý..." : "Thêm Điểm"}
+                        {isSubmitting ? "Đang xử lý..." : "Cập nhật Điểm"}
                     </Button>
                 </div>
             </form>
         </Form>
     );
-}
+} 

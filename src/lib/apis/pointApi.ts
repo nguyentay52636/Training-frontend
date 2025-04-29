@@ -1,13 +1,13 @@
 import baseApi from './baseApi';
 import { PointType } from './types';
+import { handleApiError } from '../utils/errorHandler';
 
 export const getAllPoint = async () => {
   try {
     const { data } = await baseApi.get<PointType[]>('/diem');
     return data;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    throw new Error(error);
+    handleApiError(error);
   }
 };
 
@@ -15,13 +15,14 @@ export const getPointByCodeSV = async (codeSV: number) => {
   try {
     const { data } = await baseApi.get<PointType[]>(`/diem/${codeSV}`);
     return data;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    throw new Error(error);
+    handleApiError(error);
   }
 };
+
 export const createPoint = async ({
   maSV,
+  tenSV,
   diemChuyenCan,
   diemThucHanh,
   diemGiuaKy,
@@ -32,9 +33,8 @@ export const createPoint = async ({
   lop,
 }: PointType) => {
   const point: PointType = {
-    idCotDiem: 0,
     maSV: maSV,
-    tenSV: '',
+    tenSV: tenSV,
     diemChuyenCan: diemChuyenCan,
     diemThucHanh: diemThucHanh,
     diemGiuaKy: diemGiuaKy,
@@ -47,25 +47,25 @@ export const createPoint = async ({
   try {
     const { data } = await baseApi.post<PointType>('/diem', point);
     return data;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    throw new Error(error);
+    handleApiError(error);
   }
 };
-// ok
+
 export const deletePoint = async (idCotDiem: number) => {
   try {
     const { data } = await baseApi.delete<PointType>(`/diem/${idCotDiem}`);
     return data;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    throw new Error(error);
+    handleApiError(error);
   }
 };
+
 export const updatePoint = async (
   idCotDiem: number,
   {
     maSV,
+    tenSV,
     diemChuyenCan,
     diemThucHanh,
     diemGiuaKy,
@@ -77,9 +77,8 @@ export const updatePoint = async (
   }: PointType,
 ) => {
   const point: PointType = {
-    idCotDiem: idCotDiem,
     maSV: maSV,
-    tenSV: '',
+    tenSV: tenSV,
     diemChuyenCan: diemChuyenCan,
     diemThucHanh: diemThucHanh,
     diemGiuaKy: diemGiuaKy,
@@ -92,8 +91,7 @@ export const updatePoint = async (
   try {
     const { data } = await baseApi.put<PointType>(`/diem/${idCotDiem}`, point);
     return data;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    throw new Error(error);
+    handleApiError(error);
   }
 };

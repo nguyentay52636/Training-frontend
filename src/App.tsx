@@ -14,6 +14,8 @@ import NotFound from "./modules/home/pages/NotFound";
 import { LecturerEditProfile } from "./modules/Auth/pages/EditProfile";
 import ManagerPlanGroup from "./modules/home/components/PlanGroup/ManagerPlanGroup";
 import ManagerLectureSkeleton from "./modules/home/components/SkeletonLecture/ManagerLectureSkeleton";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const router = createBrowserRouter([
@@ -78,7 +80,23 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />
+      <ToastContainer 
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </>
+  );
 }
 
 export default App;

@@ -1,6 +1,4 @@
-
 import { Button } from '@/components/ui/button';
-
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -10,7 +8,15 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
-export default function PointAction() {
+import { PointType } from "@/lib/apis/types";
+
+interface PointActionProps {
+    point: PointType;
+    onEdit: (point: PointType) => void;
+    onViewDetail: (point: PointType) => void;
+}
+
+export default function PointAction({ point, onEdit, onViewDetail }: PointActionProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -21,14 +27,16 @@ export default function PointAction() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Thao Tác</DropdownMenuLabel>
-                <DropdownMenuItem
-
-                >
+                <DropdownMenuItem>
                     Sao chép mã tài khoản
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Xem chi tiết</DropdownMenuItem>
-                <DropdownMenuItem>Chỉnh sửa</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onViewDetail(point)}>
+                    Xem chi tiết
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onEdit(point)}>
+                    Chỉnh sửa
+                </DropdownMenuItem>
                 <DropdownMenuItem className="text-red-600 hover:bg-red-50">
                     Xóa
                 </DropdownMenuItem>

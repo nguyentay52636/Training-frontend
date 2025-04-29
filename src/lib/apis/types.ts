@@ -8,8 +8,8 @@ export interface UserType {
   giangVien: boolean;
   user: boolean;
 }
-export  interface PointType { 
-  idCotDiem: number;
+export interface PointType {
+  idCotDiem?: number;
   maSV: string;
   tenSV: string;
   diemChuyenCan: number;
@@ -21,7 +21,7 @@ export  interface PointType {
   nam: string;
   lop: string;
 }
-export interface CourseType { 
+export interface CourseType {
   maHP: string;
   tenHP: string;
   soTinChi: number;
@@ -31,10 +31,10 @@ export interface CourseType {
   loaiHocPhan: string;
   tongSoTiet: number;
   heSoHocPhan: number;
-  hocKy: number; 
+  hocKy: number;
 }
-export interface SpecializedType { 
+export interface SpecializedType {
   tenChuyenNganh: string;
   idHocPhan: string;
   hocKyThucHien: number;
- } 
+}
