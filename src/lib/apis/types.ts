@@ -6,9 +6,9 @@ export interface UserType {
   role: number;
   admin: boolean;
   giangVien: boolean;
-  user: boolean;
+  user: Role;
 }
-export  interface PointType { 
+export interface PointType {
   idCotDiem?: number;
   maSV: string;
   tenSV: string;
@@ -21,7 +21,7 @@ export  interface PointType {
   nam: string;
   lop: string;
 }
-export interface CourseType { 
+export interface CourseType {
   maHP: string;
   tenHP: string;
   soTinChi: number;
@@ -31,10 +31,16 @@ export interface CourseType {
   loaiHocPhan: string;
   tongSoTiet: number;
   heSoHocPhan: number;
-  hocKy: number; 
+  hocKy: number;
 }
-export interface SpecializedType { 
+export interface SpecializedType {
   tenChuyenNganh: string;
   idHocPhan: string;
   hocKyThucHien: number;
- } 
+}
+
+export enum Role {
+  User = 0,
+  GiangVien = 1,
+  Admin = 2,
+}
