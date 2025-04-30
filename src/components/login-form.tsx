@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useAppDispatch } from '@/redux/hooks/hooks';
 import { login } from '@/redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 export function LoginForm({ ...props }: React.ComponentProps<'div'>) {
   const { register, handleSubmit } = useForm<{ userName: string; password: string }>({
@@ -21,6 +22,7 @@ export function LoginForm({ ...props }: React.ComponentProps<'div'>) {
   const handleLogin = async (value: { userName: string; password: string }) => {
     try {
       await dispatch(login(value)).unwrap();
+      toast.success('Đăng nhập thành công!');
       navigate('/trangchu', {
         replace: true,
       });
