@@ -77,9 +77,9 @@ export default function ExportExcel({ points }: ExportExcelProps) {
     };
 
     return (
-        <Button 
+        <Button
             onClick={exportToExcel}
-            className="bg-green-700 hover:bg-green-800 text-white rounded-full shadow-md transition-all duration-200 flex items-center justify-center"
+            className="bg-green-700 cursor-pointer hover:bg-green-800 text-white rounded-full shadow-md transition-all duration-200 flex items-center justify-center"
         >
             <Download className="mr-2 h-4 w-4" />
             Xuất Excel

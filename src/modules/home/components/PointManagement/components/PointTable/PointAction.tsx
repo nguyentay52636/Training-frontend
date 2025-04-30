@@ -14,9 +14,10 @@ interface PointActionProps {
     point: PointType;
     onEdit: (point: PointType) => void;
     onViewDetail: (point: PointType) => void;
+    onDelete: (point: PointType) => void;
 }
 
-export default function PointAction({ point, onEdit, onViewDetail }: PointActionProps) {
+export default function PointAction({ point, onEdit, onViewDetail, onDelete }: PointActionProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -37,7 +38,8 @@ export default function PointAction({ point, onEdit, onViewDetail }: PointAction
                 <DropdownMenuItem onClick={() => onEdit(point)}>
                     Chỉnh sửa
                 </DropdownMenuItem>
-                <DropdownMenuItem className="text-red-600 hover:bg-red-50">
+                <DropdownMenuItem onClick={() => onDelete(point)}
+                    className="text-red-600 hover:bg-red-50">
                     Xóa
                 </DropdownMenuItem>
             </DropdownMenuContent>
