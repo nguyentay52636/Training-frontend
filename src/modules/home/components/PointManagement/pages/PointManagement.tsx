@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/input";
-import { Filter, RefreshCcw, Search, X } from "lucide-react";
+import { Filter, RefreshCcw, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SearchOptionsDropdownMenu from "../../ManagerLecturer/components/SearchOptionsDropdownMenu";
 import PointTable from "../components/PointTable/PointTable";

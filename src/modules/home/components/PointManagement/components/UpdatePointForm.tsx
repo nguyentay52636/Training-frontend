@@ -67,8 +67,9 @@ export default function UpdatePointForm({ point, onClose, onUpdateSuccess }: Upd
                 onUpdateSuccess();
                 onClose(false);
             }
-        } catch (error: any) {
-            toast.error(error.message || "Có lỗi xảy ra khi cập nhật điểm", {
+        } catch (error) {
+            const message = error instanceof Error ? error.message : "Có lỗi xảy ra khi cập nhật điểm";
+            toast.error(message, {
                 position: "top-right",
                 autoClose: 3000,
                 hideProgressBar: false,

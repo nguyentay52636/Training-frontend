@@ -9,6 +9,19 @@ interface ExcelImportProps {
     onImportSuccess: (importedPoints: PointType[]) => void;
 }
 
+interface ExcelRow {
+    maSV: string | number;
+    tenSV: string;
+    diemChuyenCan: number;
+    diemThucHanh: number;
+    diemGiuaKy: number;
+    diemCuoiKy: number;
+    bangDiemMon: string;
+    hocKy: number;
+    nam: string;
+    lop: string;
+}
+
 export default function ExcelImport({ onImportSuccess }: ExcelImportProps) {
     const [isLoading, setIsLoading] = useState(false);
 
@@ -33,10 +46,10 @@ export default function ExcelImport({ onImportSuccess }: ExcelImportProps) {
                     const workbook = XLSX.read(data, { type: 'binary' });
                     const sheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
-                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet) as ExcelRow[];
 
                     // Validate data structure
-                    const validData = jsonData.filter((row: any) => {
+                    const validData = jsonData.filter((row) => {
                         return row.maSV && row.tenSV &&
                             row.diemChuyenCan !== undefined &&
                             row.diemThucHanh !== undefined &&
@@ -54,7 +67,7 @@ export default function ExcelImport({ onImportSuccess }: ExcelImportProps) {
                     }
 
                     // Convert to PointType
-                    const importedPoints: PointType[] = validData.map((row: any) => ({
+                    const importedPoints: PointType[] = validData.map((row: ExcelRow) => ({
                         maSV: String(row.maSV),
                         tenSV: String(row.tenSV),
                         diemChuyenCan: Number(row.diemChuyenCan),
