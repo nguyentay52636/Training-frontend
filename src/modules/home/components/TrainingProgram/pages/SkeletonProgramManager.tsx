@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronDown, Pencil, Plus, Save, Trash2 } from 'lucide-react';
 import {
     Table,
@@ -14,11 +14,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import DialogAddBlockNow from '../components/ProgramContent/components/AddBlocKnowledge/DialogAddlbocknow';
-import khoiKienThucData from '../components/ProgramContent/components/DataBlock';
 import BlocknowledgeActions from '../components/ProgramContent/components/BlocknowledgeActions';
 import { cn } from '@/lib/utils';
 import PaginationSkeleton from '../components/ProgramContent/components/CourseDetails/components/PaginationSkeleton';
 import Schedule from '../components/Schedule';
+import { getBlockKnows } from '@/lib/apis/blockKnowApi';
+import { BlockKnowType } from '@/lib/apis/types';
 
 // Header component
 const Header = () => (
@@ -256,80 +257,106 @@ const ObjectiveTab = () => (
 );
 
 // CurriculumTab component
-const CurriculumTab = () => (
-    <TabsContent value='curriculum'>
-        <Card className='border-gray-200 shadow-sm py-12'>
-            <CardContent>
-                <div className='flex justify-between space-x-4 mb-4'>
-                    <div className=''>
-                        <CardTitle className='text-2xl font-bold text-gray-800'>
-                            Nội dung chương trình
-                        </CardTitle>
-                    </div>
-                    <div className='flex justify-center items-center'>
-                        <DialogAddBlockNow />
-                    </div>
-                </div>
-                <div className='border-t border-gray-300 mb-4'></div>
-                <div className='space-y-4'>
-                    <div className='w-full'>
-                        <Table>
-                            <TableHeader>
-                                <TableRow className='bg-blue-300! '>
-                                    <TableHead className='text-bold'>STT</TableHead>
-                                    <TableHead className='text-bold'>Tên khối kiến thức & học phần</TableHead>
-                                    <TableHead className="">Thao tác</TableHead>
+const CurriculumTab = () => {
+    const [blockKnows, setBlockKnows] = useState<BlockKnowType[]>([]);
+    const [loading, setLoading] = useState(false);
 
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {khoiKienThucData.map(({ idKhoiKienThuc, tenKhoiKienThuc, hocPhanList }) => (
-                                    <TableRow key={idKhoiKienThuc} className='bg-background hover:bg-secondary'>
-                                        <TableCell className='font-bold'>{idKhoiKienThuc}</TableCell>
-                                        <TableCell className='font-medium'>
-                                            <div>
-                                                <div className='flex justify-between items-center mb-2'>
-                                                    <div className='font-semibold text-blue-700 text-[1rem]'>
-                                                        {tenKhoiKienThuc}
-                                                    </div>
-                                                    <BlocknowledgeActions />
-                                                </div>
+    useEffect(() => {
+        const fetchBlockKnows = async () => {
+            try {
+                setLoading(true);
+                const data = await getBlockKnows();
+                setBlockKnows(data);
+            } catch (error) {
+                console.error("Error fetching block knowledge:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-                                                <ul className='list-disc list-inside pl-2 space-y-1 text-sm text-muted-foreground'>
-                                                    {hocPhanList.map((hp, index) => (
-                                                        <li key={hp.maHP} className='flex items-center justify-between pr-2 hover:bg-gray-300 text-black cursor-pointer'>
-                                                            <span>
-                                                                {index + 1}. {hp.tenHP} – {hp.soTinChi} tín chỉ
-                                                            </span>
-                                                            <div className='flex space-x-2'>
-                                                                <button
-                                                                    className='text-blue-600 hover:text-blue-800 cursor-pointer'
-                                                                    title='Chỉnh sửa'
-                                                                >
-                                                                    <Pencil size={20} />
-                                                                </button>
-                                                                <button className='text-red-600 hover:text-red-800  cursor-pointer' title='Xóa'>
-                                                                    <Trash2 size={20} />
-                                                                </button>
-                                                            </div>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                        <div className=" mt-6">
-                            <PaginationSkeleton />
+        fetchBlockKnows();
+    }, []);
+
+    return (
+        <TabsContent value='curriculum'>
+            <Card className='border-gray-200 shadow-sm py-12'>
+                <CardContent>
+                    <div className='flex justify-between space-x-4 mb-4'>
+                        <div className=''>
+                            <CardTitle className='text-2xl font-bold text-gray-800'>
+                                Nội dung chương trình
+                            </CardTitle>
+                        </div>
+                        <div className='flex justify-center items-center'>
+                            <DialogAddBlockNow />
                         </div>
                     </div>
-                </div>
-            </CardContent>
-        </Card>
-    </TabsContent>
-);
+                    <div className='border-t border-gray-300 mb-4'></div>
+                    <div className='space-y-4'>
+                        <div className='w-full'>
+                            <Table>
+                                <TableHeader>
+                                    <TableRow className='bg-blue-300! '>
+                                        <TableHead className='text-bold'>STT</TableHead>
+                                        <TableHead className='text-bold'>Tên khối kiến thức & học phần</TableHead>
+                                        <TableHead className="">Thao tác</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {loading ? (
+                                        <TableRow>
+                                            <TableCell colSpan={3} className="text-center">Đang tải...</TableCell>
+                                        </TableRow>
+                                    ) : (
+                                        blockKnows.map((blockKnow, index) => (
+                                            <TableRow key={blockKnow.idKhoiKienThuc} className='bg-background hover:bg-secondary'>
+                                                <TableCell className='font-bold'>{index + 1}</TableCell>
+                                                <TableCell className='font-medium'>
+                                                    <div>
+                                                        <div className='flex justify-between items-center mb-2'>
+                                                            <div className='font-semibold text-blue-700 text-[1rem]'>
+                                                                {blockKnow.tenKhoiKienThuc}
+                                                            </div>
+                                                            <BlocknowledgeActions />
+                                                        </div>
+
+                                                        <ul className='list-disc list-inside pl-2 space-y-1 text-sm text-muted-foreground'>
+                                                            {blockKnow.danhSachKienThuc.map((knowledge, idx) => (
+                                                                <li key={knowledge.idKienThuc} className='flex items-center justify-between pr-2 hover:bg-gray-300 text-black cursor-pointer'>
+                                                                    <span>
+                                                                        {idx + 1}. {knowledge.tenKienThuc}
+                                                                    </span>
+                                                                    <div className='flex space-x-2'>
+                                                                        <button
+                                                                            className='text-blue-600 hover:text-blue-800 cursor-pointer'
+                                                                            title='Chỉnh sửa'
+                                                                        >
+                                                                            <Pencil size={20} />
+                                                                        </button>
+                                                                        <button className='text-red-600 hover:text-red-800  cursor-pointer' title='Xóa'>
+                                                                            <Trash2 size={20} />
+                                                                        </button>
+                                                                    </div>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
+                                    )}
+                                </TableBody>
+                            </Table>
+                            <div className=" mt-6">
+                                <PaginationSkeleton />
+                            </div>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+        </TabsContent>
+    );
+};
 
 // ScheduleTab component
 const ScheduleTab = () => (
@@ -352,7 +379,8 @@ export default function SkeletonProgramManager() {
         <div className='p-6 bg-white text-gray-800'>
             <Header />
             <div className='bg-white p-6 rounded-xl shadow-lg'>
-                <Tabs defaultValue='general' className='w-full'>
+                <Tabs defaultValue='general' className='w-
+                full'>
                     <TabNavigation />
                     <GeneralInfoTab />
                     <ObjectiveTab />

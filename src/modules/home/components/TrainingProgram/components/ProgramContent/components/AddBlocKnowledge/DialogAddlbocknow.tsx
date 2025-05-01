@@ -14,9 +14,30 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import khoiKienThucData from "../DataBlock";
+import { useEffect, useState } from "react";
+import { getBlockKnows } from "@/lib/apis/blockKnowApi";
+import { BlockKnowType } from "@/lib/apis/types";
 
 export default function DialogAddBlockNow() {
+    const [blockKnows, setBlockKnows] = useState<BlockKnowType[]>([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const fetchBlockKnows = async () => {
+            try {
+                setLoading(true);
+                const data = await getBlockKnows();
+                setBlockKnows(data);
+            } catch (error) {
+                console.error("Error fetching block knowledge:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBlockKnows();
+    }, []);
+
     return (
         <>
             <Dialog>
@@ -42,14 +63,18 @@ export default function DialogAddBlockNow() {
                             <SelectValue placeholder="Chọn tên khối kiến thức" />
                         </SelectTrigger>
                         <SelectContent>
-                            {khoiKienThucData.map((khoiKienThuc) => (
-                                <SelectItem
-                                    key={khoiKienThuc.idKhoiKienThuc}
-                                    value={String(khoiKienThuc.idKhoiKienThuc)}
-                                >
-                                    {khoiKienThuc.tenKhoiKienThuc}
-                                </SelectItem>
-                            ))}
+                            {loading ? (
+                                <SelectItem value="loading">Đang tải...</SelectItem>
+                            ) : (
+                                blockKnows.map((blockKnow) => (
+                                    <SelectItem
+                                        key={blockKnow.idKienThuc}
+                                        value={blockKnow.idKienThuc}
+                                    >
+                                        {blockKnow.tenKhoiKienThuc}
+                                    </SelectItem>
+                                ))
+                            )}
                         </SelectContent>
                     </Select>
 

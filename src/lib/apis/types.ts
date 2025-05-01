@@ -45,14 +45,14 @@ export enum Role {
   Admin = 2,
 }
 export interface BlockKnowType { 
+  idKhoiKienThuc?: number;
   tenKhoiKienThuc: string;
   idKienThuc: string;
   danhSachKienThuc: knowledgeType[];
 }
 export interface knowledgeType  { 
-
+  idKienThuc?: number;
   tenKienThuc: string;
-  idKienThuc: string;
   idHocPhan: string;
   danhSachKienThuc: CourseType[];
 }
