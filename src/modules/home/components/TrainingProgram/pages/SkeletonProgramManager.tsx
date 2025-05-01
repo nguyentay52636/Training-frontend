@@ -288,6 +288,7 @@ const CurriculumTab = () => {
                             </CardTitle>
                         </div>
                         <div className='flex justify-center items-center'>
+                            {/* thêm khối kiến thức  */}
                             <DialogAddBlockNow />
                         </div>
                     </div>

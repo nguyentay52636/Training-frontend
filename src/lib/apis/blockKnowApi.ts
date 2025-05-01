@@ -17,11 +17,11 @@ try {
     throw new Error(error as string)
 }
  } 
- export const addBlockKnow = async ( {tenKhoiKienThuc, idKienThuc, danhSachKienThuc }:BlockKnowType) => {  
+ export const addBlockKnow = async ( {tenKhoiKienThuc, danhSachKienThuc }:BlockKnowType) => {  
  try { 
     const  newBlockKnow  : BlockKnowType = { 
         tenKhoiKienThuc,
-        idKienThuc,
+   
         danhSachKienThuc
      } 
     const {data} = await baseApi.post('/khoi-kien-thuc', newBlockKnow)
@@ -55,9 +55,9 @@ try {
     throw new Error(error as string)
   }
  } 
- export const updateBlockKnow = async (id: number, {tenKhoiKienThuc, idKienThuc, danhSachKienThuc }:BlockKnowType) => {  
+ export const updateBlockKnow = async (id: number, {tenKhoiKienThuc, danhSachKienThuc }:BlockKnowType) => {  
   try { 
-    const {data} = await baseApi.put(`/khoi-kien-thuc/${id}`, {tenKhoiKienThuc, idKienThuc, danhSachKienThuc })
+    const {data} = await baseApi.put(`/khoi-kien-thuc/${id}`, {tenKhoiKienThuc, danhSachKienThuc })
     return data
   }catch(error) { 
     throw new Error(error as string)

@@ -34,6 +34,7 @@ export default function DialogAddKnowLedge({ open, onOpenChange }: DialogAddKnow
     const [blockKnows, setBlockKnows] = useState<BlockKnowType[]>([]);
     const [loading, setLoading] = useState(false);
     const [selectedCourses, setSelectedCourses] = useState<SelectedCourse[]>([]);
+    const [selectValue, setSelectValue] = useState<string>("");
 
     useEffect(() => {
         const fetchBlockKnows = async () => {
@@ -58,6 +59,8 @@ export default function DialogAddKnowLedge({ open, onOpenChange }: DialogAddKnow
                 name: knowledge.tenKienThuc,
                 credits: 3 // Mặc định là 3 tín chỉ, bạn có thể điều chỉnh theo data thực tế
             }]);
+            // Reset select value
+            setSelectValue("");
         }
     };
 
@@ -75,14 +78,18 @@ export default function DialogAddKnowLedge({ open, onOpenChange }: DialogAddKnow
                     </DialogDescription>
                 </DialogHeader>
 
-                <Select onValueChange={(value) => {
-                    const knowledge = blockKnows
-                        .flatMap(block => block.danhSachKienThuc)
-                        .find(k => k?.idKienThuc?.toString() === value);
-                    if (knowledge) {
-                        handleSelect(value, knowledge);
-                    }
-                }}>
+                <Select
+                    value={selectValue}
+                    onValueChange={(value) => {
+                        setSelectValue(value);
+                        const knowledge = blockKnows
+                            .flatMap(block => block.danhSachKienThuc)
+                            .find(k => k?.idKienThuc?.toString() === value);
+                        if (knowledge) {
+                            handleSelect(value, knowledge);
+                        }
+                    }}
+                >
                     <SelectTrigger className="w-full mt-4 h-12 text-[1.1rem] text-black!">
                         <SelectValue placeholder="Chọn học phần" />
                     </SelectTrigger>

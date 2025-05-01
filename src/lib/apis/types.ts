@@ -47,7 +47,6 @@ export enum Role {
 export interface BlockKnowType { 
   idKhoiKienThuc?: number;
   tenKhoiKienThuc: string;
-  idKienThuc: string;
   danhSachKienThuc: knowledgeType[];
 }
 export interface knowledgeType  { 
