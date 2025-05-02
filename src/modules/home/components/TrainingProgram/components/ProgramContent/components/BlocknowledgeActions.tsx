@@ -5,9 +5,12 @@ import { Ellipsis, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import DialogAddKienThucVaoKhoi from './AddBlocKnowledge/DialogAddKienThucVaoKhoi';
 
-export default function BlocknowledgeActions() {
+interface BlocknowledgeActionsProps {
+    blockKnowId: number;
+}
+
+export default function BlocknowledgeActions({ blockKnowId }: BlocknowledgeActionsProps) {
     const [open, setOpen] = useState(false);
-    const [blockKnowId] = useState(1); // Replace with actual block ID
 
     return (
         <>
