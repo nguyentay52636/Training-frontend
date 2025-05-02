@@ -16,7 +16,7 @@ import {
 import { useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 import { knowledgeType } from "@/lib/apis/types";
-import { addKnowInBlockKnow } from "@/lib/apis/blockKnowApi";
+import { updateBlockKnow } from "@/lib/apis/blockKnowApi";
 import { getKnows } from "@/lib/apis/KnowsApi";
 import { X } from "lucide-react";
 
@@ -94,17 +94,22 @@ export default function DialogAddKienThucVaoKhoi({ blockKnowId, open, onOpenChan
         try {
             setLoading(true);
             
-            // Add each selected knowledge to the block
-            for (const knowledge of selectedKnowledge) {
-                await addKnowInBlockKnow(blockKnowId, knowledge.id);
-            }
+            // Convert selected knowledge IDs to string format
+            const selectedIds = selectedKnowledge.map(k => k.id).join(',');
             
-            showToast('success', "Thêm kiến thức thành công");
+            // Update block knowledge with selected IDs
+            await updateBlockKnow(blockKnowId, {
+                tenKhoiKienThuc: "Khối kiến thức cơ sở (Cập nhật)",
+                idKienThuc: selectedIds,
+                danhSachKienThuc: []
+            });
+            
+            showToast('success', "Cập nhật kiến thức thành công");
             setSelectedKnowledge([]); // Reset selection
             onOpenChange(false); // Close dialog
         } catch (error) {
-            console.error("Error adding knowledge:", error);
-            showToast('error', "Có lỗi xảy ra khi thêm kiến thức");
+            console.error("Error updating knowledge:", error);
+            showToast('error', "Có lỗi xảy ra khi cập nhật kiến thức");
         } finally {
             setLoading(false);
         }

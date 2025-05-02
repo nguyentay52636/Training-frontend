@@ -55,7 +55,7 @@ export interface knowledgeType  {
   tenKienThuc: string;
   idHocPhan: string;
   loaiHocPhan:string;
-  hocPhans: CourseType[];
+  hocPhans? : CourseType[];
 }
 export interface CourseType {
   idHocPhan?: number;
