@@ -1,108 +1,68 @@
 import {
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-    SortingState,
-    ColumnFiltersState,
-    VisibilityState,
-    Updater,
-    OnChangeFn,
-} from "@tanstack/react-table";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-import { Colums, TaiKhoan } from "../components/Colums";
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Trash2 } from 'lucide-react';
+import EditUserDialog from './EditUserDialog';
+import { UserType } from '@/lib/apis/types';
 
 interface TableAccountProps {
-    data: TaiKhoan[];
-    sorting: SortingState;
-    columnFilters: ColumnFiltersState;
-    columnVisibility: VisibilityState;
-    rowSelection: any;
-    onSortingChange: OnChangeFn<SortingState>;
-    onColumnFiltersChange: OnChangeFn<ColumnFiltersState>;
-    onColumnVisibilityChange: OnChangeFn<VisibilityState>;
-    onRowSelectionChange: OnChangeFn<any>;
+  data: UserType[];
 }
 
-export default function TableAccount({
-    data,
-    sorting,
-    columnFilters,
-    columnVisibility,
-    rowSelection,
-    onSortingChange,
-    onColumnFiltersChange,
-    onColumnVisibilityChange,
-    onRowSelectionChange,
-}: TableAccountProps) {
-    const table = useReactTable({
-        data,
-        columns: Colums,
-        onSortingChange,
-        onColumnFiltersChange,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        onColumnVisibilityChange,
-        onRowSelectionChange,
-        state: {
-            sorting,
-            columnFilters,
-            columnVisibility,
-            rowSelection,
-        },
-    });
-
-    return (
-        <div className="rounded-md border border-gray-200 shadow-sm bg-white">
-            <Table>
-                <TableHeader>
-                    {table.getHeaderGroups().map((headerGroup) => (
-                        <TableRow key={headerGroup.id} className="bg-indigo-600 text-white!">
-                            {headerGroup.headers.map((header) => (
-                                <TableHead key={header.id} className="text-white! font-semibold py-4">
-                                    {header.isPlaceholder
-                                        ? null
-                                        : flexRender(header.column.columnDef.header, header.getContext())}
-                                </TableHead>
-                            ))}
-                        </TableRow>
-                    ))}
-                </TableHeader>
-                <TableBody>
-                    {table.getRowModel().rows?.length ? (
-                        table.getRowModel().rows.map((row) => (
-                            <TableRow
-                                key={row.id}
-                                data-state={row.getIsSelected() && "selected"}
-                                className="border-b border-gray-100 hover:bg-blue-50 transition-colors"
-                            >
-                                {row.getVisibleCells().map((cell) => (
-                                    <TableCell key={cell.id} className="py-4">
-                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        ))
-                    ) : (
-                        <TableRow>
-                            <TableCell colSpan={Colums.length} className="h-24 text-center text-gray-500">
-                                Không tìm thấy tài khoản nào.
-                            </TableCell>
-                        </TableRow>
-                    )}
-                </TableBody>
-            </Table>
-        </div>
-    );
+export default function TableAccount({ data }: TableAccountProps) {
+  return (
+    <div className='rounded-md border border-gray-200 shadow-sm bg-white'>
+      <Table>
+        <TableHeader>
+          <TableRow className='bg-indigo-600 text-white'>
+            <TableHead className='text-white font-semibold py-4'>Mã tài khoản</TableHead>
+            <TableHead className='text-white font-semibold py-4'>Họ tên</TableHead>
+            <TableHead className='text-white font-semibold py-4'>Email</TableHead>
+            <TableHead className='text-white font-semibold py-4'>Vai trò</TableHead>
+            <TableHead className='text-white font-semibold py-4'>Thao tác</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data.length > 0 ? (
+            data.map((user) => (
+              <TableRow
+                key={user.id}
+                className='border-b border-gray-100 hover:bg-blue-50 transition-colors'
+              >
+                <TableCell className='py-4'>{user.id}</TableCell>
+                <TableCell className='py-4'>{user.userName}</TableCell>
+                <TableCell className='py-4'>{user.userEmail}</TableCell>
+                <TableCell className='py-4'>{user.role}</TableCell>
+                <TableCell className='py-4'>
+                  <div className='flex gap-2'>
+                    <EditUserDialog user={user} />
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      className='text-red-600 hover:text-red-700'
+                      onClick={() => console.log('Delete', user.id)}
+                    >
+                      <Trash2 className='h-4 w-4' />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={5} className='h-24 text-center text-gray-500'>
+                Không tìm thấy tài khoản nào.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
+  );
 }

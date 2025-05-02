@@ -1,214 +1,54 @@
-import React, { useState } from "react";
-import {
-    SortingState,
-    ColumnFiltersState,
-    VisibilityState,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-    Table,
-} from "@tanstack/react-table";
-import { Colums } from "../components/Colums";
-import TableAccount from "../components/TableAccount";
-import FilterAndActionsAccount from "../components/FilterAndActionsAccount";
-import PaginationAcount from "../components/PaginationAcount";
-
-
-type TaiKhoan = {
-    maTaiKhoan: string;
-    hoTen: string;
-    email: string;
-    sdt: string;
-};
-
-const data: TaiKhoan[] = [
-    {
-        maTaiKhoan: "TK001",
-        hoTen: "Nguyễn Văn A",
-        email: "nguyenvana@sgu.edu.vn",
-        sdt: "0901234567",
-    },
-    {
-        maTaiKhoan: "TK002",
-        hoTen: "Trần Thị B",
-        email: "tranthib@sgu.edu.vn",
-        sdt: "0912345678",
-    },
-    {
-        maTaiKhoan: "TK003",
-        hoTen: "Lê Văn C",
-        email: "levanc@sgu.edu.vn",
-        sdt: "0923456789",
-    },
-    {
-        maTaiKhoan: "TK003",
-        hoTen: "Lê Văn C",
-        email: "levanc@sgu.edu.vn",
-        sdt: "0923456789",
-    },
-    {
-        maTaiKhoan: "TK003",
-        hoTen: "Lê Văn C",
-        email: "levanc@sgu.edu.vn",
-        sdt: "0923456789",
-    },
-    {
-        maTaiKhoan: "TK003",
-        hoTen: "Lê Văn C",
-        email: "levanc@sgu.edu.vn",
-        sdt: "0923456789",
-    },
-    {
-        maTaiKhoan: "TK003",
-        hoTen: "Lê Văn C",
-        email: "levanc@sgu.edu.vn",
-        sdt: "0923456789",
-    },
-    {
-        maTaiKhoan: "TK003",
-        hoTen: "Lê Văn C",
-        email: "levanc@sgu.edu.vn",
-        sdt: "0923456789",
-    },
-    {
-        maTaiKhoan: "TK003",
-        hoTen: "Lê Văn C",
-        email: "levanc@sgu.edu.vn",
-        sdt: "0923456789",
-    },
-    {
-        maTaiKhoan: "TK003",
-        hoTen: "Lê Văn C",
-        email: "levanc@sgu.edu.vn",
-        sdt: "0923456789",
-    },
-    {
-        maTaiKhoan: "TK003",
-        hoTen: "Lê Văn C",
-        email: "levanc@sgu.edu.vn",
-        sdt: "0923456789",
-    },
-    {
-        maTaiKhoan: "TK003",
-        hoTen: "Lê Văn C",
-        email: "levanc@sgu.edu.vn",
-        sdt: "0923456789",
-    },
-    {
-        maTaiKhoan: "TK003",
-        hoTen: "Lê Văn C",
-        email: "levanc@sgu.edu.vn",
-        sdt: "0923456789",
-    },
-    {
-        maTaiKhoan: "TK003",
-        hoTen: "Lê Văn C",
-        email: "levanc@sgu.edu.vn",
-        sdt: "0923456789",
-    },
-    {
-        maTaiKhoan: "TK003",
-        hoTen: "Lê Văn C",
-        email: "levanc@sgu.edu.vn",
-        sdt: "0923456789",
-    },
-    {
-        maTaiKhoan: "TK003",
-        hoTen: "Lê Văn C",
-        email: "levanc@sgu.edu.vn",
-        sdt: "0923456789",
-    },
-    {
-        maTaiKhoan: "TK003",
-        hoTen: "Lê Văn C",
-        email: "levanc@sgu.edu.vn",
-        sdt: "0923456789",
-    },
-    {
-        maTaiKhoan: "TK003",
-        hoTen: "Lê Văn C",
-        email: "levanc@sgu.edu.vn",
-        sdt: "0923456789",
-    },
-    {
-        maTaiKhoan: "TK003",
-        hoTen: "Lê Văn C",
-        email: "levanc@sgu.edu.vn",
-        sdt: "0923456789",
-    },
-    {
-        maTaiKhoan: "TK003",
-        hoTen: "Lê Văn C",
-        email: "levanc@sgu.edu.vn",
-        sdt: "0923456789",
-    },
-];
-
-interface FilterAndActionsAccountProps {
-    table: Table<TaiKhoan>;
-}
+import { useState } from 'react';
+import { useGetAllUserQuery } from '../components/querys';
+import TableAccount from '../components/TableAccount';
+import FilterAndActionsAccount from '../components/FilterAndActionsAccount';
+import PaginationAcount from '../components/PaginationAcount';
 
 export default function AccountManagement() {
-    const [sorting, setSorting] = useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-    const [rowSelection, setRowSelection] = useState({});
-    const [taiKhoanData, setTaiKhoanData] = useState<TaiKhoan[]>(data);
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
-    const handleAddTaiKhoan = (newTaiKhoan: TaiKhoan) => {
-        setTaiKhoanData([...taiKhoanData, newTaiKhoan]);
-    };
+  // Sử dụng react-query để fetch data
+  const { data: userData, isLoading, isError } = useGetAllUserQuery({ keyword: searchKeyword });
 
-    const table = useReactTable<TaiKhoan>({
-        data: taiKhoanData,
-        columns: Colums,
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
-        state: {
-            sorting,
-            columnFilters,
-            columnVisibility,
-            rowSelection,
-        },
-    });
+  if (!userData) return;
 
-    return (
-        <div className="w-full p-8 bg-gradient-to-b from-gray-50 to-gray-100 min-h-screen">
-            {/* Tiêu đề */}
-            <div className="mb-8 flex items-center justify-between">
-                <div>
-                    <h1 className="text-4xl font-bold text-blue-900 tracking-tight">
-                        Quản Lý tài khoản
-                    </h1>
-                    <p className="text-sm text-gray-500 mt-2">
-                        Quản lý thông tin tài khoản của SGU một cách hiệu quả và chuyên nghiệp
-                    </p>
-                </div>
-            </div>
+  // Tính toán phân trang
+  const totalPages = Math.ceil(userData.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentData = userData.slice(startIndex, endIndex);
 
-            <FilterAndActionsAccount table={table} onAddTaiKhoan={handleAddTaiKhoan} />
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-            <TableAccount
-                data={taiKhoanData}
-                sorting={sorting}
-                columnFilters={columnFilters}
-                columnVisibility={columnVisibility}
-                rowSelection={rowSelection}
-                onSortingChange={setSorting}
-                onColumnFiltersChange={setColumnFilters}
-                onColumnVisibilityChange={setColumnVisibility}
-                onRowSelectionChange={setRowSelection}
-            />
+  if (isError) {
+    return <div>Error loading data</div>;
+  }
 
-            <PaginationAcount table={table} />
+  return (
+    <div className='w-full p-8 bg-gradient-to-b from-gray-50 to-gray-100 min-h-screen'>
+      {/* Tiêu đề */}
+      <div className='mb-8 flex items-center justify-between'>
+        <div>
+          <h1 className='text-4xl font-bold text-blue-900 tracking-tight'>Quản Lý tài khoản</h1>
+          <p className='text-sm text-gray-500 mt-2'>
+            Quản lý thông tin tài khoản của SGU một cách hiệu quả và chuyên nghiệp
+          </p>
         </div>
-    );
+      </div>
+
+      <FilterAndActionsAccount setSearchKeyword={setSearchKeyword} searchKeyword={searchKeyword} />
+
+      <TableAccount data={currentData} />
+
+      <PaginationAcount
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
+    </div>
+  );
 }
