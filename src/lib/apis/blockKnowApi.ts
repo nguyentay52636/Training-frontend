@@ -17,12 +17,12 @@ try {
     throw new Error(error as string)
 }
  } 
- export const addBlockKnow = async ( {tenKhoiKienThuc, danhSachKienThuc }:BlockKnowType) => {  
+ export const addBlockKnow = async ({ tenKhoiKienThuc }: BlockKnowType) => {  
  try { 
     const  newBlockKnow  : BlockKnowType = { 
         tenKhoiKienThuc,
-   
-        danhSachKienThuc
+        idKienThuc: '',
+        danhSachKienThuc:[]
      } 
     const {data} = await baseApi.post('/khoi-kien-thuc', newBlockKnow)
     return data

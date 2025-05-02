@@ -2,11 +2,12 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { DropdownMenu, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
 import { Ellipsis, Pencil, Plus, Trash2 } from 'lucide-react';
-import DialogAddKnowLedge from './AddBlocKnowledge/DialogAddKnowLedge';
 import { useState } from 'react';
+import DialogAddKienThucVaoKhoi from './AddBlocKnowledge/DialogAddKienThucVaoKhoi';
 
 export default function BlocknowledgeActions() {
     const [open, setOpen] = useState(false);
+    const [blockKnowId] = useState(1); // Replace with actual block ID
 
     return (
         <>
@@ -29,8 +30,11 @@ export default function BlocknowledgeActions() {
                 </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Dialog component được render dưới cùng */}
-            <DialogAddKnowLedge open={open} onOpenChange={setOpen} />
+            <DialogAddKienThucVaoKhoi 
+                open={open} 
+                onOpenChange={setOpen}
+                blockKnowId={blockKnowId}
+            />
         </>
     );
 }
