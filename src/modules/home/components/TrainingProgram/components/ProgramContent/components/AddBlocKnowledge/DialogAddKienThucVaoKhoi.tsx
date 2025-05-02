@@ -16,7 +16,7 @@ import {
 import { useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 import { knowledgeType } from "@/lib/apis/types";
-import { updateBlockKnow } from "@/lib/apis/blockKnowApi";
+import {  addKnowInBlockKnow } from "@/lib/apis/blockKnowApi";
 import { getKnows } from "@/lib/apis/KnowsApi";
 import { X } from "lucide-react";
 import DialogNewKnow from "./DialogNewKnow";
@@ -51,8 +51,11 @@ export default function DialogAddKienThucVaoKhoi({ blockKnowId, open, onOpenChan
             }
         };
 
-        fetchKnowledge();
-    }, []);
+        if (open) {
+            fetchKnowledge();
+            setSelectedKnowledge([]); // Reset selection when dialog opens
+        }
+    }, [open]);
 
     const showToast = (type: 'success' | 'error', message: string) => {
         const toastConfig = {
@@ -76,24 +79,30 @@ export default function DialogAddKienThucVaoKhoi({ blockKnowId, open, onOpenChan
     const handleSelect = (value: string) => {
         const knowledge = availableKnowledge.find(k => k.idKienThuc?.toString() === value);
         if (knowledge && !selectedKnowledge.some(k => k.id === knowledge.idKienThuc)) {
-            setSelectedKnowledge([...selectedKnowledge, {
+            const newSelected = [...selectedKnowledge, {
                 id: knowledge.idKienThuc!,
                 name: knowledge.tenKienThuc
-            }]);
+            }];
+            setSelectedKnowledge(newSelected);
+            console.log("Selected knowledge IDs:", newSelected.map(k => k.id).join(','));
             setSelectValue("");
         }
     };
 
     const handleRemove = (id: number) => {
-        setSelectedKnowledge(selectedKnowledge.filter(k => k.id !== id));
+        const newSelected = selectedKnowledge.filter(k => k.id !== id);
+        setSelectedKnowledge(newSelected);
+        console.log("After remove, selected IDs:", newSelected.map(k => k.id).join(','));
     };
 
     const handleNewKnowledgeCreated = (newKnowledge: knowledgeType) => {
         setAvailableKnowledge([...availableKnowledge, newKnowledge]);
-        setSelectedKnowledge([...selectedKnowledge, {
+        const newSelected = [...selectedKnowledge, {
             id: newKnowledge.idKienThuc!,
             name: newKnowledge.tenKienThuc
-        }]);
+        }];
+        setSelectedKnowledge(newSelected);
+        console.log("After adding new knowledge, selected IDs:", newSelected.map(k => k.id).join(','));
     };
 
     const handleSave = async () => {
@@ -105,15 +114,10 @@ export default function DialogAddKienThucVaoKhoi({ blockKnowId, open, onOpenChan
         try {
             setLoading(true);
             
-            // Convert selected knowledge IDs to string format
-            const selectedIds = selectedKnowledge.map(k => k.id).join(',');
-            
-            // Update block knowledge with selected IDs
-            await updateBlockKnow(blockKnowId, {
-                tenKhoiKienThuc: "Khối kiến thức cơ sở (Cập nhật)",
-                idKienThuc: selectedIds,
-                danhSachKienThuc: []
-            });
+            // Add each selected knowledge to the block
+            for (const knowledge of selectedKnowledge) {
+                await addKnowInBlockKnow(blockKnowId, knowledge.id);
+            }
             
             showToast('success', "Cập nhật kiến thức thành công");
             setSelectedKnowledge([]); // Reset selection
@@ -146,23 +150,23 @@ export default function DialogAddKienThucVaoKhoi({ blockKnowId, open, onOpenChan
                         <div className="flex justify-between items-center">
                             <Select
                                 value={selectValue}
-                                onValueChange={(value) => {
-                                    setSelectValue(value);
-                                    handleSelect(value);
-                                }}
+                                onValueChange={handleSelect}
                             >
                                 <SelectTrigger className="w-full h-12 text-[1.1rem] text-black!">
                                     <SelectValue placeholder="Chọn kiến thức có sẵn" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {availableKnowledge.map((knowledge) => (
-                                        <SelectItem
-                                            key={knowledge.idKienThuc}
-                                            value={knowledge.idKienThuc?.toString() || ''}
-                                        >
-                                            {knowledge.tenKienThuc}
-                                        </SelectItem>
-                                    ))}
+                                    {availableKnowledge
+                                        .filter(k => !selectedKnowledge.some(s => s.id === k.idKienThuc))
+                                        .map((knowledge) => (
+                                            <SelectItem
+                                                key={knowledge.idKienThuc}
+                                                value={knowledge.idKienThuc?.toString() || ''}
+                                            >
+                                                {knowledge.tenKienThuc}
+                                            </SelectItem>
+                                        ))
+                                    }
                                 </SelectContent>
                             </Select>
                             <Button
@@ -177,11 +181,11 @@ export default function DialogAddKienThucVaoKhoi({ blockKnowId, open, onOpenChan
 
                     {selectedKnowledge.length > 0 && (
                         <div className="mt-6">
-                            <h3 className="text-lg font-semibold mb-2">Kiến thức đã chọn:</h3>
+                            <h3 className="text-lg font-semibold mb-2">Kiến thức đã chọn: ({selectedKnowledge.map(k => k.id).join(',')})</h3>
                             <div className="space-y-2">
                                 {selectedKnowledge.map((knowledge) => (
                                     <div
-                                        key={knowledge.id}
+                                        key={`selected-${knowledge.id}`}
                                         className="flex items-center justify-between p-3 bg-gray-100 rounded-lg"
                                     >
                                         <span>{knowledge.name}</span>
