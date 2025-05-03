@@ -5,7 +5,7 @@ import FilterAndActionsAccount from '../components/FilterAndActionsAccount';
 import PaginationAcount from '../components/PaginationAcount';
 
 export default function AccountManagement() {
-  const [searchKeyword, setSearchKeyword] = useState('');
+  const [searchKeyword, setSearchKeyword] = useState('b');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
