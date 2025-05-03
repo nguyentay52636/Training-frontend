@@ -16,14 +16,16 @@ import {
 import { useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 import { knowledgeType } from "@/lib/apis/types";
-import { updateBlockKnow } from "@/lib/apis/blockKnowApi";
+import {  addKnowInBlockKnow } from "@/lib/apis/blockKnowApi";
 import { getKnows } from "@/lib/apis/KnowsApi";
 import { X } from "lucide-react";
+import DialogNewKnow from "./DialogNewKnow";
 
 interface DialogAddKienThucVaoKhoiProps {
     blockKnowId: number;
     open: boolean;
     onOpenChange: (open: boolean) => void;
+    onUpdateSuccess?: () => void;
 }
 
 interface SelectedKnowledge {
@@ -31,11 +33,12 @@ interface SelectedKnowledge {
     name: string;
 }
 
-export default function DialogAddKienThucVaoKhoi({ blockKnowId, open, onOpenChange }: DialogAddKienThucVaoKhoiProps) {
+export default function DialogAddKienThucVaoKhoi({ blockKnowId, open, onOpenChange, onUpdateSuccess }: DialogAddKienThucVaoKhoiProps) {
     const [selectedKnowledge, setSelectedKnowledge] = useState<SelectedKnowledge[]>([]);
     const [loading, setLoading] = useState(false);
     const [availableKnowledge, setAvailableKnowledge] = useState<knowledgeType[]>([]);
     const [selectValue, setSelectValue] = useState<string>("");
+    const [isNewKnowDialogOpen, setIsNewKnowDialogOpen] = useState(false);
 
     useEffect(() => {
         const fetchKnowledge = async () => {
@@ -48,8 +51,11 @@ export default function DialogAddKienThucVaoKhoi({ blockKnowId, open, onOpenChan
             }
         };
 
-        fetchKnowledge();
-    }, []);
+        if (open) {
+            fetchKnowledge();
+            setSelectedKnowledge([]); // Reset selection when dialog opens
+        }
+    }, [open]);
 
     const showToast = (type: 'success' | 'error', message: string) => {
         const toastConfig = {
@@ -73,16 +79,30 @@ export default function DialogAddKienThucVaoKhoi({ blockKnowId, open, onOpenChan
     const handleSelect = (value: string) => {
         const knowledge = availableKnowledge.find(k => k.idKienThuc?.toString() === value);
         if (knowledge && !selectedKnowledge.some(k => k.id === knowledge.idKienThuc)) {
-            setSelectedKnowledge([...selectedKnowledge, {
+            const newSelected = [...selectedKnowledge, {
                 id: knowledge.idKienThuc!,
                 name: knowledge.tenKienThuc
-            }]);
+            }];
+            setSelectedKnowledge(newSelected);
+            console.log("Selected knowledge IDs:", newSelected.map(k => k.id).join(','));
             setSelectValue("");
         }
     };
 
     const handleRemove = (id: number) => {
-        setSelectedKnowledge(selectedKnowledge.filter(k => k.id !== id));
+        const newSelected = selectedKnowledge.filter(k => k.id !== id);
+        setSelectedKnowledge(newSelected);
+        console.log("After remove, selected IDs:", newSelected.map(k => k.id).join(','));
+    };
+
+    const handleNewKnowledgeCreated = (newKnowledge: knowledgeType) => {
+        setAvailableKnowledge([...availableKnowledge, newKnowledge]);
+        const newSelected = [...selectedKnowledge, {
+            id: newKnowledge.idKienThuc!,
+            name: newKnowledge.tenKienThuc
+        }];
+        setSelectedKnowledge(newSelected);
+        console.log("After adding new knowledge, selected IDs:", newSelected.map(k => k.id).join(','));
     };
 
     const handleSave = async () => {
@@ -94,19 +114,19 @@ export default function DialogAddKienThucVaoKhoi({ blockKnowId, open, onOpenChan
         try {
             setLoading(true);
             
-            // Convert selected knowledge IDs to string format
-            const selectedIds = selectedKnowledge.map(k => k.id).join(',');
-            
-            // Update block knowledge with selected IDs
-            await updateBlockKnow(blockKnowId, {
-                tenKhoiKienThuc: "Khối kiến thức cơ sở (Cập nhật)",
-                idKienThuc: selectedIds,
-                danhSachKienThuc: []
-            });
+            // Add each selected knowledge to the block
+            for (const knowledge of selectedKnowledge) {
+                await addKnowInBlockKnow(blockKnowId, knowledge.id);
+            }
             
             showToast('success', "Cập nhật kiến thức thành công");
             setSelectedKnowledge([]); // Reset selection
             onOpenChange(false); // Close dialog
+            
+            // Call the callback to refresh the table
+            if (onUpdateSuccess) {
+                onUpdateSuccess();
+            }
         } catch (error) {
             console.error("Error updating knowledge:", error);
             showToast('error', "Có lỗi xảy ra khi cập nhật kiến thức");
@@ -116,72 +136,91 @@ export default function DialogAddKienThucVaoKhoi({ blockKnowId, open, onOpenChan
     };
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-3xl">
-                <DialogHeader>
-                    <DialogTitle className="text-[1.8rem]">Thêm kiến thức vào khối</DialogTitle>
-                    <DialogDescription className="text-[1rem]">
-                        Chọn kiến thức để thêm vào khối.
-                    </DialogDescription>
-                </DialogHeader>
+        <>
+            <Dialog open={open} onOpenChange={onOpenChange}>
+                <DialogContent className="max-w-3xl">
+                    <DialogHeader>
+                        <DialogTitle className="text-[1.8rem]">Thêm kiến thức vào khối</DialogTitle>
+                        <DialogDescription className="text-[1rem]">
+                            Chọn kiến thức để thêm vào khối hoặc tạo mới.
+                        </DialogDescription>
+                    </DialogHeader>
 
-                <Select
-                    value={selectValue}
-                    onValueChange={(value) => {
-                        setSelectValue(value);
-                        handleSelect(value);
-                    }}
-                >
-                    <SelectTrigger className="w-full mt-4 h-12 text-[1.1rem] text-black!">
-                        <SelectValue placeholder="Chọn kiến thức" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {availableKnowledge.map((knowledge) => (
-                            <SelectItem
-                                key={knowledge.idKienThuc}
-                                value={knowledge.idKienThuc?.toString() || ''}
+                    <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                            <Select
+                                value={selectValue}
+                                onValueChange={handleSelect}
                             >
-                                {knowledge.tenKienThuc}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-
-                {selectedKnowledge.length > 0 && (
-                    <div className="mt-6">
-                        <h3 className="text-lg font-semibold mb-2">Kiến thức đã chọn:</h3>
-                        <div className="space-y-2">
-                            {selectedKnowledge.map((knowledge) => (
-                                <div
-                                    key={knowledge.id}
-                                    className="flex items-center justify-between p-3 bg-gray-100 rounded-lg"
-                                >
-                                    <span>{knowledge.name}</span>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => handleRemove(knowledge.id)}
-                                        className="hover:bg-gray-200"
-                                    >
-                                        <X className="h-4 w-4" />
-                                    </Button>
-                                </div>
-                            ))}
+                                <SelectTrigger className="w-full h-12 text-[1.1rem] text-black!">
+                                    <SelectValue placeholder="Chọn kiến thức có sẵn" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {availableKnowledge
+                                        .filter(k => !selectedKnowledge.some(s => s.id === k.idKienThuc))
+                                        .map((knowledge) => (
+                                            <SelectItem
+                                                key={knowledge.idKienThuc}
+                                                value={knowledge.idKienThuc?.toString() || ''}
+                                            >
+                                                {knowledge.tenKienThuc}
+                                            </SelectItem>
+                                        ))
+                                    }
+                                </SelectContent>
+                            </Select>
+                            <Button
+                                variant="outline"
+                                className="ml-4"
+                                onClick={() => setIsNewKnowDialogOpen(true)}
+                            >
+                                Tạo mới
+                            </Button>
                         </div>
                     </div>
-                )}
 
-                <div className="flex justify-end mt-4">
-                    <Button
-                        variant="default"
-                        className="px-6 py-2 bg-blue-600 cursor-pointer text-white rounded-md hover:bg-blue-700"
-                        onClick={handleSave}
-                        disabled={loading}
-                    >
-                        {loading ? "Đang lưu..." : "Lưu"}
-                    </Button>
-                </div>
-            </DialogContent>
-        </Dialog>
+                    {selectedKnowledge.length > 0 && (
+                        <div className="mt-6">
+                            <h3 className="text-lg font-semibold mb-2">Kiến thức đã chọn: ({selectedKnowledge.map(k => k.id).join(',')})</h3>
+                            <div className="space-y-2">
+                                {selectedKnowledge.map((knowledge) => (
+                                    <div
+                                        key={`selected-${knowledge.id}`}
+                                        className="flex items-center justify-between p-3 bg-gray-100 rounded-lg"
+                                    >
+                                        <span>{knowledge.name}</span>
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => handleRemove(knowledge.id)}
+                                            className="hover:bg-gray-200"
+                                        >
+                                            <X className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="flex justify-end mt-4">
+                        <Button
+                            variant="default"
+                            className="px-6 py-2 bg-blue-600 cursor-pointer text-white rounded-md hover:bg-blue-700"
+                            onClick={handleSave}
+                            disabled={loading}
+                        >
+                            {loading ? "Đang lưu..." : "Lưu"}
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
+
+            <DialogNewKnow
+                open={isNewKnowDialogOpen}
+                onOpenChange={setIsNewKnowDialogOpen}
+                onKnowledgeCreated={handleNewKnowledgeCreated}
+            />
+        </>
     );
 }

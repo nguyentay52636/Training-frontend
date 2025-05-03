@@ -20,6 +20,7 @@ import PaginationSkeleton from '../components/ProgramContent/components/CourseDe
 import Schedule from '../components/Schedule';
 import { getBlockKnows } from '@/lib/apis/blockKnowApi';
 import { BlockKnowType } from '@/lib/apis/types';
+import DialogAddKienThucVaoKhoi from '../components/ProgramContent/components/AddBlocKnowledge/DialogAddKienThucVaoKhoi';
 
 // Header component
 const Header = () => (
@@ -260,22 +261,33 @@ const ObjectiveTab = () => (
 const CurriculumTab = () => {
     const [blockKnows, setBlockKnows] = useState<BlockKnowType[]>([]);
     const [loading, setLoading] = useState(false);
+    const [selectedBlockId, setSelectedBlockId] = useState<number | null>(null);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+    const fetchBlockKnows = async () => {
+        try {
+            setLoading(true);
+            const data = await getBlockKnows();
+            setBlockKnows(data);
+        } catch (error) {
+            console.error("Error fetching block knowledge:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchBlockKnows = async () => {
-            try {
-                setLoading(true);
-                const data = await getBlockKnows();
-                setBlockKnows(data);
-            } catch (error) {
-                console.error("Error fetching block knowledge:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchBlockKnows();
     }, []);
+
+    const handleAddKnowledge = (blockId: number) => {
+        setSelectedBlockId(blockId);
+        setIsDialogOpen(true);
+    };
+
+    const handleUpdateSuccess = () => {
+        fetchBlockKnows(); // Refresh the table data
+    };
 
     return (
         <TabsContent value='curriculum'>
@@ -288,7 +300,6 @@ const CurriculumTab = () => {
                             </CardTitle>
                         </div>
                         <div className='flex justify-center items-center'>
-                            {/* thêm khối kiến thức  */}
                             <DialogAddBlockNow />
                         </div>
                     </div>
@@ -318,75 +329,98 @@ const CurriculumTab = () => {
                                                             <div className='font-semibold text-blue-700 text-[1rem]'>
                                                                 {blockKnow.tenKhoiKienThuc}
                                                             </div>
-                                                            <BlocknowledgeActions />
+                                                            <BlocknowledgeActions blockKnowId={blockKnow.idKhoiKienThuc!} />
                                                         </div>
 
-                                                        <ul className='list-disc list-inside pl-2 space-y-1 text-sm text-muted-foreground'>
-                                                            {blockKnow.danhSachKienThuc.map((knowledge, idx) => (
-                                                                <li key={knowledge.idKienThuc} className='flex items-center justify-between pr-2 hover:bg-gray-300 text-black cursor-pointer'>
-                                                                    <span>
-                                                                        {idx + 1}. {knowledge.tenKienThuc}
-                                                                    </span>
-                                                                    <div className='flex space-x-2'>
-                                                                        <button
-                                                                            className='text-blue-600 hover:text-blue-800 cursor-pointer'
-                                                                            title='Chỉnh sửa'
-                                                                        >
-                                                                            <Pencil size={20} />
-                                                                        </button>
-                                                                        <button className='text-red-600 hover:text-red-800  cursor-pointer' title='Xóa'>
-                                                                            <Trash2 size={20} />
-                                                                        </button>
-                                                                    </div>
-                                                                </li>
-                                                            ))}
-                                                        </ul>
+                                                        {blockKnow.danhSachKienThuc && blockKnow.danhSachKienThuc.length > 0 ? (
+                                                            <ul className='list-disc list-inside pl-2 space-y-1 text-sm text-muted-foreground'>
+                                                                {blockKnow.danhSachKienThuc.map((knowledge, idx) => (
+                                                                    <li key={knowledge.idKienThuc} className='flex items-center justify-between pr-2 hover:bg-gray-100 text-black cursor-pointer'>
+                                                                        <div className="flex-1">
+                                                                            <span className="font-medium">
+                                                                                {idx + 1}. {knowledge.tenKienThuc}
+                                                                            </span>
+                                                                            {knowledge.hocPhans && knowledge.hocPhans.length > 0 && (
+                                                                                <div className="ml-4 mt-1 text-sm text-gray-600">
+                                                                                    {knowledge.hocPhans.map((hocPhan) => (
+                                                                                        <div key={hocPhan.idHocPhan} className="flex items-center gap-2">
+                                                                                            <span>• {hocPhan.maHP} - {hocPhan.tenHP}</span>
+                                                                                            <span className="text-gray-500">({hocPhan.soTinChi} tín chỉ)</span>
+                                                                                        </div>
+                                                                                    ))}
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                        <div className='flex space-x-2'>
+                                                                            <button
+                                                                                className='text-blue-600 hover:text-blue-800 cursor-pointer'
+                                                                                title='Chỉnh sửa'
+                                                                            >
+                                                                                <Pencil size={20} />
+                                                                            </button>
+                                                                            <button 
+                                                                                className='text-red-600 hover:text-red-800 cursor-pointer' 
+                                                                                title='Xóa'
+                                                                            >
+                                                                                <Trash2 size={20} />
+                                                                            </button>
+                                                                        </div>
+                                                                    </li>
+                                                                ))}
+                                                            </ul>
+                                                        ) : (
+                                                            <div className="text-gray-500 italic text-sm pl-2">
+                                                                Chưa có kiến thức nào
+                                                            </div>
+                                                        )}
                                                     </div>
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <Button
+                                                        variant="outline"
+                                                        onClick={() => handleAddKnowledge(blockKnow.idKhoiKienThuc!)}
+                                                    >
+                                                        Thêm kiến thức
+                                                    </Button>
                                                 </TableCell>
                                             </TableRow>
                                         ))
                                     )}
                                 </TableBody>
                             </Table>
-                            <div className=" mt-6">
+                            <div className="mt-6">
                                 <PaginationSkeleton />
                             </div>
                         </div>
                     </div>
                 </CardContent>
             </Card>
+
+            {selectedBlockId && (
+                <DialogAddKienThucVaoKhoi
+                    blockKnowId={selectedBlockId}
+                    open={isDialogOpen}
+                    onOpenChange={setIsDialogOpen}
+                    onUpdateSuccess={handleUpdateSuccess}
+                />
+            )}
         </TabsContent>
     );
 };
 
-// ScheduleTab component
-const ScheduleTab = () => (
-    <TabsContent value='schedule'>
-        <Card className='border-gray-200 shadow-sm'>
-            <CardHeader>
-                <CardTitle className='text-2xl font-bold text-gray-800'>Kế hoạch dạy học</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <p className='text-gray-600'>Kế hoạch dạy học sẽ được thêm vào đây.</p>
-            </CardContent>
-        </Card>
-    </TabsContent>
-);
-
-
 export default function SkeletonProgramManager() {
-    const [open, setOpen] = useState(false);
     return (
         <div className='p-6 bg-white text-gray-800'>
             <Header />
             <div className='bg-white p-6 rounded-xl shadow-lg'>
-                <Tabs defaultValue='general' className='w-
-                full'>
+                <Tabs defaultValue='general' className='w-full'>
                     <TabNavigation />
                     <GeneralInfoTab />
                     <ObjectiveTab />
                     <CurriculumTab />
-                    <Schedule />
+                    <TabsContent value='schedule'>
+                        <Schedule />
+                    </TabsContent>
                 </Tabs>
             </div>
         </div>
