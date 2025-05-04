@@ -47,7 +47,12 @@ export const loginAPI = async (userData: { userName: string; password: string })
   }
 };
 
-export const registerAPI = async (userData: { email: string; password: string; role: Role }) => {
+export const registerAPI = async (userData: {
+  userName: string;
+  userEmail: string;
+  password: string;
+  role: Role;
+}) => {
   try {
     const { data } = await baseApi.post('/nguoidung/dangky', userData);
     return data;
