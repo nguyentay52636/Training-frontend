@@ -10,25 +10,13 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 import { CourseType, BlockKnowType } from "@/lib/apis/types";
 import { toast } from 'react-toastify';
 import { getBlockKnows } from "@/lib/apis/blockKnowApi";
-import { addCourseToKnowledge, updateKnowByCourse, getKnowledgeById } from "@/lib/apis/KnowsApi";
+import { addCourseToKnowledge } from "@/lib/apis/KnowsApi";
 import { createCourse } from "@/lib/apis/CourseApi";
-import {
-    getLoaiHocPhanDisplay,
-    loaiHocPhanOptions
-} from "@/lib/utils/courseHelpers";
+import CourseForm from './CourseForm';
 
 // Create a utility function for showing toast notifications
 const showToast = (type: 'success' | 'error', message: string) => {
@@ -52,8 +40,6 @@ export default function DialogAddCourse({
 }: DialogAddCourseProps) {
     const [khoiKienThucData, setKhoiKienThucData] = useState<BlockKnowType[]>([]);
     const [selectedKhoiId, setSelectedKhoiId] = useState<string | null>(null);
-    const [selectedMaHP, setSelectedMaHP] = useState<string | null>(null);
-    const [selectedLoaiHocPhan, setSelectedLoaiHocPhan] = useState<string | null>(null);
     const [selectedCourses, setSelectedCourses] = useState<CourseType[]>([]);
     const [selectedKienThucId, setSelectedKienThucId] = useState<string | null>(
         preselectedKnowledgeId ? preselectedKnowledgeId.toString() : null
@@ -78,12 +64,6 @@ export default function DialogAddCourse({
         }
     }, [preselectedKnowledgeId]);
 
-    // Derived state for hocPhanList
-    const selectedKhoi = khoiKienThucData.find(khoi => khoi.idKhoiKienThuc?.toString() === selectedKhoiId);
-    const hocPhanList: CourseType[] = selectedKhoi ?
-        selectedKhoi.kienThucList.flatMap(kienThuc => kienThuc.hocPhanList || []) :
-        [];
-
     // Fetch block knowledge data when component mounts
     useEffect(() => {
         const fetchBlockKnows = async () => {
@@ -104,10 +84,14 @@ export default function DialogAddCourse({
 
     // Handle adding course when selected
     const handleSelectCourse = (value: string) => {
+        const selectedKhoi = khoiKienThucData.find(khoi => khoi.idKhoiKienThuc?.toString() === selectedKhoiId);
+        const hocPhanList: CourseType[] = selectedKhoi ?
+            selectedKhoi.kienThucList.flatMap(kienThuc => kienThuc.hocPhanList || []) :
+            [];
+
         const hocPhan = hocPhanList.find(hp => hp.maHP === value);
         if (hocPhan && !selectedCourses.some(course => course.maHP === hocPhan.maHP)) {
             setSelectedCourses([...selectedCourses, hocPhan]);
-            setSelectedMaHP(null);
         } else {
             showToast('error', "Học phần đã được chọn trước đó!");
         }
@@ -117,32 +101,6 @@ export default function DialogAddCourse({
         setSelectedCourses(selectedCourses.filter(course => course.maHP !== maHP));
     };
 
-    // Tạo mã học phần tự động
-    const generateCourseCode = () => {
-        const timestamp = new Date().getTime();
-        const random = Math.floor(Math.random() * 1000);
-        return `HP${timestamp}${random}`;
-    };
-
-    // Tính tổng số tiết
-    const calculateTotalHours = () => {
-        return formData.soTietLyThuyet + formData.soTietThucHanh + formData.soTietThucTap;
-    };
-
-    // Reset form về trạng thái ban đầu
-    const resetForm = () => {
-        setFormData({
-            tenHP: '',
-            soTinChi: 0,
-            soTietLyThuyet: 0,
-            soTietThucHanh: 0,
-            soTietThucTap: 0,
-            loaiHocPhan: '',
-            heSoHocPhan: 0
-        });
-    };
-
-    // Xử lý thay đổi input
     const handleInputChange = (field: string, value: string | number) => {
         setFormData(prev => ({
             ...prev,
@@ -150,51 +108,25 @@ export default function DialogAddCourse({
         }));
     };
 
-    // Xử lý tạo học phần
     const handleCreateCourse = async () => {
-        if (!selectedKienThucId) {
-            showToast('error', "Vui lòng chọn kiến thức để thêm học phần");
-            return;
-        }
-
         try {
             setLoading(true);
-
-            // Tạo đối tượng học phần mới
-            const newCourse: CourseType = {
+            const newCourse = await createCourse({
                 ...formData,
-                maHP: generateCourseCode(),
-                tongSoTiet: calculateTotalHours(),
-                hocKy: 1 // Default value
-            };
+                maHP: `HP${Date.now()}${Math.floor(Math.random() * 1000)}`,
+                tongSoTiet: formData.soTietLyThuyet + formData.soTietThucHanh + formData.soTietThucTap,
+                hocKy: 1 // Default value, adjust as needed
+            });
 
-            // Gọi API tạo học phần
-            const createdCourse = await createCourse(newCourse);
-            
-            if (createdCourse && createdCourse.idHocPhan) {
-                // Lấy thông tin kiến thức hiện tại
-                const currentKnowledge = await getKnowledgeById(parseInt(selectedKienThucId));
-                
-                // Cập nhật kiến thức với học phần mới
-                await updateKnowByCourse(parseInt(selectedKienThucId), {
-                    tenKienThuc: currentKnowledge.tenKienThuc,
-                    idHocPhan: [...(currentKnowledge.idHocPhan || []), createdCourse.idHocPhan],
-                    loaiHocPhan: currentKnowledge.loaiHocPhan
-                });
-                
-                // Thêm vào danh sách đã chọn
-                setSelectedCourses([...selectedCourses, createdCourse]);
-                
-                // Thông báo thành công
-                showToast('success', "Tạo học phần mới thành công");
-                
-                // Reset form và đóng phần tạo mới
-                resetForm();
+            if (newCourse) {
+                showToast('success', "Tạo học phần thành công");
+                setSelectedCourses([...selectedCourses, newCourse]);
                 setIsCreatingCourse(false);
+                resetForm();
             }
         } catch (error) {
-            console.error("Lỗi khi tạo học phần:", error);
-            showToast('error', "Có lỗi xảy ra khi tạo học phần mới");
+            console.error("Error creating course:", error);
+            showToast('error', "Có lỗi xảy ra khi tạo học phần");
         } finally {
             setLoading(false);
         }
@@ -240,9 +172,22 @@ export default function DialogAddCourse({
         }
     };
 
+    // Reset form về trạng thái ban đầu
+    const resetForm = () => {
+        setFormData({
+            tenHP: '',
+            soTinChi: 0,
+            soTietLyThuyet: 0,
+            soTietThucHanh: 0,
+            soTietThucTap: 0,
+            loaiHocPhan: '',
+            heSoHocPhan: 0
+        });
+    };
+
     // Kiểm tra form hợp lệ
     const isFormValid = () => {
-        return formData.tenHP.trim() !== '' && formData.loaiHocPhan !== '';
+        return formData.tenHP.trim() !== '';
     };
 
     return (
@@ -259,7 +204,7 @@ export default function DialogAddCourse({
                 <DialogHeader>
                     <DialogTitle className="text-[1.8rem]">Thêm học phần</DialogTitle>
                     <DialogDescription className="text-[1rem]">
-                        Vui lòng chọn khối kiến thức, học phần và loại học phần bên dưới.
+                        Vui lòng chọn khối kiến thức và học phần bên dưới.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -273,212 +218,26 @@ export default function DialogAddCourse({
                     </Button>
                 </div>
 
-                {isCreatingCourse ? (
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label>Tên học phần</Label>
-                            <Input
-                                value={formData.tenHP}
-                                onChange={(e) => handleInputChange('tenHP', e.target.value)}
-                                placeholder="Nhập tên học phần"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label>Số tín chỉ</Label>
-                            <Input
-                                type="number"
-                                value={formData.soTinChi}
-                                onChange={(e) => handleInputChange('soTinChi', parseInt(e.target.value))}
-                                placeholder="Nhập số tín chỉ"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label>Loại học phần</Label>
-                            <Select
-                                value={formData.loaiHocPhan}
-                                onValueChange={(value) => handleInputChange('loaiHocPhan', value)}
-                            >
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Chọn loại học phần" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {loaiHocPhanOptions.map((option) => (
-                                        <SelectItem key={option.value} value={option.value}>
-                                            {option.display}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="space-y-2">
-                            <Label>Số tiết lý thuyết</Label>
-                            <Input
-                                type="number"
-                                value={formData.soTietLyThuyet}
-                                onChange={(e) => handleInputChange('soTietLyThuyet', parseInt(e.target.value))}
-                                placeholder="Nhập số tiết lý thuyết"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label>Số tiết thực hành</Label>
-                            <Input
-                                type="number"
-                                value={formData.soTietThucHanh}
-                                onChange={(e) => handleInputChange('soTietThucHanh', parseInt(e.target.value))}
-                                placeholder="Nhập số tiết thực hành"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label>Số tiết thực tập</Label>
-                            <Input
-                                type="number"
-                                value={formData.soTietThucTap}
-                                onChange={(e) => handleInputChange('soTietThucTap', parseInt(e.target.value))}
-                                placeholder="Nhập số tiết thực tập"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label>Hệ số học phần</Label>
-                            <Input
-                                type="number"
-                                value={formData.heSoHocPhan}
-                                onChange={(e) => handleInputChange('heSoHocPhan', parseInt(e.target.value))}
-                                placeholder="Nhập hệ số học phần"
-                            />
-                        </div>
-                        <div className="col-span-2 flex justify-end mt-4">
-                            <Button
-                                variant="default"
-                                className="cursor-pointer px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                                onClick={handleCreateCourse}
-                                disabled={loading || !isFormValid()}
-                            >
-                                {loading ? "Đang tạo..." : "Tạo học phần"}
-                            </Button>
-                        </div>
-                    </div>
-                ) : (
-                    <>
-                        <Select
-                            value={selectedKhoiId || undefined}
-                            onValueChange={(value) => {
-                                setSelectedKhoiId(value);
-                                setSelectedMaHP(null);
-                                setSelectedLoaiHocPhan(null);
-                            }}
-                        >
-                            <SelectTrigger className="w-full mt-4 h-12 text-[1.1rem] text-black">
-                                <SelectValue placeholder="Chọn khối kiến thức" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {khoiKienThucData.map((khoi) => (
-                                    <SelectItem
-                                        key={khoi.idKhoiKienThuc}
-                                        value={khoi.idKhoiKienThuc?.toString() || ""}
-                                    >
-                                        {khoi.tenKhoiKienThuc}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-
-                        {preselectedKnowledgeId ? (
-                            <div className="mt-4 p-3 bg-blue-50 rounded border border-blue-200">
-                                <p className="text-blue-700">Học phần sẽ được thêm vào kiến thức đã chọn.</p>
-                            </div>
-                        ) : (
-                            <Select
-                                value={selectedKienThucId || undefined}
-                                disabled={!selectedKhoiId || loading}
-                                onValueChange={(value) => setSelectedKienThucId(value)}
-                            >
-                                <SelectTrigger className="w-full mt-4 h-12 text-[1.1rem] text-black">
-                                    <SelectValue placeholder="Chọn kiến thức" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {selectedKhoi?.kienThucList?.map((kienThuc) => (
-                                        <SelectItem
-                                            key={kienThuc.idKienThuc}
-                                            value={kienThuc.idKienThuc?.toString() || ""}
-                                        >
-                                            {kienThuc.tenKienThuc}
-                                        </SelectItem>
-                                    )) || []}
-                                </SelectContent>
-                            </Select>
-                        )}
-
-                        <Select
-                            disabled={!selectedKhoiId || loading || hocPhanList.length === 0}
-                            onValueChange={(value) => handleSelectCourse(value)}
-                        >
-                            <SelectTrigger className="w-full mt-4 h-12 text-[1.1rem] text-black">
-                                <SelectValue placeholder={loading ? "Đang tải..." : "Chọn học phần"} />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {hocPhanList.map((hocPhan) => (
-                                    <SelectItem key={hocPhan.maHP} value={hocPhan.maHP}>
-                                        {hocPhan.tenHP} ({hocPhan.maHP})
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-
-                        <Select
-                            disabled={!selectedKhoiId || hocPhanList.length === 0}
-                            onValueChange={(value) => setSelectedLoaiHocPhan(value)}
-                        >
-                            <SelectTrigger className="w-full mt-4 h-12 text-[1.1rem] text-black">
-                                <SelectValue placeholder="Loại học phần" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {loaiHocPhanOptions.map((option) => (
-                                    <SelectItem key={option.value} value={option.value}>
-                                        {option.display}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-
-                        {/* Course Section */}
-                        {selectedCourses.length > 0 && (
-                            <div className="mt-6">
-                                <h3 className="text-lg font-semibold mb-2">Học phần đã chọn:</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    {selectedCourses.map((course, index) => (
-                                        <div key={index} className="flex items-center justify-between bg-gray-100 p-2 rounded-md">
-                                            <div>
-                                                <span className="block">{course.tenHP} ({course.maHP}) - {course.soTinChi} tín chỉ</span>
-                                                <span className="text-sm text-gray-600">
-                                                    Loại: {getLoaiHocPhanDisplay(course.loaiHocPhan)}
-                                                </span>
-                                            </div>
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                className="bg-black text-white text-[18px] hover:bg-black hover:text-white cursor-pointer hover:bg-shadow-xl"
-                                                onClick={() => handleRemoveCourse(course.maHP)}
-                                            >
-                                                x
-                                            </Button>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </>
-                )}
-
-                <div className="flex justify-end mt-4">
-                    <Button
-                        variant="default"
-                        className="cursor-pointer px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                        onClick={handleSaveCourses}
-                        disabled={loading || selectedCourses.length === 0 || !selectedKienThucId}
-                    >
-                        {loading ? "Đang lưu..." : "Lưu"}
-                    </Button>
-                </div>
+                <CourseForm
+                    isCreatingCourse={isCreatingCourse}
+                    formData={formData}
+                    selectedKhoiId={selectedKhoiId}
+                    selectedKienThucId={selectedKienThucId}
+                    selectedCourses={selectedCourses}
+                    khoiKienThucData={khoiKienThucData}
+                    loading={loading}
+                    preselectedKnowledgeId={preselectedKnowledgeId}
+                    onInputChange={handleInputChange}
+                    onKhoiKienThucChange={(value) => {
+                        setSelectedKhoiId(value);
+                    }}
+                    onKienThucChange={(value) => setSelectedKienThucId(value)}
+                    onSelectCourse={handleSelectCourse}
+                    onRemoveCourse={handleRemoveCourse}
+                    onCreateCourse={handleCreateCourse}
+                    onSaveCourses={handleSaveCourses}
+                    isFormValid={isFormValid}
+                />
             </DialogContent>
         </Dialog>
     );
