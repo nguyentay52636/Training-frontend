@@ -11,6 +11,7 @@ import {
 import { Checkbox } from '@radix-ui/react-checkbox';
 import { useEffect, useState } from 'react';
 import { getKnowledgeById } from '@/lib/apis/KnowsApi';
+import { getLoaiHocPhanDisplay } from '@/lib/utils/courseHelpers';
 
 interface CourseType {
     idHocPhan?: number;
@@ -125,7 +126,9 @@ export default function TableCourse({ onRowClick, courseData = [], knowledgeId }
                                 <TableCell>{hocPhan.soTietThucHanh}</TableCell>
                                 <TableCell>{hocPhan.soTietThucTap}</TableCell>
                                 <TableCell>{hocPhan.tongSoTiet}</TableCell>
-                                <TableCell>{typeof hocPhan.loaiHocPhan === 'number' ? hocPhan.loaiHocPhan : hocPhan.loaiHocPhan}</TableCell>
+                                <TableCell>
+                                    {getLoaiHocPhanDisplay(hocPhan.loaiHocPhan)}
+                                </TableCell>
                             </TableRow>
                         ))
                     )}

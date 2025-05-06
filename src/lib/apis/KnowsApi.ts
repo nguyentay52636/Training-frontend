@@ -42,6 +42,16 @@ export const addKnow = async ({tenKienThuc,idHocPhan,loaiHocPhan}:knowledgeType)
     throw new Error(error as string)
    }
 }
+
+export const addCourseToKnowledge = async (idKienThuc: number, idHocPhan: number) => {
+   try {
+      const {data} = await baseApi.post(`/kien-thuc/${idKienThuc}/hoc-phan/${idHocPhan}`)
+      return data
+   } catch(error) {
+      throw new Error(error as string)
+   }
+}
+
 export const deleteKnow = async (id: number) => {  
    try{
     const {data} = await baseApi.delete(`/kien-thuc/${id}`)
