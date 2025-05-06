@@ -19,10 +19,11 @@ import { cn } from '@/lib/utils';
 import PaginationSkeleton from '../components/ProgramContent/components/CourseDetails/components/PaginationSkeleton';
 import Schedule from '../components/Schedule';
 import { getBlockKnows } from '@/lib/apis/blockKnowApi';
-import { BlockKnowType } from '@/lib/apis/types';
+
 import DialogAddKienThucVaoKhoi from '../components/ProgramContent/components/AddBlocKnowledge/DialogAddKienThucVaoKhoi';
 import CourseManager from '../components/ProgramContent/components/CourseDetails/CourseManager';
 import { getHocPhanByKienThucId } from '@/lib/apis/KnowsApi';
+import { BlockKnowType, CourseType, KnowledgeType } from '@/lib/apis/types';
 
 // Header component
 const Header = () => (
@@ -261,13 +262,13 @@ const ObjectiveTab = () => (
 
 // CurriculumTab component
 const CurriculumTab = () => {
-    const [blockKnows, setBlockKnows] = useState<any[]>([]);
+    const [blockKnows, setBlockKnows] = useState<BlockKnowType[]>([]);
     const [loading, setLoading] = useState(false);
     const [selectedBlockId, setSelectedBlockId] = useState<number | null>(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [selectedKnowledgeId, setSelectedKnowledgeId] = useState<number | null>(null);
     const [isCourseManagerOpen, setIsCourseManagerOpen] = useState(false);
-    const [selectedKnowledgeData, setSelectedKnowledgeData] = useState<any>(null);
+    const [selectedKnowledgeData, setSelectedKnowledgeData] = useState<KnowledgeType | null>(null);
     const [loadingCourses, setLoadingCourses] = useState(false);
 
     const fetchBlockKnows = async () => {
@@ -295,7 +296,7 @@ const CurriculumTab = () => {
         fetchBlockKnows(); // Refresh the table data
     };
 
-    const handleKnowledgeClick = async (knowledge: any) => {
+    const handleKnowledgeClick = async (knowledge: KnowledgeType) => {
         try {
             setLoadingCourses(true);
             setSelectedKnowledgeId(knowledge.idKienThuc);
@@ -391,7 +392,7 @@ const CurriculumTab = () => {
 
                                                             {blockKnow.kienThucList && blockKnow.kienThucList.length > 0 ? (
                                                                 <ul className='list-disc list-inside pl-2 space-y-1 text-sm text-muted-foreground'>
-                                                                    {blockKnow.kienThucList.map((knowledge: any, idx: number) => (
+                                                                    {blockKnow.kienThucList.map((knowledge: KnowledgeType, idx: number) => (
                                                                         <li
                                                                             key={knowledge.idKienThuc}
                                                                             className='flex items-center justify-between pr-2 hover:bg-gray-100 text-black cursor-pointer'
@@ -403,7 +404,7 @@ const CurriculumTab = () => {
                                                                                 </span>
                                                                                 {knowledge.hocPhans && knowledge.hocPhans.length > 0 && (
                                                                                     <div className="ml-4 mt-1 text-sm text-gray-600">
-                                                                                        {knowledge.hocPhans.map((hocPhan: any) => (
+                                                                                        {knowledge.hocPhans.map((hocPhan: CourseType) => (
                                                                                             <div key={hocPhan.idHocPhan} className="flex items-center gap-2">
                                                                                                 <span>• {hocPhan.maHP} - {hocPhan.tenHP}</span>
                                                                                                 <span className="text-gray-500">({hocPhan.soTinChi} tín chỉ)</span>

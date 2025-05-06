@@ -60,3 +60,18 @@ export const deleteKnow = async (id: number) => {
     throw new Error(error as string)
    }
  } 
+ export const updateKnowByCourse = async (idKienThuc: number, { tenKienThuc, idHocPhan, loaiHocPhan }: { tenKienThuc: string, idHocPhan: number[], loaiHocPhan: string }) => {
+    try {
+        const updateKnow = {
+            tenKienThuc,
+            idHocPhan,
+            loaiHocPhan
+        };
+        const { data } = await baseApi.put<knowledgeType>(`/kien-thuc/${idKienThuc}`, updateKnow);
+        return data;
+    } catch (error) {
+        throw new Error(error as string);
+    }
+}   
+
+
