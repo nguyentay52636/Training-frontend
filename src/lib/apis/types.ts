@@ -47,15 +47,15 @@ export enum Role {
 export interface BlockKnowType { 
   idKhoiKienThuc?: number;
   tenKhoiKienThuc: string;
-  idKienThuc? : string;
-  danhSachKienThuc: knowledgeType[];
+  idKienThuc?: [];
+  kienThucList: knowledgeType[];
 }
 export interface knowledgeType  { 
   idKienThuc?: number;
   tenKienThuc: string;
-  idHocPhan: string;
-  loaiHocPhan:string;
-  hocPhans? : CourseType[];
+  idHocPhan: [];
+  loaiHocPhan: string;
+  hocPhanList: CourseType[];
 }
 export interface CourseType {
   idHocPhan?: number;

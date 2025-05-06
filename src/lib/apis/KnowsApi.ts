@@ -15,7 +15,7 @@ export const addKnow = async ({tenKienThuc,idHocPhan,loaiHocPhan}:knowledgeType)
       tenKienThuc,
       idHocPhan,
       loaiHocPhan,
-      hocPhans: []
+      hocPhanList: []
    }
    try{
     const {data} = await baseApi.post<knowledgeType>('/kien-thuc',newKnow)

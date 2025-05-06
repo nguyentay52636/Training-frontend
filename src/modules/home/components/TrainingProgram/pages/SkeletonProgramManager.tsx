@@ -259,7 +259,7 @@ const ObjectiveTab = () => (
 
 // CurriculumTab component
 const CurriculumTab = () => {
-    const [blockKnows, setBlockKnows] = useState<BlockKnowType[]>([]);
+    const [blockKnows, setBlockKnows] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [selectedBlockId, setSelectedBlockId] = useState<number | null>(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -329,12 +329,12 @@ const CurriculumTab = () => {
                                                             <div className='font-semibold text-blue-700 text-[1rem]'>
                                                                 {blockKnow.tenKhoiKienThuc}
                                                             </div>
-                                                            <BlocknowledgeActions blockKnowId={blockKnow.idKhoiKienThuc!} />
+
                                                         </div>
 
-                                                        {blockKnow.danhSachKienThuc && blockKnow.danhSachKienThuc.length > 0 ? (
+                                                        {blockKnow.kienThucList && blockKnow.kienThucList.length > 0 ? (
                                                             <ul className='list-disc list-inside pl-2 space-y-1 text-sm text-muted-foreground'>
-                                                                {blockKnow.danhSachKienThuc.map((knowledge, idx) => (
+                                                                {blockKnow.kienThucList.map((knowledge: any, idx: number) => (
                                                                     <li key={knowledge.idKienThuc} className='flex items-center justify-between pr-2 hover:bg-gray-100 text-black cursor-pointer'>
                                                                         <div className="flex-1">
                                                                             <span className="font-medium">
@@ -342,7 +342,7 @@ const CurriculumTab = () => {
                                                                             </span>
                                                                             {knowledge.hocPhans && knowledge.hocPhans.length > 0 && (
                                                                                 <div className="ml-4 mt-1 text-sm text-gray-600">
-                                                                                    {knowledge.hocPhans.map((hocPhan) => (
+                                                                                    {knowledge.hocPhans.map((hocPhan: any) => (
                                                                                         <div key={hocPhan.idHocPhan} className="flex items-center gap-2">
                                                                                             <span>• {hocPhan.maHP} - {hocPhan.tenHP}</span>
                                                                                             <span className="text-gray-500">({hocPhan.soTinChi} tín chỉ)</span>
@@ -351,20 +351,7 @@ const CurriculumTab = () => {
                                                                                 </div>
                                                                             )}
                                                                         </div>
-                                                                        <div className='flex space-x-2'>
-                                                                            <button
-                                                                                className='text-blue-600 hover:text-blue-800 cursor-pointer'
-                                                                                title='Chỉnh sửa'
-                                                                            >
-                                                                                <Pencil size={20} />
-                                                                            </button>
-                                                                            <button 
-                                                                                className='text-red-600 hover:text-red-800 cursor-pointer' 
-                                                                                title='Xóa'
-                                                                            >
-                                                                                <Trash2 size={20} />
-                                                                            </button>
-                                                                        </div>
+
                                                                     </li>
                                                                 ))}
                                                             </ul>
@@ -375,14 +362,27 @@ const CurriculumTab = () => {
                                                         )}
                                                     </div>
                                                 </TableCell>
-                                                <TableCell className="text-right">
-                                                    <Button
-                                                        variant="outline"
-                                                        onClick={() => handleAddKnowledge(blockKnow.idKhoiKienThuc!)}
-                                                    >
-                                                        Thêm kiến thức
-                                                    </Button>
+                                                <TableCell className="text-center">
+
+                                                    <div className='flex'>
+                                                        <BlocknowledgeActions blockKnowId={blockKnow.idKhoiKienThuc} />
+                                                        <Button
+                                                            className='text-blue-600 hover:text-blue-800 cursor-pointer text-2xl text-center'
+                                                            title='Chỉnh sửa'
+                                                            variant='ghost'
+                                                        >
+                                                            <Pencil className='text-2xl' />
+                                                        </Button>
+                                                        <Button
+                                                            className='text-red-600 hover:text-red-800 cursor-pointer text-center'
+                                                            title='Xóa'
+                                                            variant='ghost'
+                                                        >
+                                                            <Trash2 />
+                                                        </Button>
+                                                    </div>
                                                 </TableCell>
+
                                             </TableRow>
                                         ))
                                     )}
