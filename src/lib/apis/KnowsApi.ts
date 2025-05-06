@@ -1,5 +1,5 @@
 import baseApi from "./baseApi";
-import { knowledgeType } from "./types";
+import { knowledgeType, CourseType } from "./types";
 
 export const getKnows = async () => {
    try{
@@ -7,6 +7,24 @@ export const getKnows = async () => {
     return data
    }catch(error){
     throw new Error(error as string)
+   }
+};
+
+export const getKnowledgeById = async (id: number) => {
+   try {
+      const {data} = await baseApi.get(`/kien-thuc/${id}`)
+      return data
+   } catch(error) {
+      throw new Error(error as string)
+   }
+};
+
+export const getHocPhanByKienThucId = async (id: number): Promise<CourseType[]> => {
+   try {
+      const {data} = await baseApi.get<CourseType[]>(`/kien-thuc/${id}/hoc-phan`)
+      return data
+   } catch(error) {
+      throw new Error(error as string)
    }
 };
 

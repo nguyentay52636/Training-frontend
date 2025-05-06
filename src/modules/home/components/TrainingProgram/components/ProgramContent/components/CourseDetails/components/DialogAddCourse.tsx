@@ -17,24 +17,24 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import khoiKienThucData, { HocPhan } from "../../DataBlock";
+
 import { Plus } from "lucide-react";
+import { CourseType } from "@/lib/apis/types";
 
 export default function DialogAddCourse() {
     const [selectedKhoiId, setSelectedKhoiId] = useState<string | null>(null);
     const [selectedMaHP, setSelectedMaHP] = useState<string | null>(null);
     const [selectedLoaiHocPhan, setSelectedLoaiHocPhan] = useState<string | null>(null);
-    const [selectedCourses, setSelectedCourses] = useState<HocPhan[]>([]);
+    const [selectedCourses, setSelectedCourses] = useState<CourseType[]>([]);
 
-    const selectedKhoi = khoiKienThucData.find(khoi => khoi.idKhoiKienThuc.toString() === selectedKhoiId);
-    const hocPhanList = selectedKhoi ? selectedKhoi.hocPhanList : [];
+
 
     // Handle adding course immediately when selected
     const handleSelectCourse = (value: string) => {
         const hocPhan = hocPhanList.find(hp => hp.maHP === value);
         if (hocPhan && !selectedCourses.some(course => course.maHP === hocPhan.maHP)) {
             setSelectedCourses([...selectedCourses, hocPhan]);
-            setSelectedMaHP(null); // Reset the course selection
+            setSelectedMaHP(null);
         } else {
             console.log("Học phần đã được chọn trước đó!");
         }
@@ -56,7 +56,7 @@ export default function DialogAddCourse() {
                 <DialogHeader>
                     <DialogTitle className="text-[1.8rem]">Thêm học phần</DialogTitle>
                     <DialogDescription className="text-[1rem]">
-                        Vui lòng chọn khối kiến thức, học phần và loại học phần bên dưới.
+                        Vui lòng  kiến thức, học phần và loại học phần bên dưới.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -66,7 +66,7 @@ export default function DialogAddCourse() {
                     setSelectedLoaiHocPhan(null);
                 }}>
                     <SelectTrigger className="w-full mt-4 h-12 text-[1.1rem] text-black">
-                        <SelectValue placeholder="Chọn khối kiến thức" />
+                        <SelectValue placeholder="Chọn  kiến thức" />
                     </SelectTrigger>
                     <SelectContent>
                         {khoiKienThucData.map((khoi) => (
@@ -79,7 +79,7 @@ export default function DialogAddCourse() {
 
                 <Select
                     disabled={!selectedKhoiId}
-                    onValueChange={(value) => handleSelectCourse(value)} // Add course on selection
+                    onValueChange={(value) => handleSelectCourse(value)}
                 >
                     <SelectTrigger className="w-full mt-4 h-12 text-[1.1rem] text-black">
                         <SelectValue placeholder="Chọn học phần" />
@@ -113,7 +113,7 @@ export default function DialogAddCourse() {
                 {selectedCourses.length > 0 && (
                     <div className="mt-6">
                         <h3 className="text-lg font-semibold mb-2">Học phần đã chọn:</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
                             {selectedCourses.map((course, index) => (
                                 <div key={index} className="flex items-center justify-between bg-gray-100 p-2 rounded-md">
                                     <span>{course.tenHP} ({course.maHP}) - {course.soTinChi} tín chỉ</span>
