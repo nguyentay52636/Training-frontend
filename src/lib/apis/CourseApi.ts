@@ -20,10 +20,32 @@ export const getCourseById = async (id: number) => {
     }
 }
 
+
 // Create operation
-export const createCourse = async (course: CourseType) => {
+export const createCourse = async ({
+    maHP,
+tenHP,
+soTinChi,
+soTietLyThuyet,
+soTietThucHanh,
+soTietThucTap,
+    loaiHocPhan,
+    tongSoTiet,
+    heSoHocPhan
+}: CourseType) => {
+    const newCourse = {
+        maHP,
+        tenHP,
+        soTinChi,
+        soTietLyThuyet,
+        soTietThucHanh,
+        soTietThucTap,
+        loaiHocPhan,
+        tongSoTiet,
+        heSoHocPhan
+    }
     try {
-        const {data} = await baseApi.post<CourseType>('/hocphan', course)
+        const {data} = await baseApi.post<CourseType>('/hocphan', newCourse)
         return data
     } catch (error) {
         throw new Error(error as string)

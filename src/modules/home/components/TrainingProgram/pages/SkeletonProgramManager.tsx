@@ -19,8 +19,11 @@ import { cn } from '@/lib/utils';
 import PaginationSkeleton from '../components/ProgramContent/components/CourseDetails/components/PaginationSkeleton';
 import Schedule from '../components/Schedule';
 import { getBlockKnows } from '@/lib/apis/blockKnowApi';
-import { BlockKnowType } from '@/lib/apis/types';
+
 import DialogAddKienThucVaoKhoi from '../components/ProgramContent/components/AddBlocKnowledge/DialogAddKienThucVaoKhoi';
+import CourseManager from '../components/ProgramContent/components/CourseDetails/CourseManager';
+import { getHocPhanByKienThucId } from '@/lib/apis/KnowsApi';
+import { BlockKnowType, CourseType, knowledgeType as KnowledgeType } from '@/lib/apis/types';
 
 // Header component
 const Header = () => (
@@ -263,6 +266,10 @@ const CurriculumTab = () => {
     const [loading, setLoading] = useState(false);
     const [selectedBlockId, setSelectedBlockId] = useState<number | null>(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [selectedKnowledgeId, setSelectedKnowledgeId] = useState<number | null>(null);
+    const [isCourseManagerOpen, setIsCourseManagerOpen] = useState(false);
+    const [selectedKnowledgeData, setSelectedKnowledgeData] = useState<KnowledgeType | null>(null);
+    const [loadingCourses, setLoadingCourses] = useState(false);
 
     const fetchBlockKnows = async () => {
         try {
@@ -289,6 +296,36 @@ const CurriculumTab = () => {
         fetchBlockKnows(); // Refresh the table data
     };
 
+    const handleKnowledgeClick = async (knowledge: KnowledgeType) => {
+        try {
+            setLoadingCourses(true);
+            setSelectedKnowledgeId(knowledge.idKienThuc || null);
+
+            // Sao chép dữ liệu kiến thức hiện tại
+            const knowledgeDataCopy = { ...knowledge };
+
+            if (knowledge.idKienThuc) {
+                // Lấy danh sách học phần từ API dựa vào ID kiến thức
+                const hocPhans = await getHocPhanByKienThucId(knowledge.idKienThuc);
+
+                // Thêm thuộc tính hocPhans để hiển thị
+                // @ts-ignore - thêm thuộc tính động
+                knowledgeDataCopy.hocPhans = hocPhans;
+            }
+
+            // Cập nhật state và mở CourseManager
+            setSelectedKnowledgeData(knowledgeDataCopy);
+            setIsCourseManagerOpen(true);
+        } catch (error) {
+            console.error("Error fetching courses for knowledge:", error);
+            // Nếu có lỗi, vẫn hiển thị với dữ liệu sẵn có
+            setSelectedKnowledgeData(knowledge);
+            setIsCourseManagerOpen(true);
+        } finally {
+            setLoadingCourses(false);
+        }
+    };
+
     return (
         <TabsContent value='curriculum'>
             <Card className='border-gray-200 shadow-sm py-12'>
@@ -305,93 +342,124 @@ const CurriculumTab = () => {
                     </div>
                     <div className='border-t border-gray-300 mb-4'></div>
                     <div className='space-y-4'>
-                        <div className='w-full'>
-                            <Table>
-                                <TableHeader>
-                                    <TableRow className='bg-blue-300! '>
-                                        <TableHead className='text-bold'>STT</TableHead>
-                                        <TableHead className='text-bold'>Tên khối kiến thức & học phần</TableHead>
-                                        <TableHead className="">Thao tác</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {loading ? (
-                                        <TableRow>
-                                            <TableCell colSpan={3} className="text-center">Đang tải...</TableCell>
-                                        </TableRow>
-                                    ) : (
-                                        blockKnows.map((blockKnow, index) => (
-                                            <TableRow key={blockKnow.idKhoiKienThuc} className='bg-background hover:bg-secondary'>
-                                                <TableCell className='font-bold'>{index + 1}</TableCell>
-                                                <TableCell className='font-medium'>
-                                                    <div>
-                                                        <div className='flex justify-between items-center mb-2'>
-                                                            <div className='font-semibold text-blue-700 text-[1rem]'>
-                                                                {blockKnow.tenKhoiKienThuc}
-                                                            </div>
-                                                            <BlocknowledgeActions blockKnowId={blockKnow.idKhoiKienThuc!} />
-                                                        </div>
-
-                                                        {blockKnow.danhSachKienThuc && blockKnow.danhSachKienThuc.length > 0 ? (
-                                                            <ul className='list-disc list-inside pl-2 space-y-1 text-sm text-muted-foreground'>
-                                                                {blockKnow.danhSachKienThuc.map((knowledge, idx) => (
-                                                                    <li key={knowledge.idKienThuc} className='flex items-center justify-between pr-2 hover:bg-gray-100 text-black cursor-pointer'>
-                                                                        <div className="flex-1">
-                                                                            <span className="font-medium">
-                                                                                {idx + 1}. {knowledge.tenKienThuc}
-                                                                            </span>
-                                                                            {knowledge.hocPhans && knowledge.hocPhans.length > 0 && (
-                                                                                <div className="ml-4 mt-1 text-sm text-gray-600">
-                                                                                    {knowledge.hocPhans.map((hocPhan) => (
-                                                                                        <div key={hocPhan.idHocPhan} className="flex items-center gap-2">
-                                                                                            <span>• {hocPhan.maHP} - {hocPhan.tenHP}</span>
-                                                                                            <span className="text-gray-500">({hocPhan.soTinChi} tín chỉ)</span>
-                                                                                        </div>
-                                                                                    ))}
-                                                                                </div>
-                                                                            )}
-                                                                        </div>
-                                                                        <div className='flex space-x-2'>
-                                                                            <button
-                                                                                className='text-blue-600 hover:text-blue-800 cursor-pointer'
-                                                                                title='Chỉnh sửa'
-                                                                            >
-                                                                                <Pencil size={20} />
-                                                                            </button>
-                                                                            <button 
-                                                                                className='text-red-600 hover:text-red-800 cursor-pointer' 
-                                                                                title='Xóa'
-                                                                            >
-                                                                                <Trash2 size={20} />
-                                                                            </button>
-                                                                        </div>
-                                                                    </li>
-                                                                ))}
-                                                            </ul>
-                                                        ) : (
-                                                            <div className="text-gray-500 italic text-sm pl-2">
-                                                                Chưa có kiến thức nào
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </TableCell>
-                                                <TableCell className="text-right">
-                                                    <Button
-                                                        variant="outline"
-                                                        onClick={() => handleAddKnowledge(blockKnow.idKhoiKienThuc!)}
-                                                    >
-                                                        Thêm kiến thức
-                                                    </Button>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))
-                                    )}
-                                </TableBody>
-                            </Table>
-                            <div className="mt-6">
-                                <PaginationSkeleton />
+                        {isCourseManagerOpen && selectedKnowledgeData ? (
+                            <div>
+                                <div className="flex justify-between items-center mb-4">
+                                    <Button
+                                        onClick={() => setIsCourseManagerOpen(false)}
+                                        variant="outline"
+                                        className="px-4 py-2"
+                                    >
+                                        Quay lại
+                                    </Button>
+                                    <h2 className="text-2xl font-bold">{selectedKnowledgeData.tenKienThuc}</h2>
+                                </div>
+                                {loadingCourses ? (
+                                    <div className="flex justify-center items-center h-64">
+                                        <div className="text-center">
+                                            <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                                            <p className="mt-4 text-lg">Đang tải danh sách học phần...</p>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <CourseManager knowledgeData={selectedKnowledgeData} />
+                                )}
                             </div>
-                        </div>
+                        ) : (
+                            <div className='w-full'>
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow className='bg-blue-300! '>
+                                            <TableHead className='text-bold'>STT</TableHead>
+                                            <TableHead className='text-bold'>Tên khối kiến thức & học phần</TableHead>
+                                            <TableHead className="">Thao tác</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {loading ? (
+                                            <TableRow>
+                                                <TableCell colSpan={3} className="text-center">Đang tải...</TableCell>
+                                            </TableRow>
+                                        ) : (
+                                            blockKnows.map((blockKnow, index) => (
+                                                <TableRow key={blockKnow.idKhoiKienThuc} className='bg-background hover:bg-secondary'>
+                                                    <TableCell className='font-bold'>{index + 1}</TableCell>
+                                                    <TableCell className='font-medium'>
+                                                        <div>
+                                                            <div className='flex justify-between items-center mb-2'>
+                                                                <div className='font-semibold text-blue-700 text-[1rem]'>
+                                                                    {blockKnow.tenKhoiKienThuc}
+                                                                </div>
+
+                                                            </div>
+
+                                                            {blockKnow.kienThucList && blockKnow.kienThucList.length > 0 ? (
+                                                                <ul className='list-disc list-inside pl-2 space-y-1 text-sm text-muted-foreground'>
+                                                                    {blockKnow.kienThucList.map((knowledge: KnowledgeType, idx: number) => (
+                                                                        <li
+                                                                            key={knowledge.idKienThuc}
+                                                                            className='flex items-center justify-between pr-2 hover:bg-gray-100 text-black cursor-pointer'
+                                                                            onClick={() => handleKnowledgeClick(knowledge)}
+                                                                        >
+                                                                            <div className="flex-1">
+                                                                                <span className="font-medium">
+                                                                                    {idx + 1}. {knowledge.tenKienThuc}
+                                                                                </span>
+                                                                                {/* @ts-ignore - hocPhans is a dynamic property */}
+                                                                                {knowledge.hocPhans && knowledge.hocPhans.length > 0 && (
+                                                                                    <div className="ml-4 mt-1 text-sm text-gray-600">
+                                                                                        {/* @ts-ignore - hocPhans is a dynamic property */}
+                                                                                        {knowledge.hocPhans.map((hocPhan: CourseType) => (
+                                                                                            <div key={hocPhan.idHocPhan} className="flex items-center gap-2">
+                                                                                                <span>• {hocPhan.maHP} - {hocPhan.tenHP}</span>
+                                                                                                <span className="text-gray-500">({hocPhan.soTinChi} tín chỉ)</span>
+                                                                                            </div>
+                                                                                        ))}
+                                                                                    </div>
+                                                                                )}
+                                                                            </div>
+
+                                                                        </li>
+                                                                    ))}
+                                                                </ul>
+                                                            ) : (
+                                                                <div className="text-gray-500 italic text-sm pl-2">
+                                                                    Chưa có kiến thức nào
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell className="text-center">
+
+                                                        <div className='flex'>
+                                                            <BlocknowledgeActions blockKnowId={blockKnow.idKhoiKienThuc || 0} />
+                                                            <Button
+                                                                className='text-blue-600 hover:text-blue-800 cursor-pointer text-2xl text-center'
+                                                                title='Chỉnh sửa'
+                                                                variant='ghost'
+                                                            >
+                                                                <Pencil className='text-2xl' />
+                                                            </Button>
+                                                            <Button
+                                                                className='text-red-600 hover:text-red-800 cursor-pointer text-center'
+                                                                title='Xóa'
+                                                                variant='ghost'
+                                                            >
+                                                                <Trash2 />
+                                                            </Button>
+                                                        </div>
+                                                    </TableCell>
+
+                                                </TableRow>
+                                            ))
+                                        )}
+                                    </TableBody>
+                                </Table>
+                                <div className="mt-6">
+                                    <PaginationSkeleton />
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </CardContent>
             </Card>

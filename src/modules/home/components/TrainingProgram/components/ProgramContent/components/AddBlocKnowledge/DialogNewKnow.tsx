@@ -52,9 +52,9 @@ export default function DialogNewKnow({ open, onOpenChange, onKnowledgeCreated }
             setLoading(true);
             const newKnowledge = await addKnow({
                 tenKienThuc: knowledgeName.trim(),
-                idHocPhan: "",
+                idHocPhan: [],
                 loaiHocPhan: loaiHocPhan,
-                hocPhans: []
+                hocPhanList: []
             });
 
             onKnowledgeCreated(newKnowledge);

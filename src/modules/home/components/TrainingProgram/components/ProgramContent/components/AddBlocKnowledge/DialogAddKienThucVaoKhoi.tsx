@@ -15,8 +15,8 @@ import {
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
 import { toast } from 'react-toastify';
-import { knowledgeType } from "@/lib/apis/types";
-import {  addKnowInBlockKnow } from "@/lib/apis/blockKnowApi";
+import { knowledgeType, CourseType } from "@/lib/apis/types";
+import { addKnowInBlockKnow } from "@/lib/apis/blockKnowApi";
 import { getKnows } from "@/lib/apis/KnowsApi";
 import { X } from "lucide-react";
 import DialogNewKnow from "./DialogNewKnow";
@@ -96,10 +96,18 @@ export default function DialogAddKienThucVaoKhoi({ blockKnowId, open, onOpenChan
     };
 
     const handleNewKnowledgeCreated = (newKnowledge: knowledgeType) => {
-        setAvailableKnowledge([...availableKnowledge, newKnowledge]);
+        // Ensure the newKnowledge has hocPhanList initialized as empty array
+        const completeKnowledge: knowledgeType = {
+            ...newKnowledge,
+            idHocPhan: newKnowledge.idHocPhan || [],
+            loaiHocPhan: newKnowledge.loaiHocPhan || "0",
+            hocPhanList: [] as CourseType[]
+        };
+
+        setAvailableKnowledge([...availableKnowledge, completeKnowledge]);
         const newSelected = [...selectedKnowledge, {
-            id: newKnowledge.idKienThuc!,
-            name: newKnowledge.tenKienThuc
+            id: completeKnowledge.idKienThuc!,
+            name: completeKnowledge.tenKienThuc
         }];
         setSelectedKnowledge(newSelected);
         console.log("After adding new knowledge, selected IDs:", newSelected.map(k => k.id).join(','));
@@ -113,16 +121,16 @@ export default function DialogAddKienThucVaoKhoi({ blockKnowId, open, onOpenChan
 
         try {
             setLoading(true);
-            
+
             // Add each selected knowledge to the block
             for (const knowledge of selectedKnowledge) {
                 await addKnowInBlockKnow(blockKnowId, knowledge.id);
             }
-            
+
             showToast('success', "Cập nhật kiến thức thành công");
             setSelectedKnowledge([]); // Reset selection
             onOpenChange(false); // Close dialog
-            
+
             // Call the callback to refresh the table
             if (onUpdateSuccess) {
                 onUpdateSuccess();

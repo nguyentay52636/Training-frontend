@@ -44,18 +44,18 @@ export enum Role {
   GiangVien = 1,
   Admin = 2,
 }
-export interface BlockKnowType {
+export interface BlockKnowType { 
   idKhoiKienThuc?: number;
   tenKhoiKienThuc: string;
-  idKienThuc?: string;
-  danhSachKienThuc: knowledgeType[];
+  idKienThuc?: [];
+  kienThucList: knowledgeType[];
 }
-export interface knowledgeType {
+export interface knowledgeType  { 
   idKienThuc?: number;
   tenKienThuc: string;
-  idHocPhan: string;
+  idHocPhan: [];
   loaiHocPhan: string;
-  hocPhans?: CourseType[];
+  hocPhanList: CourseType[];
 }
 export interface CourseType {
   idHocPhan?: number;

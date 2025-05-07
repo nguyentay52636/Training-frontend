@@ -47,7 +47,8 @@ export default function DialogAddBlockNow() {
             setLoading(true);
             const newBlockKnow: BlockKnowType = {
                 tenKhoiKienThuc,
-                danhSachKienThuc: []
+                idKienThuc: [],
+                kienThucList: []
             };
 
             await addBlockKnow(newBlockKnow);
