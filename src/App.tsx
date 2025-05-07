@@ -18,6 +18,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ManagerCourseDetail from './modules/home/components/ManagerKnowAndBlock/components/ManagerCourseDetail/ManagerCourseDetail';
 import ManagerKnowAndBlock from './modules/home/components/ManagerKnowAndBlock/ManagerKnowAndBlock';
+import ManagerBlockKnowledge from './modules/home/components/ManagerKnowAndBlock/components/ManagerBlockKnowledge/ManagerBlockKnowledge';
 
 function App() {
   const router = createBrowserRouter([
@@ -51,9 +52,8 @@ function App() {
         },
         {
           path: 'quan-ly-khoi',
-          element: <ManagerLectureSkeleton />,
           children: [
-            { path: 'khoikienthuc', element: <ManagerKnowAndBlock /> },
+            { path: 'khoikienthuc', element: <ManagerBlockKnowledge /> },
             { path: 'hocphan', element: <ManagerCourseDetail /> },
             {
               path: 'ke-hoach-mo-nhom',

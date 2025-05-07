@@ -62,7 +62,7 @@ const data = {
       items: [
         {
           title: " Quản lý  khối kiến thức",
-          url: "/trangchu/quan-ly-khoi/kienthuc",
+          url: "/trangchu/quan-ly-khoi/khoikienthuc",
         },
         {
           title: "  Quản lý  kiến thức",

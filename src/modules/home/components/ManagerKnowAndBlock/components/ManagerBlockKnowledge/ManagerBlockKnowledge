@@ -1,7 +1,0 @@
-import React from 'react'
-
-export default function ManagerBlockKnowledge() {
-    return (
-        <div>ManagerBlockKnowledge</div>
-    )
-}
