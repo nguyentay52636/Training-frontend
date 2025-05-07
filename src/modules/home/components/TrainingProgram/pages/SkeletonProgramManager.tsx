@@ -24,6 +24,14 @@ import DialogAddKienThucVaoKhoi from '../components/ProgramContent/components/Ad
 import CourseManager from '../components/ProgramContent/components/CourseDetails/CourseManager';
 import { getHocPhanByKienThucId } from '@/lib/apis/KnowsApi';
 import { BlockKnowType, CourseType, knowledgeType as KnowledgeType } from '@/lib/apis/types';
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from '@/components/ui/select';
 
 // Header component
 const Header = () => (
@@ -326,6 +334,17 @@ const CurriculumTab = () => {
         }
     };
 
+    const handleKnowledgeSelect = (knowledgeId: string) => {
+        // Find knowledge data
+        const selectedKnowledge = blockKnows.flatMap(block =>
+            block.kienThucList || []
+        ).find(k => k.idKienThuc?.toString() === knowledgeId);
+
+        if (selectedKnowledge) {
+            handleKnowledgeClick(selectedKnowledge);
+        }
+    };
+
     return (
         <TabsContent value='curriculum'>
             <Card className='border-gray-200 shadow-sm py-12'>
@@ -372,7 +391,7 @@ const CurriculumTab = () => {
                                         <TableRow className='bg-blue-300! '>
                                             <TableHead className='text-bold'>STT</TableHead>
                                             <TableHead className='text-bold'>Tên khối kiến thức & học phần</TableHead>
-                                            <TableHead className="">Thao tác</TableHead>
+                                            <TableHead className="text-center">Thao tác</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
@@ -390,38 +409,30 @@ const CurriculumTab = () => {
                                                                 <div className='font-semibold text-blue-700 text-[1rem]'>
                                                                     {blockKnow.tenKhoiKienThuc}
                                                                 </div>
-
                                                             </div>
 
                                                             {blockKnow.kienThucList && blockKnow.kienThucList.length > 0 ? (
-                                                                <ul className='list-disc list-inside pl-2 space-y-1 text-sm text-muted-foreground'>
-                                                                    {blockKnow.kienThucList.map((knowledge: KnowledgeType, idx: number) => (
-                                                                        <li
-                                                                            key={knowledge.idKienThuc}
-                                                                            className='flex items-center justify-between pr-2 hover:bg-gray-100 text-black cursor-pointer'
-                                                                            onClick={() => handleKnowledgeClick(knowledge)}
-                                                                        >
-                                                                            <div className="flex-1">
-                                                                                <span className="font-medium">
-                                                                                    {idx + 1}. {knowledge.tenKienThuc}
-                                                                                </span>
-                                                                                {/* @ts-ignore - hocPhans is a dynamic property */}
-                                                                                {knowledge.hocPhans && knowledge.hocPhans.length > 0 && (
-                                                                                    <div className="ml-4 mt-1 text-sm text-gray-600">
-                                                                                        {/* @ts-ignore - hocPhans is a dynamic property */}
-                                                                                        {knowledge.hocPhans.map((hocPhan: CourseType) => (
-                                                                                            <div key={hocPhan.idHocPhan} className="flex items-center gap-2">
-                                                                                                <span>• {hocPhan.maHP} - {hocPhan.tenHP}</span>
-                                                                                                <span className="text-gray-500">({hocPhan.soTinChi} tín chỉ)</span>
-                                                                                            </div>
-                                                                                        ))}
-                                                                                    </div>
-                                                                                )}
-                                                                            </div>
-
-                                                                        </li>
-                                                                    ))}
-                                                                </ul>
+                                                                <div className="mt-2">
+                                                                    <Select onValueChange={handleKnowledgeSelect}>
+                                                                        <SelectTrigger className="w-full">
+                                                                            <SelectValue placeholder="Chọn kiến thức" />
+                                                                        </SelectTrigger>
+                                                                        <SelectContent>
+                                                                            <SelectGroup>
+                                                                                {blockKnow.kienThucList.map((knowledge: KnowledgeType, idx: number) => (
+                                                                                    <SelectItem
+                                                                                        key={knowledge.idKienThuc}
+                                                                                        value={knowledge.idKienThuc?.toString() || ''}
+                                                                                    >
+                                                                                        <span className="font-medium">
+                                                                                            {idx + 1}. {knowledge.tenKienThuc}
+                                                                                        </span>
+                                                                                    </SelectItem>
+                                                                                ))}
+                                                                            </SelectGroup>
+                                                                        </SelectContent>
+                                                                    </Select>
+                                                                </div>
                                                             ) : (
                                                                 <div className="text-gray-500 italic text-sm pl-2">
                                                                     Chưa có kiến thức nào
@@ -431,21 +442,21 @@ const CurriculumTab = () => {
                                                     </TableCell>
                                                     <TableCell className="text-center">
 
-                                                        <div className='flex'>
+                                                        <div className='flex justify-center'>
                                                             <BlocknowledgeActions blockKnowId={blockKnow.idKhoiKienThuc || 0} />
                                                             <Button
-                                                                className='text-blue-600 hover:text-blue-800 cursor-pointer text-2xl text-center'
+                                                                className='text-blue-600 hover:text-blue-800 cursor-pointer text-center p-3'
                                                                 title='Chỉnh sửa'
                                                                 variant='ghost'
                                                             >
-                                                                <Pencil className='text-2xl' />
+                                                                <Pencil size={24} />
                                                             </Button>
                                                             <Button
-                                                                className='text-red-600 hover:text-red-800 cursor-pointer text-center'
+                                                                className='text-red-600 hover:text-red-800 cursor-pointer text-center p-3'
                                                                 title='Xóa'
                                                                 variant='ghost'
                                                             >
-                                                                <Trash2 />
+                                                                <Trash2 size={24} />
                                                             </Button>
                                                         </div>
                                                     </TableCell>

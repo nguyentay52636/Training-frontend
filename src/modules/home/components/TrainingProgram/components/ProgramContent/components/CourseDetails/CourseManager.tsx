@@ -111,12 +111,12 @@ export default function CourseManager({ knowledgeData }: CourseManagerProps = {}
 
     return (
         <div className="bg-white p-4">
-            <h1 className="text-4xl font-bold mb-6">{knowledgeData?.tenKienThuc || "Danh sách học phần"}</h1>
+
 
             <div className="space-y-4">
-                <span className="my-8 block text-2xl">Danh sách các học phần trong khối</span>
+                <h2 className="my-8 block text-2xl font-bold">Danh sách các học phần trong khối</h2>
 
-                <div className="flex flex-1 items-center ml-4">
+                <div className="flex justify-end items-center ml-4">
                     <div className="flex items-center space-x-4">
                         <DialogAddCourse
                             preselectedKnowledgeId={idKienThuc}
