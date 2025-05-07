@@ -70,3 +70,21 @@ export interface CourseType {
   heSoHocPhan: number;
 }
 
+export interface PropramData {
+  id: number;
+  idThongTin: number;
+  thongTinChung: ThongTinChung[];
+}
+
+interface ThongTinChung {
+  id: number;
+  tenChuongTrinh: string;
+  bac: string;
+  loaiBang: string;
+  loaiHinhDaoTao: string;
+  thoiGian: string;
+  soTinChi: number;
+  khoaQuanLy: string;
+  ngonNgu: string;
+  khoaTuyen: string;
+}

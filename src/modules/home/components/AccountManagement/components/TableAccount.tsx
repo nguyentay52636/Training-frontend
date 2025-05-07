@@ -10,12 +10,15 @@ import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import EditUserDialog from './EditUserDialog';
 import { UserType } from '@/lib/apis/types';
+import { useDeleteUserMutation } from './mutations';
 
 interface TableAccountProps {
   data: UserType[];
 }
 
 export default function TableAccount({ data }: TableAccountProps) {
+  const { mutate } = useDeleteUserMutation();
+
   return (
     <div className='rounded-md border border-gray-200 shadow-sm bg-white'>
       <Table>
@@ -46,7 +49,9 @@ export default function TableAccount({ data }: TableAccountProps) {
                       variant='outline'
                       size='sm'
                       className='text-red-600 hover:text-red-700'
-                      onClick={() => console.log('Delete', user.id)}
+                      onClick={() => {
+                        mutate(user.id);
+                      }}
                     >
                       <Trash2 className='h-4 w-4' />
                     </Button>

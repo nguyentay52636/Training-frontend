@@ -1,5 +1,5 @@
 import baseApi from './baseApi';
-import { CourseType, SpecializedType } from './types';
+import { CourseType, PropramData, SpecializedType } from './types';
 
 export const getCourses = async () => {
   const { data } = await baseApi.get<CourseType[]>('/courses');
@@ -63,4 +63,24 @@ export const deleteCourseBySpecialized = async (specializedId: number, courseId:
     `/kehoachdayhoc/${specializedId}/hocphan/${courseId}`,
   );
   return data;
+};
+
+export const getKHungChuongTrinh = async () => {
+  try {
+    const { data } = await baseApi.get<PropramData[]>('/khungchuongtrinh');
+    return data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw Error(error);
+  }
+};
+
+export const deleteKhungChuongTrinh = async ({ id }: { id: number }) => {
+  try {
+    const { data } = await baseApi.get<PropramData[]>('/khungchuongtrinh/' + id);
+    return data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw Error(error);
+  }
 };
