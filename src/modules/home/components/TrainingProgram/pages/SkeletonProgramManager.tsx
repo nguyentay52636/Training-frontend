@@ -23,7 +23,7 @@ import { getBlockKnows } from '@/lib/apis/blockKnowApi';
 import DialogAddKienThucVaoKhoi from '../components/ProgramContent/components/AddBlocKnowledge/DialogAddKienThucVaoKhoi';
 import CourseManager from '../components/ProgramContent/components/CourseDetails/CourseManager';
 import { getHocPhanByKienThucId } from '@/lib/apis/KnowsApi';
-import { BlockKnowType, CourseType, KnowledgeType } from '@/lib/apis/types';
+import { BlockKnowType, CourseType, knowledgeType as KnowledgeType } from '@/lib/apis/types';
 
 // Header component
 const Header = () => (
@@ -299,16 +299,19 @@ const CurriculumTab = () => {
     const handleKnowledgeClick = async (knowledge: KnowledgeType) => {
         try {
             setLoadingCourses(true);
-            setSelectedKnowledgeId(knowledge.idKienThuc);
+            setSelectedKnowledgeId(knowledge.idKienThuc || null);
 
             // Sao chép dữ liệu kiến thức hiện tại
             const knowledgeDataCopy = { ...knowledge };
 
-            // Lấy danh sách học phần từ API dựa vào ID kiến thức
-            const hocPhans = await getHocPhanByKienThucId(knowledge.idKienThuc);
+            if (knowledge.idKienThuc) {
+                // Lấy danh sách học phần từ API dựa vào ID kiến thức
+                const hocPhans = await getHocPhanByKienThucId(knowledge.idKienThuc);
 
-            // Cập nhật dữ liệu kiến thức với danh sách học phần mới
-            knowledgeDataCopy.hocPhans = hocPhans;
+                // Thêm thuộc tính hocPhans để hiển thị
+                // @ts-ignore - thêm thuộc tính động
+                knowledgeDataCopy.hocPhans = hocPhans;
+            }
 
             // Cập nhật state và mở CourseManager
             setSelectedKnowledgeData(knowledgeDataCopy);
@@ -402,8 +405,10 @@ const CurriculumTab = () => {
                                                                                 <span className="font-medium">
                                                                                     {idx + 1}. {knowledge.tenKienThuc}
                                                                                 </span>
+                                                                                {/* @ts-ignore - hocPhans is a dynamic property */}
                                                                                 {knowledge.hocPhans && knowledge.hocPhans.length > 0 && (
                                                                                     <div className="ml-4 mt-1 text-sm text-gray-600">
+                                                                                        {/* @ts-ignore - hocPhans is a dynamic property */}
                                                                                         {knowledge.hocPhans.map((hocPhan: CourseType) => (
                                                                                             <div key={hocPhan.idHocPhan} className="flex items-center gap-2">
                                                                                                 <span>• {hocPhan.maHP} - {hocPhan.tenHP}</span>
@@ -427,7 +432,7 @@ const CurriculumTab = () => {
                                                     <TableCell className="text-center">
 
                                                         <div className='flex'>
-                                                            <BlocknowledgeActions blockKnowId={blockKnow.idKhoiKienThuc} />
+                                                            <BlocknowledgeActions blockKnowId={blockKnow.idKhoiKienThuc || 0} />
                                                             <Button
                                                                 className='text-blue-600 hover:text-blue-800 cursor-pointer text-2xl text-center'
                                                                 title='Chỉnh sửa'

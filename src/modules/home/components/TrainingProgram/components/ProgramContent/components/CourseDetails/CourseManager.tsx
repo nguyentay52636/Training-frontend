@@ -18,18 +18,26 @@ export default function CourseManager({ knowledgeData }: CourseManagerProps = {}
     const [refreshKey, setRefreshKey] = useState(0);
     const [selectedCourses, setSelectedCourses] = useState<CourseType[]>([]);
     const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>([]);
-    
+
     // Lấy danh sách học phần khi component mount hoặc khi idKienThuc thay đổi
     useEffect(() => {
         if (!idKienThuc) return;
-        
+
         const fetchCourses = async () => {
             try {
                 setLoading(true);
                 // Lấy danh sách học phần từ API
                 const courses = await getHocPhanByKienThucId(idKienThuc);
+
+                // Kiểm tra nếu courses là null hoặc undefined, gán mảng trống
+                if (!courses) {
+                    setSelectedCourses([]);
+                    setSelectedCourseIds([]);
+                    return;
+                }
+
                 setSelectedCourses(courses);
-                
+
                 // Lấy danh sách ID học phần
                 const courseIds = courses
                     .filter(course => course.idHocPhan !== undefined)
@@ -37,12 +45,14 @@ export default function CourseManager({ knowledgeData }: CourseManagerProps = {}
                 setSelectedCourseIds(courseIds);
             } catch (error: any) {
                 console.error("Lỗi khi lấy danh sách học phần:", error.message || error);
-                toast.error("Có lỗi xảy ra khi lấy danh sách học phần!");
+                // Reset states to prevent UI errors
+                setSelectedCourses([]);
+                setSelectedCourseIds([]);
             } finally {
                 setLoading(false);
             }
         };
-        
+
         fetchCourses();
     }, [idKienThuc, refreshKey]);
 
@@ -51,7 +61,7 @@ export default function CourseManager({ knowledgeData }: CourseManagerProps = {}
         // Có thể thêm xử lý chi tiết nếu cần
         console.log("Đã chọn học phần:", courseId);
     };
-    
+
     // Xử lý khi học phần được thêm thành công từ DialogAddCourse
     const handleCoursesAdded = () => {
         // Refresh danh sách học phần
@@ -70,17 +80,24 @@ export default function CourseManager({ knowledgeData }: CourseManagerProps = {}
             setLoading(true);
             // Lấy thông tin kiến thức hiện tại
             const currentKnowledge = await getKnowledgeById(idKienThuc);
-            
+
+            // Lấy danh sách ID học phần hiện tại từ API
+            const existingIds = currentKnowledge.idHocPhan || [];
+
+            // Kết hợp danh sách ID đã chọn và danh sách ID hiện tại
+            // Sử dụng Set để loại bỏ trùng lặp
+            const allCourseIds = [...new Set([...existingIds, ...selectedCourseIds])];
+
             // Tạo đối tượng cập nhật với danh sách học phần đã chọn
             const updateData = {
                 tenKienThuc: currentKnowledge.tenKienThuc,
-                idHocPhan: selectedCourseIds,
+                idHocPhan: allCourseIds,
                 loaiHocPhan: currentKnowledge.loaiHocPhan
             };
-            
+
             // Gọi API cập nhật
             await updateKnowByCourse(idKienThuc, updateData);
-            
+
             toast.success("Cập nhật kiến thức thành công!");
             // Refresh lại danh sách sau khi cập nhật
             setRefreshKey(prev => prev + 1);
@@ -101,12 +118,12 @@ export default function CourseManager({ knowledgeData }: CourseManagerProps = {}
 
                 <div className="flex flex-1 items-center ml-4">
                     <div className="flex items-center space-x-4">
-                        <DialogAddCourse 
-                            preselectedKnowledgeId={idKienThuc} 
+                        <DialogAddCourse
+                            preselectedKnowledgeId={idKienThuc}
                             onCoursesAdded={handleCoursesAdded}
                         />
-                        <Button 
-                            variant="outline" 
+                        <Button
+                            variant="outline"
                             className="mx-2 cursor-pointer bg-gray-700 text-white hover:bg-gray-800"
                             onClick={handleSaveKnowledge}
                             disabled={loading}

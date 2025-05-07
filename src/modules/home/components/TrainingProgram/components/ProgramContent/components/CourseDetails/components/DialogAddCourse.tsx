@@ -14,7 +14,7 @@ import {
 import { CourseType, BlockKnowType } from "@/lib/apis/types";
 import { toast } from 'react-toastify';
 import { getBlockKnows } from "@/lib/apis/blockKnowApi";
-import { addCourseToKnowledge } from "@/lib/apis/KnowsApi";
+import { addCourseToKnowledge, updateKnowByCourse, getKnowledgeById } from "@/lib/apis/KnowsApi";
 import { createCourse } from "@/lib/apis/CourseApi";
 import CourseForm from './CourseForm';
 
@@ -146,14 +146,34 @@ export default function DialogAddCourse({
         try {
             setLoading(true);
 
-            // Save each selected course to the knowledge
-            const savePromises = selectedCourses.map(async (course) => {
-                if (course.idHocPhan) {
-                    return await addCourseToKnowledge(parseInt(selectedKienThucId), course.idHocPhan);
-                }
-            });
+            // Lấy id của các học phần đã chọn mới
+            const newCourseIds = selectedCourses.map(course => course.idHocPhan).filter(id => id !== undefined) as number[];
 
-            await Promise.all(savePromises);
+            // Cập nhật kiến thức với danh sách học phần đã chọn
+            if (newCourseIds.length > 0) {
+                // Chuẩn bị dữ liệu cho API call
+                const knowledgeId = parseInt(selectedKienThucId, 10);
+
+                // Lấy thông tin hiện tại của kiến thức
+                const currentKnowledge = await getKnowledgeById(knowledgeId);
+
+                // Lấy danh sách ID học phần hiện tại
+                const existingCourseIds = currentKnowledge.idHocPhan || [];
+
+                // Kết hợp danh sách ID hiện tại với danh sách ID mới
+                // và loại bỏ các ID trùng lặp bằng Set
+                const combinedCourseIds = [...new Set([...existingCourseIds, ...newCourseIds])];
+
+                // Chuẩn bị dữ liệu cập nhật
+                const updateData = {
+                    tenKienThuc: currentKnowledge.tenKienThuc,
+                    idHocPhan: combinedCourseIds,
+                    loaiHocPhan: currentKnowledge.loaiHocPhan || "Bắt buộc"
+                };
+
+                // Gọi API cập nhật
+                await updateKnowByCourse(knowledgeId, updateData);
+            }
 
             showToast('success', "Lưu học phần thành công");
             setSelectedCourses([]);
