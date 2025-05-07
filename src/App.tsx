@@ -16,6 +16,8 @@ import ManagerPlanGroup from './modules/home/components/PlanGroup/ManagerPlanGro
 import ManagerLectureSkeleton from './modules/home/components/SkeletonLecture/ManagerLectureSkeleton';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ManagerCourseDetail from './modules/home/components/ManagerKnowAndBlock/components/ManagerCourseDetail/ManagerCourseDetail';
+import ManagerKnowAndBlock from './modules/home/components/ManagerKnowAndBlock/ManagerKnowAndBlock';
 
 function App() {
   const router = createBrowserRouter([
@@ -41,6 +43,18 @@ function App() {
           children: [
             { path: 'danh-sach-giang-vien', element: <LecturerManager /> },
             { path: 'lich-giang-day', element: <TeachingScheduleManager /> },
+            {
+              path: 'ke-hoach-mo-nhom',
+              element: <ManagerPlanGroup />,
+            },
+          ],
+        },
+        {
+          path: 'quan-ly-khoi',
+          element: <ManagerLectureSkeleton />,
+          children: [
+            { path: 'khoikienthuc', element: <ManagerKnowAndBlock /> },
+            { path: 'hocphan', element: <ManagerCourseDetail /> },
             {
               path: 'ke-hoach-mo-nhom',
               element: <ManagerPlanGroup />,

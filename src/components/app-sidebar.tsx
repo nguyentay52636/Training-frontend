@@ -7,6 +7,7 @@ import {
   Home,
   User,
   GraduationCap,
+  Book,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -51,6 +52,25 @@ const data = {
         {
           title: "Kế hoạch mở nhóm",
           url: "/trangchu/quan-ly-giang-vien/ke-hoach-mo-nhom",
+        },
+      ],
+    },
+    {
+      title: "Kiến thức và học phần ",
+      url: "/trangchu/quan-ly-khoi/khoikienthuc",
+      icon: Book,
+      items: [
+        {
+          title: " Quản lý  khối kiến thức",
+          url: "/trangchu/quan-ly-khoi/kienthuc",
+        },
+        {
+          title: "  Quản lý  kiến thức",
+          url: "/trangchu/quan-ly-khoi/kienthuc",
+        },
+        {
+          title: " Quản lý học phần  ",
+          url: "/trangchu/quan-ly-khoi/hocphan",
         },
       ],
     },
