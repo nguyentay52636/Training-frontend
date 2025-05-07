@@ -392,7 +392,7 @@ const CurriculumTab = () => {
                                             <TableHead className='text-bold'>STT</TableHead>
                                             <TableHead className='text-bold'>Tên khối kiến thức & học phần</TableHead>
                                             <TableHead className="text-center">Thao tác</TableHead>
-                                        </TableRow>
+                                    </TableRow>
                                     </TableHeader>
                                     <TableBody>
                                         {loading ? (
