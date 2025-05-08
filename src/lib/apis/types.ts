@@ -53,7 +53,7 @@ export interface BlockKnowType {
 export interface knowledgeType  { 
   idKienThuc?: number;
   tenKienThuc: string;
-  idHocPhan: [];
+  idHocPhan: number[];
   loaiHocPhan: string;
   hocPhanList: CourseType[];
 }
