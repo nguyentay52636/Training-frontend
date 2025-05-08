@@ -17,8 +17,8 @@ import ManagerLectureSkeleton from './modules/home/components/SkeletonLecture/Ma
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ManagerCourseDetail from './modules/home/components/ManagerKnowAndBlock/components/ManagerCourseDetail/ManagerCourseDetail';
-import ManagerKnowAndBlock from './modules/home/components/ManagerKnowAndBlock/ManagerKnowAndBlock';
 import ManagerBlockKnowledge from './modules/home/components/ManagerKnowAndBlock/components/ManagerBlockKnowledge/ManagerBlockKnowledge';
+import ManagerKnowledge from './modules/home/components/ManagerKnowAndBlock/components/ManagerKnowledge/ManagerKnowledge';
 
 function App() {
   const router = createBrowserRouter([
@@ -56,8 +56,8 @@ function App() {
             { path: 'khoikienthuc', element: <ManagerBlockKnowledge /> },
             { path: 'hocphan', element: <ManagerCourseDetail /> },
             {
-              path: 'ke-hoach-mo-nhom',
-              element: <ManagerPlanGroup />,
+              path: 'kienthuc',
+              element: <ManagerKnowledge />,
             },
           ],
         },
