@@ -1,66 +1,70 @@
-
+import { Button } from '@/components/ui/button';
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableCell,
 } from '@/components/ui/table';
+import { PhanCongGiangDayType } from '@/lib/apis/types';
+import { useDeletePhanCongGiangDayMutation } from './AddTeachingSchedule/mutations';
 
+export default function TableTeachingSchedule({ data }: { data: PhanCongGiangDayType[] }) {
+  const { mutate } = useDeletePhanCongGiangDayMutation();
 
-
-export default function TableTeachingSchedule() {
-    return (
-        <div className="w-full p-4 bg-white rounded-xl shadow-md">
-            <Table>
-                <TableHeader>
-                    <TableRow className=" bg-indigo-600! text-white">
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">
-                            STT
-                        </TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">
-                            Mã sinh viên
-                        </TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">
-                            Họ và tên
-                        </TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">
-                            Chuyên cần
-                        </TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">
-                            Thực hành
-                        </TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">
-                            Giữa kỳ
-                        </TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">
-                            Cuối kỳ
-                        </TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-center text-white!">
-                            Hành động
-                        </TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {/* {pointData.map((point, index) => (
-                        <TableRow key={point.idCotDiem} className="hover:bg-muted/50 transition">
-                            <TableCell className="font-medium">{index + 1}</TableCell>
-                            <TableCell>{point.maSV}</TableCell>
-                            <TableCell>{point.tenSV}</TableCell>
-                            <TableCell>{point.diemChuyenCan}</TableCell>
-                            <TableCell>{point.diemThucHanh}</TableCell>
-                            <TableCell>{point.diemGiuaKy}</TableCell>
-                            <TableCell>{point.diemCuoiKy}</TableCell>
-                            <TableCell>
-                                <div className="flex justify-center">
-                                    <PointAction />
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                    ))} */}
-                </TableBody>
-            </Table>
-        </div>
-    );
+  return (
+    <div className='w-full p-4 bg-white rounded-xl shadow-md'>
+      <Table>
+        <TableHeader>
+          <TableRow className='bg-indigo-600 text-white'>
+            <TableHead className='text-lg font-semibold tracking-wide uppercase'>STT</TableHead>
+            <TableHead className='text-lg font-semibold tracking-wide uppercase'>
+              Mã giảng viên
+            </TableHead>
+            <TableHead className='text-lg font-semibold tracking-wide uppercase'>
+              Tên giảng viên
+            </TableHead>
+            <TableHead className='text-lg font-semibold tracking-wide uppercase'>
+              Chức danh
+            </TableHead>
+            <TableHead className='text-lg font-semibold tracking-wide uppercase'>
+              Tên môn học
+            </TableHead>
+            <TableHead className='text-lg font-semibold tracking-wide uppercase'>
+              Số tiết thực hiện
+            </TableHead>
+            <TableHead className='text-lg font-semibold tracking-wide uppercase'>
+              Số tiết thực tế
+            </TableHead>
+            <TableHead className='text-lg font-semibold tracking-wide uppercase'>
+              thao tác
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data.map((item, index) => (
+            <TableRow key={item.idPhanCong} className='hover:bg-muted/50 transition'>
+              <TableCell className='font-medium'>{index + 1}</TableCell>
+              <TableCell>{item.giangVien.maGiangVien}</TableCell>
+              <TableCell>{item.giangVien.tenGiangVien}</TableCell>
+              <TableCell>{item.giangVien.chucDanh}</TableCell>
+              <TableCell>{item.tenMonHoc}</TableCell>
+              <TableCell>{item.soTietThucHien}</TableCell>
+              <TableCell>{item.soTietThucTe}</TableCell>
+              <TableCell>
+                <Button
+                  onClick={() => {
+                    mutate(item.idPhanCong);
+                  }}
+                >
+                  xoá
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
 }
