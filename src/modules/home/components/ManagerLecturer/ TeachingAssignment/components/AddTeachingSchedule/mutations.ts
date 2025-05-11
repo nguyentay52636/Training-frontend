@@ -1,5 +1,6 @@
+import { editPhanCongGiangDay } from './../../../../../../../lib/apis/KnowsApi';
 import { deletePhanCongGiangDay } from '@/lib/apis/KnowsApi';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 export const useDeletePhanCongGiangDayMutation = () => {
   const queryClinet = useQueryClient();
 
@@ -15,6 +16,30 @@ export const useDeletePhanCongGiangDayMutation = () => {
     },
     onSuccess: () => {
       queryClinet.invalidateQueries({
+        queryKey: ['phanc cong giang day'],
+      });
+    },
+  });
+
+  return mutation;
+};
+
+export const useEditPhanCongGiangDayMutation = () => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: ['edit-phanconggiangday'],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    mutationFn: async ({ id, data }: { id: number; data: any }) => {
+      try {
+        const response = await editPhanCongGiangDay({ id, data });
+        return response;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
         queryKey: ['phanc cong giang day'],
       });
     },

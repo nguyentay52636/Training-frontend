@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/table';
 import { PhanCongGiangDayType } from '@/lib/apis/types';
 import { useDeletePhanCongGiangDayMutation } from './AddTeachingSchedule/mutations';
+import EditScheduleDialog from './AddTeachingSchedule/EditScheduleDialog';
 
 export default function TableTeachingSchedule({ data }: { data: PhanCongGiangDayType[] }) {
   const { mutate } = useDeletePhanCongGiangDayMutation();
@@ -52,7 +53,7 @@ export default function TableTeachingSchedule({ data }: { data: PhanCongGiangDay
               <TableCell>{item.tenMonHoc}</TableCell>
               <TableCell>{item.soTietThucHien}</TableCell>
               <TableCell>{item.soTietThucTe}</TableCell>
-              <TableCell>
+              <TableCell className=' flex gap-x-2'>
                 <Button
                   onClick={() => {
                     mutate(item.idPhanCong);
@@ -60,6 +61,7 @@ export default function TableTeachingSchedule({ data }: { data: PhanCongGiangDay
                 >
                   xoá
                 </Button>
+                <EditScheduleDialog scheduleData={item} />
               </TableCell>
             </TableRow>
           ))}

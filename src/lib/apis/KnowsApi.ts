@@ -114,3 +114,14 @@ export const deletePhanCongGiangDay = async (id: number) => {
     throw new Error(error);
   }
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const editPhanCongGiangDay = async ({ id, data }: { id: number; data: any }) => {
+  try {
+    const response = await baseApi.put(`phanconggiangday/${id}`, data);
+    return response.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
