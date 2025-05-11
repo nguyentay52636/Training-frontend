@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 export default function LecturerManager() {
   const [keyword, setKeyword] = useState('');
-  const { data } = useGetAllTeacherQuery({ keyword });
+  const { data } = useGetAllTeacherQuery();
   return (
     <div>
       {/* Title */}

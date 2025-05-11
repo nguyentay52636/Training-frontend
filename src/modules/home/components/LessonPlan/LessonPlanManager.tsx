@@ -1,7 +1,5 @@
-import React from 'react'
+import React from 'react';
 
 export default function LessonPlanManager() {
-    return (
-        <div>LessonPlanManager</div>
-    )
+  return <div>LessonPlanManager</div>;
 }

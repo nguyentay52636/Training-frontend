@@ -44,13 +44,13 @@ export enum Role {
   GiangVien = 1,
   Admin = 2,
 }
-export interface BlockKnowType { 
+export interface BlockKnowType {
   idKhoiKienThuc?: number;
   tenKhoiKienThuc: string;
   idKienThuc?: [];
   kienThucList: knowledgeType[];
 }
-export interface knowledgeType  { 
+export interface knowledgeType {
   idKienThuc?: number;
   tenKienThuc: string;
   idHocPhan: number[];
@@ -87,4 +87,40 @@ interface ThongTinChung {
   khoaQuanLy: string;
   ngonNgu: string;
   khoaTuyen: string;
+}
+
+export interface PhanCongGiangDayType {
+  idPhanCong: number;
+  idGiangVien: number;
+  idHocPhan: number;
+  hocKy: number;
+  tenMonHoc: string;
+  soTietThucHien: number;
+  soTietThucTe: number;
+  giangVien: GiangVien;
+  hocPhan: null;
+}
+
+interface GiangVien {
+  idGiangVien: number;
+  idTaiKhoan: number;
+  nguoiDung: NguoiDung;
+  maGiangVien: string;
+  tenGiangVien: string;
+  chucDanh: string;
+  namPhong: string;
+  trinhDo: string;
+  nuoc: string;
+  namTotNghiep: string;
+}
+
+interface NguoiDung {
+  id: number;
+  userName: string;
+  userEmail: string;
+  password: string;
+  role: number;
+  admin: boolean;
+  user: boolean;
+  giangVien: boolean;
 }

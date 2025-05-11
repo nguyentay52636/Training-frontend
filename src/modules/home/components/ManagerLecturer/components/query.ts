@@ -1,10 +1,10 @@
-import { searchUserAPI } from '@/lib/apis/userApi';
+import { getAllUserAPI } from '@/lib/apis/userApi';
 import { useQuery } from '@tanstack/react-query';
 
-export const useGetAllTeacherQuery = ({ keyword }: { keyword?: string }) => {
+export const useGetAllTeacherQuery = () => {
   const handleGetALlTeacher = async () => {
     try {
-      const data = await searchUserAPI(keyword);
+      const data = await getAllUserAPI();
       return data;
     } catch (error) {
       console.log(error);
@@ -12,7 +12,7 @@ export const useGetAllTeacherQuery = ({ keyword }: { keyword?: string }) => {
   };
 
   const query = useQuery({
-    queryKey: ['teachers', { keyword }],
+    queryKey: ['teachers'],
     queryFn: handleGetALlTeacher,
   });
 

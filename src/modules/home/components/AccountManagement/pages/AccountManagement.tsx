@@ -10,7 +10,7 @@ export default function AccountManagement() {
   const itemsPerPage = 10;
 
   // Sử dụng react-query để fetch data
-  const { data: userData, isLoading, isError } = useGetAllUserQuery({ keyword: searchKeyword });
+  const { data: userData, isLoading, isError } = useGetAllUserQuery();
 
   if (!userData) return;
 
