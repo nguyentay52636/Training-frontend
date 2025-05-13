@@ -8,3 +8,6 @@ export const getLectureAPI = async () => {
         throw new Error(error as string)
     }
 } 
+export const getLectureByIdAPI = async (id: number) => {  
+    
+} 

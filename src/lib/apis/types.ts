@@ -101,7 +101,7 @@ export interface PhanCongGiangDayType {
   hocPhan: null;
 }
 
-interface GiangVien {
+ export interface GiangVien {
   idGiangVien: number;
   idTaiKhoan: number;
   nguoiDung: NguoiDung;
@@ -114,7 +114,7 @@ interface GiangVien {
   namTotNghiep: string;
 }
 
-interface NguoiDung {
+export interface NguoiDung {
   id: number;
   userName: string;
   userEmail: string;
@@ -124,3 +124,15 @@ interface NguoiDung {
   user: boolean;
   giangVien: boolean;
 }
+
+export interface HocKyType {
+  idHocKy?: number;
+  idHocPhan: number[];
+  hocPhanList? : CourseType[]
+} 
+export interface ChuyenNganhType { 
+  idChuyenNganh?: number;
+  tenChuyenNganh : string ; 
+  idHocKy: number[] ; 
+  hocPhanList? : CourseType[]
+ } 
