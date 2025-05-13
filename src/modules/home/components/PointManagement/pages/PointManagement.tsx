@@ -15,6 +15,10 @@ import ExcelImport from "../components/ExcelImport/ExcelImport";
 
 export default function PointManagement() {
     const [points, setPoints] = useState<PointType[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const totalItems = points?.length || 0;
+    const totalPages = Math.ceil(totalItems / rowsPerPage);
 
     useEffect(() => {
         const fetchPoints = async () => {
@@ -34,6 +38,15 @@ export default function PointManagement() {
     const handleImportSuccess = (importedPoints: PointType[]) => {
         setPoints(prevPoints => [...importedPoints, ...prevPoints]);
         toast.success('Đã nhập Excel thành công!');
+    };
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
+    const handleRowsPerPageChange = (rows: number) => {
+        setRowsPerPage(rows);
+        setCurrentPage(1); // Reset to first page when changing rows per page
     };
 
     return (
@@ -87,7 +100,14 @@ export default function PointManagement() {
 
             <PointTable />
 
-            <PaginationPoint />
+            <PaginationPoint
+                currentPage={currentPage}
+                totalPages={totalPages}
+                rowsPerPage={rowsPerPage}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handleRowsPerPageChange}
+                totalItems={totalItems}
+            />
         </div>
     );
 }
