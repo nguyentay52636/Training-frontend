@@ -2,10 +2,22 @@ import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 import SearchOptionsDropdownMenu from '../ManagerLecturer/components/SearchOptionsDropdownMenu';
 import TablePlanGroup from './components/TablePlanGroup';
 import DialogAddPlanGroup from './components/AddPlanGroup/DialogAddPlanGroup';
+import DialogEditPlanGroup from './components/DialogEditPlanGroup';
+import PaginationPlanGroup from './components/PaginationPlanGroup';
 import { KeHoachMoNhomType } from '@/lib/apis/types';
 import { getAllKeHoachMoNhom, deleteKeHoachMoNhom } from '@/lib/apis/keHoachMoNhomApi';
 
@@ -13,6 +25,11 @@ export default function ManagerPlanGroup() {
   const [data, setData] = useState<KeHoachMoNhomType[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [selectedItem, setSelectedItem] = useState<KeHoachMoNhomType | null>(null);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -34,22 +51,36 @@ export default function ManagerPlanGroup() {
   const handleDelete = async (id: number) => {
     try {
       await deleteKeHoachMoNhom(id);
-      toast.success('Xóa thành công');
+      toast.success('Xóa kế hoạch mở nhóm thành công');
+      setShowDeleteDialog(false);
       fetchData();
     } catch (err) {
       console.error('Error deleting:', err);
-      toast.error('Có lỗi xảy ra khi xóa');
+      toast.error('Có lỗi xảy ra khi xóa kế hoạch mở nhóm');
     }
   };
 
   const handleEdit = (data: KeHoachMoNhomType) => {
-    // Handle edit logic here
-    console.log('Edit:', data);
+    setSelectedItem(data);
+    setShowEditDialog(true);
   };
 
+  const handleDeleteClick = (data: KeHoachMoNhomType) => {
+    setSelectedItem(data);
+    setShowDeleteDialog(true);
+  };
+
+  // Filter data based on search term
   const filteredData = data.filter(item => 
     item.namHoc.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Calculate pagination
+  const totalItems = filteredData.length;
+  const totalPages = Math.ceil(totalItems / rowsPerPage);
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = startIndex + rowsPerPage;
+  const currentData = filteredData.slice(startIndex, endIndex);
 
   return (
     <div>
@@ -77,11 +108,51 @@ export default function ManagerPlanGroup() {
       </div>
 
       <TablePlanGroup
-        data={filteredData}
+        data={currentData}
         loading={loading}
         onEdit={handleEdit}
-        onDelete={handleDelete}
+        onDelete={handleDeleteClick}
       />
+
+      <PaginationPlanGroup
+        currentPage={currentPage}
+        totalPages={totalPages}
+        rowsPerPage={rowsPerPage}
+        onPageChange={setCurrentPage}
+        onRowsPerPageChange={setRowsPerPage}
+        totalItems={totalItems}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
+            <AlertDialogDescription>
+              Bạn có chắc chắn muốn xóa kế hoạch mở nhóm này không? Hành động này không thể hoàn tác.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Hủy</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => selectedItem?.id && handleDelete(selectedItem.id)}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Xóa
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Edit Dialog */}
+      {selectedItem && (
+        <DialogEditPlanGroup
+          isOpen={showEditDialog}
+          onClose={() => setShowEditDialog(false)}
+          data={selectedItem}
+          onSuccess={fetchData}
+        />
+      )}
     </div>
   );
 }

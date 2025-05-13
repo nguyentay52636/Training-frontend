@@ -14,7 +14,7 @@ interface TablePlanGroupProps {
   data: KeHoachMoNhomType[];
   loading: boolean;
   onEdit: (data: KeHoachMoNhomType) => void;
-  onDelete: (id: number) => void;
+  onDelete: (data: KeHoachMoNhomType) => void;
 }
 
 export default function TablePlanGroup({ data, loading, onEdit, onDelete }: TablePlanGroupProps) {
@@ -51,7 +51,7 @@ export default function TablePlanGroup({ data, loading, onEdit, onDelete }: Tabl
                     <Button size="sm" variant="outline" onClick={() => onEdit(row)}>
                       <Pencil className="h-4 w-4" />
                     </Button>
-                    <Button size="sm" variant="destructive" onClick={() => row.id && onDelete(row.id)}>
+                    <Button size="sm" variant="destructive" onClick={() => onDelete(row)}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
