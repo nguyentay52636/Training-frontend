@@ -22,7 +22,7 @@ export default function PaginationAcount({
   // Generate page numbers to display
   const getPageNumbers = () => {
     const pages = [];
-    const maxPagesToShow = 5;
+    // const maxPagesToShow = 5;
 
     // Always show first page
     if (currentPage > 3) {

@@ -22,24 +22,20 @@ export default function CourseManager({ knowledgeData }: CourseManagerProps = {}
   const [totalPages, setTotalPages] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  // Lấy danh sách học phần khi component mount hoặc khi idKienThuc thay đổi
+
   useEffect(() => {
     if (!idKienThuc) return;
-
     const fetchCourses = async () => {
       try {
         setLoading(true);
         // Lấy danh sách học phần từ API
         const courses = await getHocPhanByKienThucId(idKienThuc);
-
-        // Kiểm tra nếu courses là null hoặc undefined, gán mảng trống
         if (!courses) {
           setSelectedCourses([]);
           setSelectedCourseIds([]);
           return;
         }
-
-        setSelectedCourses(courses);
+    setSelectedCourses(courses);
 
         // Lấy danh sách ID học phần
         const courseIds = courses

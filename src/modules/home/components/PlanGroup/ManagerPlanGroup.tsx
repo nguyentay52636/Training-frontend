@@ -1,12 +1,56 @@
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
-import { Button } from '@/components/ui/button';
 import SearchOptionsDropdownMenu from '../ManagerLecturer/components/SearchOptionsDropdownMenu';
 import TablePlanGroup from './components/TablePlanGroup';
 import DialogAddPlanGroup from './components/AddPlanGroup/DialogAddPlanGroup';
+import { KeHoachMoNhomType } from '@/lib/apis/types';
+import { getAllKeHoachMoNhom, deleteKeHoachMoNhom } from '@/lib/apis/keHoachMoNhomApi';
 
 export default function ManagerPlanGroup() {
+  const [data, setData] = useState<KeHoachMoNhomType[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await getAllKeHoachMoNhom();
+      setData(response);
+    } catch (err) {
+      console.error('Error fetching data:', err);
+      toast.error('Có lỗi xảy ra khi tải dữ liệu');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteKeHoachMoNhom(id);
+      toast.success('Xóa thành công');
+      fetchData();
+    } catch (err) {
+      console.error('Error deleting:', err);
+      toast.error('Có lỗi xảy ra khi xóa');
+    }
+  };
+
+  const handleEdit = (data: KeHoachMoNhomType) => {
+    // Handle edit logic here
+    console.log('Edit:', data);
+  };
+
+  const filteredData = data.filter(item => 
+    item.namHoc.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div>
       {/* Title */}
@@ -19,34 +63,25 @@ export default function ManagerPlanGroup() {
         <div className='relative w-full max-w-md'>
           <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5' />
           <Input
-            placeholder='Tìm kiếm giảng viên theo họ tên...'
+            placeholder='Tìm kiếm theo năm học...'
             className='pl-10 rounded-full border-gray-200 focus:ring-blue-400 shadow-sm'
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
 
-        <div className=' flex gap-x-5'>
+        <div className='flex gap-x-5'>
           <SearchOptionsDropdownMenu />
-          <DialogAddPlanGroup />
+          <DialogAddPlanGroup onSuccess={fetchData} />
         </div>
       </div>
 
-      <TablePlanGroup />
-
-      <div className='mx-auto gap-x-5 mt-8 flex justify-center'>
-        <Button className='hover:bg-secondary' variant='outline'>
-          back
-        </Button>
-
-        <Button className='bg-foreground text-background'>1</Button>
-        <Button className='bg-background hover:text-white text-foreground'>2</Button>
-        <Button className='bg-background hover:text-white text-foreground'>3</Button>
-        <Button className='bg-background hover:text-white text-foreground'>4</Button>
-        <Button className='bg-background hover:text-white text-foreground'>5</Button>
-
-        <Button className='hover:bg-secondary' variant='outline'>
-          Next
-        </Button>
-      </div>
+      <TablePlanGroup
+        data={filteredData}
+        loading={loading}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
     </div>
   );
 }

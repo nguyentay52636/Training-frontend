@@ -1,35 +1,66 @@
-
+import { Button } from '@/components/ui/button';
+import { Pencil, Trash2 } from 'lucide-react';
+import { KeHoachMoNhomType } from '@/lib/apis/types';
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-export default function TablePlanGroup() {
+interface TablePlanGroupProps {
+  data: KeHoachMoNhomType[];
+  loading: boolean;
+  onEdit: (data: KeHoachMoNhomType) => void;
+  onDelete: (id: number) => void;
+}
 
-
-    return (
-        <div className='w-full'>
-            <Table>
-                <TableHeader>
-                    <TableRow className=" bg-indigo-600 text-white!">
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Mã giảng viên</TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Họ và tên giảng viên</TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Chức danh</TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Năm phong</TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Trình đọ </TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Năm tốt nghiệp </TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Nước </TableHead>
-                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Hành động </TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-
-                </TableBody>
-            </Table>
-        </div>
-    );
+export default function TablePlanGroup({ data, loading, onEdit, onDelete }: TablePlanGroupProps) {
+  return (
+    <div className="rounded-md border">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="bg-indigo-600 text-white">Năm học</TableHead>
+            <TableHead className="bg-indigo-600 text-white">Số nhóm</TableHead>
+            <TableHead className="bg-indigo-600 text-white">Hành động</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {loading ? (
+            <TableRow>
+              <TableCell colSpan={3} className="text-center py-8">
+                Đang tải dữ liệu...
+              </TableCell>
+            </TableRow>
+          ) : data.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={3} className="text-center py-8">
+                Không có dữ liệu
+              </TableCell>
+            </TableRow>
+          ) : (
+            data.map((row) => (
+              <TableRow key={row.id} className="hover:bg-gray-50">
+                <TableCell>{row.namHoc}</TableCell>
+                <TableCell>{row.soNhom}</TableCell>
+                <TableCell>
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="outline" onClick={() => onEdit(row)}>
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button size="sm" variant="destructive" onClick={() => row.id && onDelete(row.id)}>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
+        </TableBody>
+      </Table>
+    </div>
+  );
 }
