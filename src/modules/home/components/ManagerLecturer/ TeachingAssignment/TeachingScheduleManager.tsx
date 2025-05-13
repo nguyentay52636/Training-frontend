@@ -35,7 +35,7 @@ export default function TeachingScheduleManager() {
         <TableTeachingSchedule data={data} />
 
         <div className='mx-auto gap-x-5 mt-8 flex justify-center'>
-          <PaginationTeachingSchedule />
+          <PaginationTeachingSchedule currentPage={1} totalPages={1} onPageChange={() => { }} totalItems={1} />
         </div>
       </div>
     )

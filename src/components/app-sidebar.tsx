@@ -79,15 +79,15 @@ const data = {
       url: "/trangchu/quan-ly-diem",
       icon: FileText,
       items: [
-        {
-          title: "Thống kê điểm",
-          url: "/trangchu/quan-ly-diem/thong-ke",
-        },
+        
         {
           title: "Xem diểm",
           url: "/trangchu/quan-ly-diem/xem-diem",
         },
-
+        {
+          title: "Thống kê điểm",
+          url: "/trangchu/quan-ly-diem/thong-ke-diem",
+        },
       ],
     },
     {

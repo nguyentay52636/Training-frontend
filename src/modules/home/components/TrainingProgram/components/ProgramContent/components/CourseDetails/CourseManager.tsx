@@ -18,6 +18,9 @@ export default function CourseManager({ knowledgeData }: CourseManagerProps = {}
   const [refreshKey, setRefreshKey] = useState(0);
   const [selectedCourses, setSelectedCourses] = useState<CourseType[]>([]);
   const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   // Lấy danh sách học phần khi component mount hoặc khi idKienThuc thay đổi
   useEffect(() => {
@@ -43,6 +46,9 @@ export default function CourseManager({ knowledgeData }: CourseManagerProps = {}
           .filter((course) => course.idHocPhan !== undefined)
           .map((course) => course.idHocPhan as number);
         setSelectedCourseIds(courseIds);
+        
+        // Calculate total pages
+        setTotalPages(Math.ceil(courses.length / rowsPerPage));
       } catch (error: any) {
         console.error('Lỗi khi lấy danh sách học phần:', error.message || error);
         // Reset states to prevent UI errors
@@ -144,7 +150,14 @@ export default function CourseManager({ knowledgeData }: CourseManagerProps = {}
           )}
 
           <div className='my-8'>
-            <PaginationCourse />
+            <PaginationCourse
+              currentPage={currentPage}
+              totalPages={totalPages}
+              rowsPerPage={rowsPerPage}
+              onPageChange={setCurrentPage}
+              onRowsPerPageChange={setRowsPerPage}
+              totalItems={selectedCourses.length}
+            />
           </div>
         </div>
       </div>
