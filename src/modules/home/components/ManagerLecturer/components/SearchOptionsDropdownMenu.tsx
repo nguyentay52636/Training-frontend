@@ -18,7 +18,7 @@ export default function SearchOptionsDropdownMenu() {
             Cột hiển thị <ChevronDown className='ml-2 h-4 w-4' />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align='end'>abcd</DropdownMenuContent>
+        <DropdownMenuContent align='end'></DropdownMenuContent>
       </DropdownMenu>
     </div>
   );
