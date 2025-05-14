@@ -9,28 +9,32 @@ import {
 } from '@/components/ui/accordion';
 import MajorTable from './MajorTable';
 import { cn } from '@/lib/utils';
-import { ArrowDownToLine, ArrowUpToLine, Plus } from 'lucide-react';
+import { ArrowDownToLine, ArrowUpToLine } from 'lucide-react';
 import DiaLogAddSchedule from './DialogAddSchedule';
-import { useGetAllKeHoachDayHOcQuery } from './querys';
-
-const majors = ['Kỹ thuật phần mềm'];
+import { useGetAllHocKy, useGetAllKeHoachDayHOcQuery } from './querys';
 
 const major = {
-  stt: 1,
-  maHocPhan: 'INT1234',
-  soTC: 3,
-  lyThuyet: '30',
-  thucHanh: '15',
-  tenHocPhan: 'Giao duc quoc  phong',
+  idHocPhan: 1,
+  maHP: 'HP001',
+  tenHP: 'Toán rời rạc',
+  soTinChi: 3,
+  soTietLyThuyet: 30,
+  soTietThucHanh: 15,
+  soTietThucTap: 0,
+  tongSoTiet: 45,
+  loaiHocPhan: 0,
+  heSoHocPhan: 1,
 };
 
 const danhsachHocKy = [1, 2, 3, 4, 5];
 
 export default function Schedule() {
   const { data } = useGetAllKeHoachDayHOcQuery();
+  const { data: dataHocKy } = useGetAllHocKy();
 
   return (
-    data && (
+    data &&
+    dataHocKy && (
       <TabsContent value='schedule'>
         <div className='flex justify-between items-center'>
           <h1 className='font-bold text-3xl'>Kế hoạch dạy học</h1>
@@ -44,8 +48,12 @@ export default function Schedule() {
         </div>
 
         <Accordion type='single' collapsible className='w-full mt-8'>
-          {data.map(({ hocPhanList, idChuyenNganh, idHocKy, tenChuyenNganh }) => (
-            <AccordionItem className='mb-5 w-full' key={idHocKy} value={tenChuyenNganh}>
+          {data.map(({ tenChuyenNganh }) => (
+            <AccordionItem
+              className='mb-5 w-full'
+              key={new Date().getTime()}
+              value={tenChuyenNganh}
+            >
               <AccordionTrigger>
                 <div className='cursor-pointer font-bold w-full p-3 hover:bg-gray-100 transition-colors duration-300 rounded-xl bg-secondary'>
                   <h1>{tenChuyenNganh}</h1>
@@ -70,10 +78,10 @@ export default function Schedule() {
                 </div>
                 <Tabs defaultValue='hocky-1'>
                   <TabsList className='mb-4'>
-                    {danhsachHocKy.map((num) => (
+                    {dataHocKy.map(({ idHocPhan, idHocKy }) => (
                       <TabsTrigger
-                        key={num}
-                        value={`hocky-${num}`}
+                        key={idHocPhan}
+                        value={`hocky-${idHocKy}`}
                         className={cn(
                           'pb-2 relative text-xl mx-6',
                           'data-[state=active]:text-indigo-600 data-[state=active]:font-semibold',
@@ -84,7 +92,7 @@ export default function Schedule() {
                           'data-[state=active]:after:opacity-100',
                         )}
                       >
-                        {'Học kỳ ' + num}
+                        {'Học kỳ ' + idHocKy}
                       </TabsTrigger>
                     ))}
                   </TabsList>
