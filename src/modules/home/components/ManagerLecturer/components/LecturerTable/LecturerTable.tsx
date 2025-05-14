@@ -7,12 +7,19 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import LecturerActions from './LecturerActions';
+import ExcelActions from '../ExcelActions/ExcelActions';
 import { UserType } from '@/lib/apis/types';
 
-export default function LecturerTable({ lectureData }: { lectureData: UserType[] }) {
+interface LecturerTableProps {
+  lectureData: UserType[];
+  onImport?: (data: UserType[]) => void;
+}
+
+export default function LecturerTable({ lectureData, onImport }: LecturerTableProps) {
   return (
     lectureData && (
       <div className='w-full'>
+
         <Table>
           <TableHeader>
             <TableRow className='bg-indigo-600 text-white!'>
