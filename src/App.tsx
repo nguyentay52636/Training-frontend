@@ -64,11 +64,10 @@ function App() {
         },
         {
           path: 'quan-ly-diem',
-         
+
           children: [
             { path: 'thong-ke-diem', element: <DashBoardManager /> },
             { path: 'xem-diem', element: <PointManagement /> },
-          
           ],
         },
         { path: 'quan-ly-tai-khoan', element: <AccountManagement /> },
