@@ -21,24 +21,32 @@ type LectureType = {
   namTotNghiep: string;
 };
 
-export default function AddLectuerForm({ onClose }: { onClose: (isOpen: boolean) => void }) {
+export default function AddLectuerForm({
+  lecture,
+  onClose,
+}: {
+  onClose: () => void;
+  lecture?: LectureType; // lecture có thể không có giá trị nên mình thêm `?`
+}) {
+  // Thiết lập giá trị mặc định từ prop lecture, nếu không có thì là chuỗi rỗng
   const form = useForm<LectureType>({
     defaultValues: {
-      maGiangVien: '',
-      tenGiangVien: '',
-      chucDanh: '',
-      namPhong: '',
-      trinhDo: '',
-      nuoc: '',
-      namTotNghiep: '',
+      maGiangVien: lecture?.maGiangVien || '',
+      tenGiangVien: lecture?.tenGiangVien || '',
+      chucDanh: lecture?.chucDanh || '',
+      namPhong: lecture?.namPhong || '',
+      trinhDo: lecture?.trinhDo || '',
+      nuoc: lecture?.nuoc || '',
+      namTotNghiep: lecture?.namTotNghiep || '',
     },
   });
 
   const { mutate } = useAddTeacherMutation();
 
   const handleAddLecturer = (value: LectureType) => {
+    console.log('Dữ liệu gửi lên:', JSON.stringify(value, null, 2)); // Log lại để kiểm tra
     mutate(value);
-    onClose(false);
+    onClose(); // Đóng form sau khi submit
   };
 
   const fields = [
