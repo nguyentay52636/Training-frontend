@@ -12,7 +12,7 @@ export const getAllPoint = async () => {
 };
 
 export const getPointByCodeSV = async (codeSV: number) => {
-  try { 
+  try {
     const { data } = await baseApi.get<PointType[]>(`/diem/${codeSV}`);
     return data;
   } catch (error: any) {
