@@ -3,7 +3,6 @@ import { Search } from 'lucide-react';
 import AddLecturerDialog from './components/AddLecturer/AddLecturerDialog';
 import SearchOptionsDropdownMenu from './components/SearchOptionsDropdownMenu';
 import LecturerTable from './components/LecturerTable';
-import { Button } from '@/components/ui/button';
 import { useGetAllTeacherQuery } from './components/query';
 import { useState } from 'react';
 import PaginationLecture from './components/PaginationLecture';
