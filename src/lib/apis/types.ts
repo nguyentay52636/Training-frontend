@@ -136,3 +136,9 @@ export interface ChuyenNganhType {
   idHocKy: number[] ; 
   hocPhanList? : CourseType[]
  } 
+
+ export interface KeHoachMoNhomType { 
+  id?:number;
+  namHoc :string ;
+  soNhom:number; 
+ }

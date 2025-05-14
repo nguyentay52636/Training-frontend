@@ -11,142 +11,155 @@ import {
 interface PaginationCourseProps {
     currentPage: number
     totalPages: number
-    totalItems: number
+    rowsPerPage?: number
     onPageChange: (page: number) => void
-    onPageSizeChange?: (pageSize: number) => void
-    pageSize?: number
+    onRowsPerPageChange?: (rows: number) => void
+    totalItems: number
 }
 
 export default function PaginationCourse({
-    currentPage,
-    totalPages,
-    totalItems,
+    currentPage = 1,
+    totalPages = 1,
+    rowsPerPage = 10,
     onPageChange,
-    onPageSizeChange,
-    pageSize = 10
+    onRowsPerPageChange,
+    totalItems = 0
 }: PaginationCourseProps) {
-    const pageSizeOptions = [5, 10, 20, 50];
-
-    // Tạo mảng các số trang hiển thị
+    // Generate page numbers to display
     const getPageNumbers = () => {
         const pages = [];
-        const maxVisiblePages = 5; // Số trang hiển thị tối đa
-        let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+        const maxPagesToShow = 5;
 
-        // Điều chỉnh startPage nếu endPage đã đạt giới hạn
-        if (endPage === totalPages) {
-            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        // Always show first page
+        if (currentPage > 3) {
+            pages.push(1);
+            if (currentPage > 4) {
+                pages.push('...');
+            }
         }
+
+        // Calculate range of pages to show around current page
+        const startPage = Math.max(1, currentPage - 1);
+        const endPage = Math.min(totalPages, currentPage + 1);
 
         for (let i = startPage; i <= endPage; i++) {
             pages.push(i);
         }
+
+        // Always show last page
+        if (currentPage < totalPages - 2) {
+            if (currentPage < totalPages - 3) {
+                pages.push('...');
+            }
+            pages.push(totalPages);
+        }
+
         return pages;
     };
 
-    // Tính toán hiển thị thông tin phân trang
-    const startItem = totalItems === 0 ? 0 : (currentPage - 1) * pageSize + 1;
-    const endItem = Math.min(startItem + pageSize - 1, totalItems);
+    // Calculate the range of items being displayed
+    const startItem = (currentPage - 1) * rowsPerPage + 1;
+    const endItem = Math.min(currentPage * rowsPerPage, totalItems);
 
-    // Xử lý thay đổi kích thước trang
-    const handlePageSizeChange = (value: string) => {
-        if (onPageSizeChange) {
-            onPageSizeChange(Number(value));
+    const handleRowsPerPageChange = (value: string) => {
+        if (onRowsPerPageChange) {
+            onRowsPerPageChange(Number(value));
+            // Reset to first page when changing rows per page
+            onPageChange(1);
         }
     };
 
     return (
-        <div className="flex flex-col lg:flex-row items-center justify-between py-6 px-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-b-lg border-t border-blue-100">
-            <div className="text-base text-gray-700 mb-4 lg:mb-0 font-medium">
-                Hiển thị <span className="font-bold text-blue-700">{startItem}</span> đến{' '}
-                <span className="font-bold text-blue-700">{endItem}</span> trong số{' '}
-                <span className="font-bold text-blue-700">{totalItems}</span> học phần
+        <div className="flex flex-col md:flex-row justify-between items-center mt-6 px-4 py-4 bg-white rounded-xl shadow-sm border border-gray-100">
+            {/* Rows per page selector */}
+            <div className="flex items-center space-x-3 mb-4 md:mb-0">
+                <span className="text-sm text-gray-700">Hiển thị</span>
+                <Select
+                    value={rowsPerPage.toString()}
+                    onValueChange={handleRowsPerPageChange}
+                >
+                    <SelectTrigger className="w-[80px] h-8 text-sm cursor-pointer">
+                        <SelectValue placeholder={rowsPerPage} />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="5" className="cursor-pointer">5</SelectItem>
+                        <SelectItem value="10" className="cursor-pointer">10</SelectItem>
+                        <SelectItem value="20" className="cursor-pointer">20</SelectItem>
+                        <SelectItem value="50" className="cursor-pointer">50</SelectItem>
+                        <SelectItem value="100" className="cursor-pointer">100</SelectItem>
+                    </SelectContent>
+                </Select>
+                <span className="text-sm text-gray-700">dòng mỗi trang</span>
             </div>
 
-            <div className="flex flex-col md:flex-row items-center gap-4">
-                {onPageSizeChange && (
-                    <div className="flex items-center mr-0 md:mr-6 mb-4 md:mb-0">
-                        <span className="text-base text-gray-700 mr-3 font-medium">Hiển thị:</span>
-                        <Select
-                            value={String(pageSize)}
-                            onValueChange={handlePageSizeChange}
-                        >
-                            <SelectTrigger className="h-10 w-[80px] bg-white border-blue-200 focus:ring-blue-500">
-                                <SelectValue placeholder={pageSize} />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {pageSizeOptions.map((size) => (
-                                    <SelectItem key={size} value={String(size)}>
-                                        {size}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
-                )}
+            {/* Pagination controls */}
+            <div className="flex items-center space-x-2 mb-4 md:mb-0">
+                <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => onPageChange(1)}
+                    disabled={currentPage === 1}
+                    className="h-8 w-8 rounded-md border-gray-200 bg-white text-gray-500 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 disabled:bg-gray-50 disabled:text-gray-400 cursor-pointer"
+                >
+                    <ChevronsLeft className="h-4 w-4" />
+                </Button>
 
-                <div className="flex items-center bg-white rounded-xl shadow-md border border-blue-200 overflow-hidden">
-                    <Button
-                        variant="ghost"
-                        className="h-11 w-11 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-50 disabled:opacity-50"
-                        disabled={currentPage <= 1}
-                        onClick={() => onPageChange(1)}
-                        title="Trang đầu"
-                    >
-                        <ChevronsLeft className="h-5 w-5" />
-                    </Button>
+                <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
+                    disabled={currentPage === 1}
+                    className="h-8 w-8 rounded-md border-gray-200 bg-white text-gray-500 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 disabled:bg-gray-50 disabled:text-gray-400 cursor-pointer"
+                >
+                    <ChevronLeft className="h-4 w-4" />
+                </Button>
 
-                    <Button
-                        variant="ghost"
-                        className="h-11 w-11 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-50 disabled:opacity-50"
-                        disabled={currentPage <= 1}
-                        onClick={() => onPageChange(currentPage - 1)}
-                        title="Trang trước"
-                    >
-                        <ChevronLeft className="h-5 w-5" />
-                    </Button>
-
-                    <div className="border-l border-r px-1 hidden md:flex">
-                        {getPageNumbers().map((page) => (
+                {/* Page numbers */}
+                <div className="flex items-center space-x-1">
+                    {getPageNumbers().map((page, index) => (
+                        typeof page === 'number' ? (
                             <Button
-                                key={page}
-                                variant={currentPage === page ? "default" : "ghost"}
-                                className={`h-11 w-11 rounded-full m-1 font-bold ${currentPage === page
-                                    ? "bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-md"
-                                    : "text-gray-700 hover:text-blue-700 hover:bg-blue-50"
-                                    }`}
+                                key={index}
+                                variant={page === currentPage ? "default" : "outline"}
+                                size="sm"
                                 onClick={() => onPageChange(page)}
+                                className={`h-8 w-8 p-0 rounded-md cursor-pointer ${page === currentPage
+                                    ? 'bg-blue-700 text-white hover:bg-blue-800'
+                                    : 'border-gray-200 bg-white text-gray-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700'
+                                    }`}
                             >
                                 {page}
                             </Button>
-                        ))}
-                    </div>
-
-                    <div className="border-l border-r px-4 flex md:hidden items-center text-base font-medium text-gray-700">
-                        <span>Trang <span className="text-blue-700 font-bold">{currentPage}</span> / {totalPages}</span>
-                    </div>
-
-                    <Button
-                        variant="ghost"
-                        className="h-11 w-11 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-50 disabled:opacity-50"
-                        disabled={currentPage >= totalPages}
-                        onClick={() => onPageChange(currentPage + 1)}
-                        title="Trang sau"
-                    >
-                        <ChevronRight className="h-5 w-5" />
-                    </Button>
-
-                    <Button
-                        variant="ghost"
-                        className="h-11 w-11 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-50 disabled:opacity-50"
-                        disabled={currentPage >= totalPages}
-                        onClick={() => onPageChange(totalPages)}
-                        title="Trang cuối"
-                    >
-                        <ChevronsRight className="h-5 w-5" />
-                    </Button>
+                        ) : (
+                            <span key={index} className="text-gray-400 px-1">...</span>
+                        )
+                    ))}
                 </div>
+
+                <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => onPageChange(Math.min(currentPage + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className="h-8 w-8 rounded-md border-gray-200 bg-white text-gray-500 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 disabled:bg-gray-50 disabled:text-gray-400 cursor-pointer"
+                >
+                    <ChevronRight className="h-4 w-4" />
+                </Button>
+
+                <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => onPageChange(totalPages)}
+                    disabled={currentPage === totalPages}
+                    className="h-8 w-8 rounded-md border-gray-200 bg-white text-gray-500 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 disabled:bg-gray-50 disabled:text-gray-400 cursor-pointer"
+                >
+                    <ChevronsRight className="h-4 w-4" />
+                </Button>
+            </div>
+
+            {/* Page info */}
+            <div className="text-sm font-medium text-gray-700">
+                Hiển thị <span className="text-blue-700 font-semibold">{startItem}-{endItem}</span> trên <span className="text-blue-700 font-semibold">{totalItems}</span> kết quả
             </div>
         </div>
     )

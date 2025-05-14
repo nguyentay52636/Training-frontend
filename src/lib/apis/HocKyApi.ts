@@ -1,5 +1,5 @@
 import baseApi from "./baseApi";
-import { HocKyType, CourseType } from "./types";
+import { HocKyType } from "./types";
 
 export const getAllHocKyAPI = async () => { 
     try { 

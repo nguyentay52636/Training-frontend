@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/button';
 import {
     Form,
@@ -10,52 +9,52 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
+import { KeHoachMoNhomType } from '@/lib/apis/types';
+import { createKeHoachMoNhom } from '@/lib/apis/keHoachMoNhomApi';
+import { toast } from 'sonner';
 
-type LectureType = {
-    maGiangVien: string;
-    hoTenGV: string;
-    chucDanh: string;
-    namPhong: string;
-    trinhDo: string;
-    nuoc: string;
-    namTotNghiep: string;
-};
+interface AddFormPlanGroupProps {
+    onClose: (isOpen: boolean) => void;
+    onSuccess?: () => void;
+}
 
-export default function AddFormPlanGroup({ onClose }: { onClose: (isOpen: boolean) => void }) {
-    const form = useForm({
+export default function AddFormPlanGroup({ onClose, onSuccess }: AddFormPlanGroupProps) {
+    const form = useForm<KeHoachMoNhomType>({
         defaultValues: {
-            maGiangVien: '',
-            hoTenGV: '',
-            chucDanh: '',
-            namPhong: '',
-            trinhDo: '',
-            nuoc: '',
-            namTotNghiep: '',
+            namHoc: '',
+            soNhom: 0,
         },
     });
 
-    const handleAddLecturer = (value: LectureType) => {
-        console.log(value);
-        onClose(false);
+    const handleAddGroup = async (values: KeHoachMoNhomType) => {
+        try {
+            await createKeHoachMoNhom(values);
+            toast.success('Thêm kế hoạch mở nhóm thành công');
+            onClose(false);
+            onSuccess?.();
+        } catch (err) {
+            console.error('Error adding group:', err);
+            toast.error('Có lỗi xảy ra khi thêm kế hoạch mở nhóm');
+        }
     };
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleAddLecturer)} className=' space-y-6'>
+            <form onSubmit={form.handleSubmit(handleAddGroup)} className='space-y-6'>
                 <FormField
-                    name='hoTenGV'
+                    name='namHoc'
                     control={form.control}
                     render={({ field }) => (
                         <FormItem>
                             <FormControl>
-                                <div className='flex  gap-x-5'>
+                                <div className='flex gap-x-5'>
                                     <FormLabel className='text-right w-[100px] font-medium text-gray-700'>
-                                        Họ và tên{' '}
+                                        Năm học
                                     </FormLabel>
                                     <Input
                                         className='flex-1 rounded-lg border-gray-200 focus:ring-blue-400'
                                         {...field}
-                                        placeholder='vd : Nguyễn Văn A'
+                                        placeholder='vd: 2023-2024'
                                     />
                                 </div>
                             </FormControl>
@@ -65,19 +64,21 @@ export default function AddFormPlanGroup({ onClose }: { onClose: (isOpen: boolea
                 />
 
                 <FormField
-                    name='maGiangVien'
+                    name='soNhom'
                     control={form.control}
                     render={({ field }) => (
                         <FormItem>
                             <FormControl>
                                 <div className='flex gap-x-5'>
                                     <FormLabel className='text-right w-[100px] font-medium text-gray-700'>
-                                        Mã giảng viên
+                                        Số nhóm
                                     </FormLabel>
                                     <Input
+                                        type="number"
                                         className='flex-1 rounded-lg border-gray-200 focus:ring-blue-400'
                                         {...field}
-                                        placeholder='vd : GV001'
+                                        onChange={(e) => field.onChange(Number(e.target.value))}
+                                        placeholder='vd: 5'
                                     />
                                 </div>
                             </FormControl>
@@ -86,118 +87,21 @@ export default function AddFormPlanGroup({ onClose }: { onClose: (isOpen: boolea
                     )}
                 />
 
-                <FormField
-                    name='chucDanh'
-                    control={form.control}
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormControl>
-                                <div className='flex gap-x-5'>
-                                    <FormLabel className='text-right w-[100px] font-medium text-gray-700'>
-                                        Chức danh
-                                    </FormLabel>
-                                    <Input
-                                        className='flex-1 rounded-lg border-gray-200 focus:ring-blue-400'
-                                        {...field}
-                                        placeholder='vd : Giảng viên'
-                                    />
-                                </div>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    name='namPhong'
-                    control={form.control}
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormControl>
-                                <div className='flex gap-x-5'>
-                                    <FormLabel className='text-right w-[100px] font-medium text-gray-700'>
-                                        Năm phong
-                                    </FormLabel>
-                                    <Input
-                                        className='flex-1 rounded-lg border-gray-200 focus:ring-blue-400'
-                                        {...field}
-                                        placeholder='vd : 2020'
-                                    />
-                                </div>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    name='trinhDo'
-                    control={form.control}
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormControl>
-                                <div className='flex gap-x-5'>
-                                    <FormLabel className='text-right w-[100px] font-medium text-gray-700'>
-                                        Trình độ
-                                    </FormLabel>
-                                    <Input
-                                        className='flex-1 rounded-lg border-gray-200 focus:ring-blue-400'
-                                        {...field}
-                                        placeholder='vd : Tiến sĩ'
-                                    />
-                                </div>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    name='nuoc'
-                    control={form.control}
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormControl>
-                                <div className='flex gap-x-5'>
-                                    <FormLabel className='text-right w-[100px] font-medium text-gray-700'>
-                                        Nước
-                                    </FormLabel>
-                                    <Input
-                                        className='flex-1 rounded-lg border-gray-200 focus:ring-blue-400'
-                                        {...field}
-                                        placeholder='vd : Việt Nam'
-                                    />
-                                </div>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    name='namTotNghiep'
-                    control={form.control}
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormControl>
-                                <div className='flex gap-x-5'>
-                                    <FormLabel className='text-nowrap w-[100px] font-medium text-gray-700'>
-                                        Năm tốt nghiệp
-                                    </FormLabel>
-                                    <Input
-                                        className='flex-1 rounded-lg border-gray-200 focus:ring-blue-400'
-                                        {...field}
-                                        placeholder='vd : 2018'
-                                    />
-                                </div>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <Button className='bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 block ml-auto hover:to-indigo-800 rounded-lg'>
-                    Thêm Giảng Viên
-                </Button>
+                <div className="flex justify-end gap-2">
+                    <Button 
+                        type="button" 
+                        variant="outline" 
+                        onClick={() => onClose(false)}
+                    >
+                        Hủy
+                    </Button>
+                    <Button 
+                        type="submit"
+                        className='bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 rounded-lg'
+                    >
+                        Thêm kế hoạch
+                    </Button>
+                </div>
             </form>
         </Form>
     );

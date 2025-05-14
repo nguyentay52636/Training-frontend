@@ -14,7 +14,7 @@ import {
 import { CourseType, BlockKnowType } from "@/lib/apis/types";
 import { toast } from 'react-toastify';
 import { getBlockKnows } from "@/lib/apis/blockKnowApi";
-import { addCourseToKnowledge, updateKnowByCourse, getKnowledgeById } from "@/lib/apis/KnowsApi";
+import { updateKnowByCourse, getKnowledgeById } from "@/lib/apis/KnowsApi";
 import { createCourse } from "@/lib/apis/CourseApi";
 import CourseForm from './CourseForm';
 

@@ -6,10 +6,28 @@ import LecturerTable from './components/LecturerTable';
 import { Button } from '@/components/ui/button';
 import { useGetAllTeacherQuery } from './components/query';
 import { useState } from 'react';
+import PaginationLecture from './components/PaginationLecture';
 
 export default function LecturerManager() {
   const [keyword, setKeyword] = useState('');
   const { data } = useGetAllTeacherQuery();
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const totalItems = data?.length || 0;
+  const totalPages = Math.ceil(totalItems / rowsPerPage);
+
+  // Pagination handlers
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleRowsPerPageChange = (rows: number) => {
+    setRowsPerPage(rows);
+    setCurrentPage(1); // Reset to first page when changing rows per page
+  };
+
   return (
     <div>
       {/* Title */}
@@ -38,21 +56,14 @@ export default function LecturerManager() {
 
       {data && <LecturerTable lectureData={data} />}
 
-      <div className='mx-auto gap-x-5 mt-8 flex justify-center'>
-        <Button className='hover:bg-secondary' variant='outline'>
-          back
-        </Button>
-
-        <Button className='bg-foreground text-background'>1</Button>
-        <Button className='bg-background hover:text-white text-foreground'>2</Button>
-        <Button className='bg-background hover:text-white text-foreground'>3</Button>
-        <Button className='bg-background hover:text-white text-foreground'>4</Button>
-        <Button className='bg-background hover:text-white text-foreground'>5</Button>
-
-        <Button className='hover:bg-secondary' variant='outline'>
-          Next
-        </Button>
-      </div>
+      <PaginationLecture
+        currentPage={currentPage}
+        totalPages={totalPages}
+        rowsPerPage={rowsPerPage}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleRowsPerPageChange}
+        totalItems={totalItems}
+      />
     </div>
   );
 }

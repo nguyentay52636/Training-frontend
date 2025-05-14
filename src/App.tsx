@@ -19,6 +19,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ManagerCourseDetail from './modules/home/components/ManagerKnowAndBlock/components/ManagerCourseDetail/ManagerCourseDetail';
 import ManagerBlockKnowledge from './modules/home/components/ManagerKnowAndBlock/components/ManagerBlockKnowledge/ManagerBlockKnowledge';
 import ManagerKnowledge from './modules/home/components/ManagerKnowAndBlock/components/ManagerKnowledge/ManagerKnowledge';
+import DashBoardManager from './modules/home/components/Dashboard/DashBoardManager';
 
 function App() {
   const router = createBrowserRouter([
@@ -63,8 +64,12 @@ function App() {
         },
         {
           path: 'quan-ly-diem',
-          element: <PointManagement />,
-          children: [{ path: 'xem-diem', element: <PointManagement /> }],
+         
+          children: [
+            { path: 'thong-ke-diem', element: <DashBoardManager /> },
+            { path: 'xem-diem', element: <PointManagement /> },
+          
+          ],
         },
         { path: 'quan-ly-tai-khoan', element: <AccountManagement /> },
         { path: 'ke-hoach-day-hoc', element: <LessonPlanManager /> },

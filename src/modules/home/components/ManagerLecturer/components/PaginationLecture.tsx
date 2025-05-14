@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-interface PaginationTeachingScheduleProps {
+interface PaginationLectureProps {
     currentPage: number;
     totalPages: number;
     rowsPerPage?: number;
@@ -11,17 +11,18 @@ interface PaginationTeachingScheduleProps {
     totalItems: number;
 }
 
-export default function PaginationTeachingSchedule({
+export default function PaginationLecture({
     currentPage = 1,
     totalPages = 1,
     rowsPerPage = 10,
     onPageChange,
     onRowsPerPageChange,
     totalItems = 0
-}: PaginationTeachingScheduleProps) {
+}: PaginationLectureProps) {
     // Generate page numbers to display
     const getPageNumbers = () => {
         const pages = [];
+        const maxPagesToShow = 5;
 
         // Always show first page
         if (currentPage > 3) {

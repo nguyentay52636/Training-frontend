@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { PhanCongGiangDayType } from '@/lib/apis/types';
 import { useEditPhanCongGiangDayMutation } from './mutations';
+import { ReactNode } from 'react';
 
 interface FormValues {
   idGiangVien: number;
@@ -22,11 +23,15 @@ interface FormValues {
   soTietThucTe: number;
 }
 
+interface EditScheduleDialogProps {
+  scheduleData: PhanCongGiangDayType;
+  children?: ReactNode;
+}
+
 export default function EditScheduleDialog({
   scheduleData,
-}: {
-  scheduleData: PhanCongGiangDayType;
-}) {
+  children,
+}: EditScheduleDialogProps) {
   const { mutate } = useEditPhanCongGiangDayMutation();
 
   const form = useForm<FormValues>({
@@ -49,13 +54,13 @@ export default function EditScheduleDialog({
 
   return (
     <Dialog>
-      <DialogTrigger>
-        <Button>Edit</Button>
+      <DialogTrigger asChild>
+        {children || <Button>Edit</Button>}
       </DialogTrigger>
       <DialogContent>
         <div>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 name='idGiangVien'
                 render={({ field }) => (
@@ -128,7 +133,7 @@ export default function EditScheduleDialog({
                   </FormItem>
                 )}
               />
-              <Button>Lưu Thay Đổi</Button>
+              <Button type="submit" className="w-full">Lưu Thay Đổi</Button>
             </form>
           </Form>
         </div>

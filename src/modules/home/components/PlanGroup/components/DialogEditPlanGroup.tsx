@@ -5,56 +5,51 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { createKeHoachMoNhom } from '@/lib/apis/keHoachMoNhomApi';
+import { KeHoachMoNhomType } from '@/lib/apis/types';
+import { updateKeHoachMoNhom } from '@/lib/apis/keHoachMoNhomApi';
 
-interface DialogAddPlanGroupProps {
+interface DialogEditPlanGroupProps {
+    isOpen: boolean;
+    onClose: () => void;
+    data: KeHoachMoNhomType;
     onSuccess?: () => void;
 }
 
-export default function DialogAddPlanGroup({ onSuccess }: DialogAddPlanGroupProps) {
-    const [open, setOpen] = useState(false);
+export default function DialogEditPlanGroup({ isOpen, onClose, data, onSuccess }: DialogEditPlanGroupProps) {
     const [loading, setLoading] = useState(false);
-    const [formData, setFormData] = useState({
-        namHoc: '',
-        soNhom: 0,
+    const [formData, setFormData] = useState<KeHoachMoNhomType>({
+        id: data.id,
+        namHoc: data.namHoc,
+        soNhom: data.soNhom,
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             setLoading(true);
-            await createKeHoachMoNhom(formData);
-            toast.success('Thêm kế hoạch mở nhóm thành công');
-            setOpen(false);
+            await updateKeHoachMoNhom(formData.id!, { namHoc: formData.namHoc, soNhom: formData.soNhom });
+            toast.success('Cập nhật kế hoạch mở nhóm thành công');
+            onClose();
             onSuccess?.();
         } catch (err) {
-            console.error('Error adding group plan:', err);
-            toast.error('Có lỗi xảy ra khi thêm kế hoạch mở nhóm');
+            console.error('Error updating group plan:', err);
+            toast.error('Có lỗi xảy ra khi cập nhật kế hoạch mở nhóm');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <Button
-                    className='bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-full shadow-md'
-                >
-                    <Plus className='mr-2 h-5 w-5' /> Thêm kế hoạch mở nhóm
-                </Button>
-            </DialogTrigger>
+        <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className='sm:max-w-[500px] rounded-lg'>
                 <DialogHeader>
-                    <DialogTitle className='text-blue-900 text-xl'>Thêm kế hoạch mở nhóm mới</DialogTitle>
+                    <DialogTitle className='text-blue-900 text-xl'>Chỉnh sửa kế hoạch mở nhóm</DialogTitle>
                     <DialogDescription className='text-gray-600'>
-                        Vui lòng nhập đầy đủ thông tin kế hoạch mở nhóm để thêm vào hệ thống.
+                        Vui lòng cập nhật thông tin kế hoạch mở nhóm.
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -78,7 +73,7 @@ export default function DialogAddPlanGroup({ onSuccess }: DialogAddPlanGroupProp
                         />
                     </div>
                     <div className="flex justify-end gap-2">
-                        <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+                        <Button type="button" variant="outline" onClick={onClose}>
                             Hủy
                         </Button>
                         <Button 
@@ -86,7 +81,7 @@ export default function DialogAddPlanGroup({ onSuccess }: DialogAddPlanGroupProp
                             disabled={loading}
                             className='bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800'
                         >
-                            {loading ? 'Đang xử lý...' : 'Thêm kế hoạch'}
+                            {loading ? 'Đang xử lý...' : 'Cập nhật'}
                         </Button>
                     </div>
                 </form>
