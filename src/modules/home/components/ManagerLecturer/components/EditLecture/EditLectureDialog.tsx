@@ -1,6 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { DialogDescription } from '@radix-ui/react-dialog';
 import EditLecutreFomr from './EditLectureForm';
+import { toast } from 'react-toastify';
 
 export default function EditLectureDialog({
   lecture,
@@ -29,10 +30,10 @@ export default function EditLectureDialog({
     <Dialog open={open} onOpenChange={handleCloseDialog}>
       <DialogContent className='sm:max-w-[500px] rounded-lg'>
         <DialogHeader>
-          <DialogTitle className='text-blue-900 text-xl'>Chỉnh sữa</DialogTitle>
+          <DialogTitle className='text-blue-900 text-xl'>Chỉnh sửa</DialogTitle>
           <DialogDescription hidden></DialogDescription>
         </DialogHeader>
-        <EditLecutreFomr lecture={lecture} onClose={() => handleCloseDialog} />
+        <EditLecutreFomr lecture={lecture} onClose={handleCloseDialog} />
       </DialogContent>
     </Dialog>
   );

@@ -1,4 +1,5 @@
 import baseApi from './baseApi';
+import { LectureType } from './types';
 
 export const getLectureAPI = async () => {
   try {
@@ -9,7 +10,6 @@ export const getLectureAPI = async () => {
   }
 };
 
-export const getLectureByIdAPI = async (id: number) => {};
 
 export const addLectureAPI = async (lecture: {
   maGiangVien: string;
@@ -38,3 +38,38 @@ export const deleteLectureAPI = async (lectureId: number) => {
     throw new Error(error);
   }
 };
+
+export const addLectureExcelAPI = async({maGiangVien, tenGiangVien, chucDanh, namPhong, trinhDo, nuoc, namTotNghiep }:LectureType) => {
+  try {
+    const newLecture : LectureType = {
+      maGiangVien,
+      tenGiangVien,
+      chucDanh,
+      namPhong,
+      trinhDo,
+      nuoc,
+      namTotNghiep } 
+    const {data} = await baseApi.post('/giangvien',newLecture);
+    return data;
+
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+export const updateLectureAPI = async( id:number,{ maGiangVien, tenGiangVien, chucDanh, namPhong, trinhDo, nuoc, namTotNghiep }: LectureType) => {
+try{
+    const newLecture :LectureType= { 
+    maGiangVien,
+    tenGiangVien,
+    chucDanh,
+    namPhong,
+    trinhDo,
+    nuoc,
+    namTotNghiep
+  }
+  const {data} = await baseApi.put(`/giangvien/${id}`,newLecture);
+  return data;
+}catch(error){
+  throw new Error(error as string);
+}
+ } 
