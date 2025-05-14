@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button';
 import { useGetAllTeacherQuery } from './components/query';
 import { useState } from 'react';
 import PaginationLecture from './components/PaginationLecture';
+import ExcelActions from './components/ExcelActions/ExcelActions';
+import { UserType } from '@/lib/apis/types';
 
 export default function LecturerManager() {
   const [keyword, setKeyword] = useState('');
@@ -18,6 +20,8 @@ export default function LecturerManager() {
   const totalItems = data?.length || 0;
   const totalPages = Math.ceil(totalItems / rowsPerPage);
 
+  const [importedData, setImportedData] = useState<UserType[] | null>(null);
+
   // Pagination handlers
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -26,6 +30,11 @@ export default function LecturerManager() {
   const handleRowsPerPageChange = (rows: number) => {
     setRowsPerPage(rows);
     setCurrentPage(1); // Reset to first page when changing rows per page
+  };
+
+  const handleImport = (data: UserType[]) => {
+    setImportedData(data);
+    // TODO: Xử lý thêm nếu muốn cập nhật bảng hoặc gọi API
   };
 
   return (
@@ -48,8 +57,9 @@ export default function LecturerManager() {
           />
         </div>
 
-        <div className=' flex gap-x-5'>
+        <div className='flex gap-x-5 '>
           <SearchOptionsDropdownMenu />
+          <ExcelActions lectureData={data || []} onImport={handleImport} />
           <AddLecturerDialog />
         </div>
       </div>
