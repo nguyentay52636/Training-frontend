@@ -21,6 +21,9 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { useAppSelector } from "@/redux/hooks/hooks";
+import { RootState } from "@/redux/store";
 
 const data = {
   user: {
@@ -79,7 +82,7 @@ const data = {
       url: "/trangchu/quan-ly-diem",
       icon: FileText,
       items: [
-        
+
         {
           title: "Xem diểm",
           url: "/trangchu/quan-ly-diem/xem-diem",
@@ -180,6 +183,7 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const auth = useAppSelector((state: RootState) => state.auth);
   return (
     <Sidebar
       className="fixed font-semibold border-r shadow-md z-50"
@@ -188,6 +192,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     >
       <SidebarHeader className="text-black py-8">
         <TeamSwitcher teams={data.teams} />
+        <>
+          <div className="flex flex-col items-center mt-10">
+            <Avatar className="w-20 h-20 rounded-full border-2 border-gray-200 shadow-md overflow-hidden">
+              <AvatarImage
+                src="https://github.com/shadcn.png"
+                alt={auth.user?.userName || "User"}
+                className="object-cover w-full h-full"
+              />
+              <AvatarFallback className="bg-gray-100 text-gray-600 w-full h-full flex items-center justify-center text-xl">
+                {auth.user?.userName?.charAt(0) || "U"}
+              </AvatarFallback>
+            </Avatar>
+            <div className="mt-3 text-center">
+              <p className="text-sm text-gray-500">Xin chào,</p>
+              <p className="text-base font-semibold text-gray-800">{auth.user?.userName || "User"}</p>
+            </div>
+          </div>
+        </>
       </SidebarHeader>
       <SidebarContent>
         <NavProjects projects={data.projects} />
