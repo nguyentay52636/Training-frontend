@@ -115,7 +115,6 @@ export default function DialogAddCourse({
                 ...formData,
                 maHP: `HP${Date.now()}${Math.floor(Math.random() * 1000)}`,
                 tongSoTiet: formData.soTietLyThuyet + formData.soTietThucHanh + formData.soTietThucTap,
-                hocKy: 1 // Default value, adjust as needed
             });
 
             if (newCourse) {

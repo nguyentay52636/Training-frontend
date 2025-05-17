@@ -48,6 +48,7 @@ export default function AccountManagement() {
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={setCurrentPage}
+        totalItems={userData.length}
       />
     </div>
   );

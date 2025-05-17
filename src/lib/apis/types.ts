@@ -31,7 +31,6 @@ export interface CourseType {
   loaiHocPhan: string;
   tongSoTiet: number;
   heSoHocPhan: number;
-  hocKy: number;
 }
 export interface SpecializedType {
   tenChuyenNganh: string;
@@ -76,7 +75,7 @@ export interface PropramData {
   thongTinChung: ThongTinChung[];
 }
 
-interface ThongTinChung {
+export interface ThongTinChung {
   id: number;
   tenChuongTrinh: string;
   bac: string;

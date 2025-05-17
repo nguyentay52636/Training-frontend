@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -45,11 +45,6 @@ export default function DialogAddNewCourse({ knowledgeId, onCourseAdded }: Dialo
     const [tongSoTiet, setTongSoTiet] = useState<number>(0);
     const [heSoHocPhan, setHeSoHocPhan] = useState<number>(1);
 
-    // Calculate total hours whenever component hours change
-    useState(() => {
-        setTongSoTiet(soTietLyThuyet + soTietThucHanh + soTietThucTap);
-    }, [soTietLyThuyet, soTietThucHanh, soTietThucTap]);
-
     const resetForm = () => {
         setMaHP('');
         setTenHP('');
@@ -82,7 +77,6 @@ export default function DialogAddNewCourse({ knowledgeId, onCourseAdded }: Dialo
                 loaiHocPhan,
                 tongSoTiet,
                 heSoHocPhan,
-                hocKy: 0
             };
 
             // Add the course
@@ -131,7 +125,7 @@ export default function DialogAddNewCourse({ knowledgeId, onCourseAdded }: Dialo
                         <div>
                             <label className="text-gray-700 mb-1 block">Mã học phần *</label>
                             <Input
-                                className="w-full mt-1 h-10"
+                                className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
                                 placeholder="Nhập mã học phần"
                                 value={maHP}
                                 onChange={(e) => setMaHP(e.target.value)}
@@ -140,7 +134,7 @@ export default function DialogAddNewCourse({ knowledgeId, onCourseAdded }: Dialo
                         <div>
                             <label className="text-gray-700 mb-1 block">Tên học phần *</label>
                             <Input
-                                className="w-full mt-1 h-10"
+                                className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
                                 placeholder="Nhập tên học phần"
                                 value={tenHP}
                                 onChange={(e) => setTenHP(e.target.value)}
@@ -153,10 +147,10 @@ export default function DialogAddNewCourse({ knowledgeId, onCourseAdded }: Dialo
                             <label className="text-gray-700 mb-1 block">Số tín chỉ</label>
                             <Input
                                 type="number"
-                                className="w-full mt-1 h-10"
+                                className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
                                 placeholder="Số tín chỉ"
                                 value={soTinChi}
-                                onChange={(e) => setSoTinChi(Number(e.target.value))}
+                                onChange={(e) => setSoTinChi(Number(e.target.value) || 0)}
                             />
                         </div>
                         <div>
@@ -165,7 +159,7 @@ export default function DialogAddNewCourse({ knowledgeId, onCourseAdded }: Dialo
                                 value={loaiHocPhan}
                                 onValueChange={(value) => setLoaiHocPhan(value)}
                             >
-                                <SelectTrigger className="w-full mt-1 h-10">
+                                <SelectTrigger className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full">
                                     <SelectValue placeholder="Chọn loại học phần" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -181,10 +175,10 @@ export default function DialogAddNewCourse({ knowledgeId, onCourseAdded }: Dialo
                             <label className="text-gray-700 mb-1 block">Hệ số học phần</label>
                             <Input
                                 type="number"
-                                className="w-full mt-1 h-10"
+                                className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
                                 placeholder="Hệ số học phần"
                                 value={heSoHocPhan}
-                                onChange={(e) => setHeSoHocPhan(Number(e.target.value))}
+                                onChange={(e) => setHeSoHocPhan(Number(e.target.value) || 0)}
                             />
                         </div>
                     </div>
@@ -194,51 +188,40 @@ export default function DialogAddNewCourse({ knowledgeId, onCourseAdded }: Dialo
                             <label className="text-gray-700 mb-1 block">Số tiết lý thuyết</label>
                             <Input
                                 type="number"
-                                className="w-full mt-1 h-10"
+                                className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
                                 placeholder="Số tiết lý thuyết"
                                 value={soTietLyThuyet}
-                                onChange={(e) => {
-                                    const value = Number(e.target.value);
-                                    setSoTietLyThuyet(value);
-                                    setTongSoTiet(value + soTietThucHanh + soTietThucTap);
-                                }}
+                                onChange={(e) => setSoTietLyThuyet(Number(e.target.value) || 0)}
                             />
                         </div>
                         <div>
                             <label className="text-gray-700 mb-1 block">Số tiết thực hành</label>
                             <Input
                                 type="number"
-                                className="w-full mt-1 h-10"
+                                className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
                                 placeholder="Số tiết thực hành"
                                 value={soTietThucHanh}
-                                onChange={(e) => {
-                                    const value = Number(e.target.value);
-                                    setSoTietThucHanh(value);
-                                    setTongSoTiet(soTietLyThuyet + value + soTietThucTap);
-                                }}
+                                onChange={(e) => setSoTietThucHanh(Number(e.target.value) || 0)}
                             />
                         </div>
                         <div>
                             <label className="text-gray-700 mb-1 block">Số tiết thực tập</label>
                             <Input
                                 type="number"
-                                className="w-full mt-1 h-10"
+                                className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
                                 placeholder="Số tiết thực tập"
                                 value={soTietThucTap}
-                                onChange={(e) => {
-                                    const value = Number(e.target.value);
-                                    setSoTietThucTap(value);
-                                    setTongSoTiet(soTietLyThuyet + soTietThucHanh + value);
-                                }}
+                                onChange={(e) => setSoTietThucTap(Number(e.target.value) || 0)}
                             />
                         </div>
                         <div>
                             <label className="text-gray-700 mb-1 block">Tổng số tiết</label>
                             <Input
                                 type="number"
-                                className="w-full mt-1 h-10"
+                                className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
+                                placeholder="Tổng số tiết"
                                 value={tongSoTiet}
-                                readOnly
+                                onChange={(e) => setTongSoTiet(Number(e.target.value) || 0)}
                             />
                         </div>
                     </div>

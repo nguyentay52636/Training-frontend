@@ -20,6 +20,32 @@ import {
 import { CourseType } from '@/lib/apis/types'
 import { createCourse, updateCourse } from '@/lib/apis/CourseApi'
 import { Plus, Save } from 'lucide-react'
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form"
+
+// Schema validation với zod
+const formSchema = z.object({
+    maHP: z.string().min(1, "Mã học phần không được để trống").max(10, "Mã học phần quá dài"),
+    tenHP: z.string().min(1, "Tên học phần không được để trống").max(100, "Tên học phần quá dài"),
+    soTinChi: z.number().min(0, "Số tín chỉ phải lớn hơn hoặc bằng 0"),
+    soTietLyThuyet: z.number().min(0, "Số tiết lý thuyết phải lớn hơn hoặc bằng 0"),
+    soTietThucHanh: z.number().min(0, "Số tiết thực hành phải lớn hơn hoặc bằng 0"),
+    soTietThucTap: z.number().min(0, "Số tiết thực tập phải lớn hơn hoặc bằng 0"),
+    loaiHocPhan: z.string().min(1, "Loại học phần không được để trống"),
+    heSoHocPhan: z.number().min(0, "Hệ số học phần phải lớn hơn hoặc bằng 0"),
+    tongSoTiet: z.number().min(0, "Tổng số tiết phải lớn hơn hoặc bằng 0"),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 interface DialogAddManagerCourseProps {
     open: boolean;
@@ -34,96 +60,95 @@ export default function DialogAddManagerCourse({
     editingCourse,
     onSuccess
 }: DialogAddManagerCourseProps) {
-    const initEmptyCourse: CourseType = {
-        maHP: '',
-        tenHP: '',
-        soTinChi: 0,
-        soTietLyThuyet: 0,
-        soTietThucHanh: 0,
-        soTietThucTap: 0,
-        loaiHocPhan: 'BẮT BUỘC',
-        tongSoTiet: 0,
-        heSoHocPhan: 1,
-        hocKy: 1
-    }
-
-    const [formData, setFormData] = useState<CourseType>(initEmptyCourse)
     const [loading, setLoading] = useState(false)
 
+    const form = useForm<FormValues>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            maHP: "",
+            tenHP: "",
+            soTinChi: undefined,
+            soTietLyThuyet: undefined,
+            soTietThucHanh: undefined,
+            soTietThucTap: undefined,
+            loaiHocPhan: "",
+            heSoHocPhan: undefined,
+            tongSoTiet: 0,
+        },
+    });
+
     useEffect(() => {
-        // Reset form when dialog opens/closes
-        if (open) {
-            setFormData(editingCourse || initEmptyCourse)
+        if (open && editingCourse) {
+            form.reset(editingCourse);
+        } else if (open) {
+            form.reset({
+                maHP: "",
+                tenHP: "",
+                soTinChi: undefined,
+                soTietLyThuyet: undefined,
+                soTietThucHanh: undefined,
+                soTietThucTap: undefined,
+                loaiHocPhan: "",
+                heSoHocPhan: undefined,
+                tongSoTiet: 0,
+            });
         }
-    }, [open, editingCourse])
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target
-
-        // Convert numeric fields
-        if (['soTinChi', 'soTietLyThuyet', 'soTietThucHanh', 'soTietThucTap', 'tongSoTiet', 'heSoHocPhan', 'hocKy'].includes(name)) {
-            setFormData({
-                ...formData,
-                [name]: Number(value)
-            })
-        } else {
-            setFormData({
-                ...formData,
-                [name]: value
-            })
-        }
-    }
-
-    const handleSelectChange = (name: string, value: string) => {
-        setFormData({
-            ...formData,
-            [name]: value
-        })
-    }
+    }, [open, editingCourse, form]);
 
     const calculateTotalHours = () => {
-        const lyThuyet = formData.soTietLyThuyet || 0
-        const thucHanh = formData.soTietThucHanh || 0
-        const thucTap = formData.soTietThucTap || 0
-        return lyThuyet + thucHanh + thucTap
-    }
+        const lyThuyet = form.getValues("soTietLyThuyet") || 0;
+        const thucHanh = form.getValues("soTietThucHanh") || 0;
+        const thucTap = form.getValues("soTietThucTap") || 0;
+        return lyThuyet + thucHanh + thucTap;
+    };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setLoading(true)
+    const updateTotalHours = () => {
+        const total = calculateTotalHours();
+        form.setValue("tongSoTiet", total);
+    };
 
-        try {
-            // Calculate total hours before submitting
-            const updatedFormData = {
-                ...formData,
-                tongSoTiet: calculateTotalHours()
+    // Thêm useEffect để theo dõi thay đổi của các trường số tiết
+    useEffect(() => {
+        const subscription = form.watch((value, { name }) => {
+            if (name === "soTietLyThuyet" || name === "soTietThucHanh" || name === "soTietThucTap") {
+                updateTotalHours();
             }
+        });
+        return () => subscription.unsubscribe();
+    }, [form]);
+
+    const handleSubmit = async (values: FormValues) => {
+        setLoading(true);
+        try {
+            const updatedFormData = {
+                ...values,
+                tongSoTiet: calculateTotalHours()
+            };
 
             if (editingCourse?.idHocPhan) {
-                // Update existing course
-                await updateCourse(editingCourse.idHocPhan, updatedFormData)
+                await updateCourse(editingCourse.idHocPhan, updatedFormData as CourseType);
                 toast.success('Cập nhật học phần thành công', {
                     description: 'Thông tin học phần đã được cập nhật'
-                })
+                });
             } else {
-                // Create new course
-                await createCourse(updatedFormData)
-                toast.success('Thêm học phần mới thành công', {
-                    description: 'Học phần mới đã được thêm vào hệ thống'
-                })
+                const response = await createCourse(updatedFormData as CourseType);
+                if (response) {
+                    toast.success('Thêm học phần mới thành công', {
+                        description: 'Học phần mới đã được thêm vào hệ thống'
+                    });
+                    onSuccess();
+                    onOpenChange(false);
+                }
             }
-
-            onSuccess()
-            onOpenChange(false)
-        } catch (error) {
+        } catch (error: any) {
             toast.error('Không thể lưu học phần', {
-                description: 'Đã xảy ra lỗi. Vui lòng thử lại sau'
-            })
-            console.error(error)
+                description: error.message || 'Đã xảy ra lỗi. Vui lòng thử lại sau'
+            });
+            console.error('Error saving course:', error);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -134,177 +159,273 @@ export default function DialogAddManagerCourse({
                     </DialogTitle>
                 </DialogHeader>
 
-                <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-                    <div className="grid grid-cols-2 gap-4">
-                        {/* Mã HP */}
-                        <div className="space-y-2">
-                            <Label htmlFor="maHP">Mã học phần</Label>
-                            <Input
-                                id="maHP"
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 mt-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <FormField
                                 name="maHP"
-                                placeholder="Nhập mã học phần"
-                                value={formData.maHP || ''}
-                                onChange={handleInputChange}
-                                required
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <div className="flex flex-col gap-3">
+                                                <FormLabel className="text-lg font-semibold text-gray-800">Mã học phần</FormLabel>
+                                                <Input
+                                                    className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
+                                                    {...field}
+                                                    placeholder="VD: INT1234"
+                                                />
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage className="text-red-500 text-sm" />
+                                    </FormItem>
+                                )}
                             />
-                        </div>
 
-                        {/* Số tín chỉ */}
-                        <div className="space-y-2">
-                            <Label htmlFor="soTinChi">Số tín chỉ</Label>
-                            <Input
-                                id="soTinChi"
+                            <FormField
                                 name="soTinChi"
-                                type="number"
-                                min="0"
-                                value={formData.soTinChi || 0}
-                                onChange={handleInputChange}
-                                required
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <div className="flex flex-col gap-3">
+                                                <FormLabel className="text-lg font-semibold text-gray-800">Số tín chỉ</FormLabel>
+                                                <Input
+                                                    type="number"
+                                                    min="0"
+                                                    max="20"
+                                                    className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
+                                                    {...field}
+                                                    onChange={(e) => {
+                                                        const value = e.target.value;
+                                                        if (value === '' || /^\d+$/.test(value)) {
+                                                            field.onChange(parseInt(value) || undefined);
+                                                        }
+                                                    }}
+                                                    placeholder="VD: 3"
+                                                />
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage className="text-red-500 text-sm" />
+                                    </FormItem>
+                                )}
                             />
                         </div>
-                    </div>
 
-                    {/* Tên HP */}
-                    <div className="space-y-2">
-                        <Label htmlFor="tenHP">Tên học phần</Label>
-                        <Input
-                            id="tenHP"
+                        <FormField
                             name="tenHP"
-                            placeholder="Nhập tên học phần"
-                            value={formData.tenHP || ''}
-                            onChange={handleInputChange}
-                            required
-                        />
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-4">
-                        {/* Số tiết lý thuyết */}
-                        <div className="space-y-2">
-                            <Label htmlFor="soTietLyThuyet">Số tiết lý thuyết</Label>
-                            <Input
-                                id="soTietLyThuyet"
-                                name="soTietLyThuyet"
-                                type="number"
-                                min="0"
-                                value={formData.soTietLyThuyet || 0}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-
-                        {/* Số tiết thực hành */}
-                        <div className="space-y-2">
-                            <Label htmlFor="soTietThucHanh">Số tiết thực hành</Label>
-                            <Input
-                                id="soTietThucHanh"
-                                name="soTietThucHanh"
-                                type="number"
-                                min="0"
-                                value={formData.soTietThucHanh || 0}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-
-                        {/* Số tiết thực tập */}
-                        <div className="space-y-2">
-                            <Label htmlFor="soTietThucTap">Số tiết thực tập</Label>
-                            <Input
-                                id="soTietThucTap"
-                                name="soTietThucTap"
-                                type="number"
-                                min="0"
-                                value={formData.soTietThucTap || 0}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                        {/* Loại học phần */}
-                        <div className="space-y-2">
-                            <Label htmlFor="loaiHocPhan">Loại học phần</Label>
-                            <Select
-                                value={formData.loaiHocPhan}
-                                onValueChange={(value) => handleSelectChange('loaiHocPhan', value)}
-                            >
-                                <SelectTrigger id="loaiHocPhan">
-                                    <SelectValue placeholder="Chọn loại" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="BẮT BUỘC">Bắt buộc</SelectItem>
-                                    <SelectItem value="TỰ CHỌN">Tự chọn</SelectItem>
-                                    <SelectItem value="THỰC TẬP">Thực tập</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        {/* Hệ số học phần */}
-                        <div className="space-y-2">
-                            <Label htmlFor="heSoHocPhan">Hệ số học phần</Label>
-                            <Input
-                                id="heSoHocPhan"
-                                name="heSoHocPhan"
-                                type="number"
-                                min="0"
-                                step="0.1"
-                                value={formData.heSoHocPhan || 1}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Học kỳ */}
-                    <div className="space-y-2">
-                        <Label htmlFor="hocKy">Học kỳ</Label>
-                        <Input
-                            id="hocKy"
-                            name="hocKy"
-                            type="number"
-                            min="1"
-                            max="10"
-                            value={formData.hocKy || 1}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-
-                    {/* Tổng số tiết (readonly, calculated) */}
-                    <div className="space-y-2">
-                        <Label htmlFor="tongSoTiet">Tổng số tiết</Label>
-                        <Input
-                            id="tongSoTiet"
-                            value={calculateTotalHours()}
-                            readOnly
-                            disabled
-                            className="bg-gray-100"
-                        />
-                    </div>
-
-                    <DialogFooter className="mt-6">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => onOpenChange(false)}
-                        >
-                            Hủy
-                        </Button>
-                        <Button
-                            type="submit"
-                            disabled={loading}
-                            className="bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800"
-                        >
-                            {loading ? (
-                                <div className="flex items-center">
-                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                    Đang lưu...
-                                </div>
-                            ) : (
-                                <div className="flex items-center">
-                                    {editingCourse ? <Save className="mr-2 h-4 w-4" /> : <Plus className="mr-2 h-4 w-4" />}
-                                    {editingCourse ? 'Lưu thay đổi' : 'Thêm mới'}
-                                </div>
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <div className="flex flex-col gap-3">
+                                            <FormLabel className="text-lg font-semibold text-gray-800">Tên học phần</FormLabel>
+                                            <Input
+                                                className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
+                                                {...field}
+                                                placeholder="VD: Lập trình Web"
+                                            />
+                                        </div>
+                                    </FormControl>
+                                    <FormMessage className="text-red-500 text-sm" />
+                                </FormItem>
                             )}
-                        </Button>
-                    </DialogFooter>
-                </form>
+                        />
+
+                        <div className="grid grid-cols-3 gap-4">
+                            <FormField
+                                name="soTietLyThuyet"
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <div className="flex flex-col gap-3">
+                                                <FormLabel className="text-lg font-semibold text-gray-800">Số tiết lý thuyết</FormLabel>
+                                                <Input
+                                                    type="number"
+                                                    min="0"
+                                                    max="100"
+                                                    className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
+                                                    {...field}
+                                                    onChange={(e) => {
+                                                        const value = e.target.value;
+                                                        if (value === '' || /^\d+$/.test(value)) {
+                                                            field.onChange(parseInt(value) || undefined);
+                                                            updateTotalHours();
+                                                        }
+                                                    }}
+                                                    onBlur={() => {
+                                                        updateTotalHours();
+                                                    }}
+                                                    placeholder="VD: 30"
+                                                />
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage className="text-red-500 text-sm" />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                name="soTietThucHanh"
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <div className="flex flex-col gap-3">
+                                                <FormLabel className="text-lg font-semibold text-gray-800">Số tiết thực hành</FormLabel>
+                                                <Input
+                                                    type="number"
+                                                    min="0"
+                                                    max="100"
+                                                    className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
+                                                    {...field}
+                                                    onChange={(e) => {
+                                                        const value = e.target.value;
+                                                        if (value === '' || /^\d+$/.test(value)) {
+                                                            field.onChange(parseInt(value) || undefined);
+                                                            updateTotalHours();
+                                                        }
+                                                    }}
+                                                    onBlur={() => {
+                                                        updateTotalHours();
+                                                    }}
+                                                    placeholder="VD: 15"
+                                                />
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage className="text-red-500 text-sm" />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                name="soTietThucTap"
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <div className="flex flex-col gap-3">
+                                                <FormLabel className="text-lg font-semibold text-gray-800">Số tiết thực tập</FormLabel>
+                                                <Input
+                                                    type="number"
+                                                    min="0"
+                                                    max="100"
+                                                    className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
+                                                    {...field}
+                                                    onChange={(e) => {
+                                                        const value = e.target.value;
+                                                        if (value === '' || /^\d+$/.test(value)) {
+                                                            field.onChange(parseInt(value) || undefined);
+                                                            updateTotalHours();
+                                                        }
+                                                    }}
+                                                    onBlur={() => {
+                                                        updateTotalHours();
+                                                    }}
+                                                    placeholder="VD: 0"
+                                                />
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage className="text-red-500 text-sm" />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <FormField
+                                name="loaiHocPhan"
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <div className="flex flex-col gap-3">
+                                                <FormLabel className="text-lg font-semibold text-gray-800">Loại học phần</FormLabel>
+                                                <Select
+                                                    value={field.value}
+                                                    onValueChange={field.onChange}
+                                                >
+                                                    <SelectTrigger className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full">
+                                                        <SelectValue placeholder="Chọn loại" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="BẮT BUỘC">Bắt buộc</SelectItem>
+                                                        <SelectItem value="TỰ CHỌN">Tự chọn</SelectItem>
+                                                        <SelectItem value="THỰC TẬP">Thực tập</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage className="text-red-500 text-sm" />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                name="heSoHocPhan"
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <div className="flex flex-col gap-3">
+                                                <FormLabel className="text-lg font-semibold text-gray-800">Hệ số học phần</FormLabel>
+                                                <Input
+                                                    type="number"
+                                                    step="0.1"
+                                                    className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
+                                                    {...field}
+                                                    onChange={(e) => field.onChange(parseFloat(e.target.value) || undefined)}
+                                                    placeholder="VD: 1.0"
+                                                />
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage className="text-red-500 text-sm" />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="tongSoTiet" className="text-lg font-semibold text-gray-800">Tổng số tiết</Label>
+                            <Input
+                                id="tongSoTiet"
+                                value={calculateTotalHours()}
+                                readOnly
+                                disabled
+                                className="rounded-full border-gray-300 bg-gray-100 py-3 px-6 text-base transition-all duration-200 w-full"
+                            />
+                        </div>
+
+                        <DialogFooter className="mt-6">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => onOpenChange(false)}
+                                className="rounded-full border-gray-400 text-gray-700 hover:bg-gray-200 hover:text-gray-900 px-8 py-3 text-lg font-semibold shadow-md transition-all duration-200"
+                            >
+                                Hủy
+                            </Button>
+                            <Button
+                                type="submit"
+                                disabled={loading}
+                                className="rounded-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 px-8 py-3 text-lg text-white font-semibold shadow-md transition-all duration-200"
+                            >
+                                {loading ? (
+                                    <div className="flex items-center">
+                                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                        Đang lưu...
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center">
+                                        {editingCourse ? <Save className="mr-2 h-4 w-4" /> : <Plus className="mr-2 h-4 w-4" />}
+                                        {editingCourse ? 'Lưu thay đổi' : 'Thêm mới'}
+                                    </div>
+                                )}
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </Form>
             </DialogContent>
         </Dialog>
     )
