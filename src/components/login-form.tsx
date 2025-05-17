@@ -1,9 +1,9 @@
-
 import { useForm } from 'react-hook-form';
 import { useAppDispatch } from '@/redux/hooks/hooks';
 import { login } from '@/redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export function LoginForm({ ...props }: React.ComponentProps<'div'>) {
   const { register, handleSubmit } = useForm<{ userName: string; password: string }>({
@@ -18,11 +18,26 @@ export function LoginForm({ ...props }: React.ComponentProps<'div'>) {
   const handleLogin = async (value: { userName: string; password: string }) => {
     try {
       await dispatch(login(value)).unwrap();
-      toast.success('Đăng nhập thành công!');
+      toast.success('Đăng nhập thành công!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
       navigate('/trangchu', {
         replace: true,
       });
     } catch (error) {
+      toast.error('Đăng nhập thất bại! Vui lòng kiểm tra lại thông tin.', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
       console.log(error);
     }
   };
