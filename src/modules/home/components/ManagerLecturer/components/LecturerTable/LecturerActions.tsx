@@ -15,8 +15,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+} from '@/components/ui/alert-dialog';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 export default function LecturerActions({ user }: { user: LectureType }) {
   const { mutate } = useRemoveTeacherMutation();
@@ -29,7 +29,7 @@ export default function LecturerActions({ user }: { user: LectureType }) {
       mutate(user.idGiangVien, {
         onSuccess: () => {
           toast.success('Xóa giảng viên thành công!', {
-            position: "top-right",
+            position: 'top-right',
             autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,
@@ -39,31 +39,31 @@ export default function LecturerActions({ user }: { user: LectureType }) {
         },
         onError: () => {
           toast.error('Có lỗi xảy ra khi xóa giảng viên!', {
-            position: "top-right",
+            position: 'top-right',
             autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
           });
-        }
+        },
       });
     }
   };
 
   return (
     <>
-      <div className="flex items-center gap-2">
+      <div className='flex items-center gap-2'>
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                variant="ghost"
-                size="icon"
+                variant='ghost'
+                size='icon'
                 onClick={() => setOpen(true)}
-                className="hover:bg-blue-50 hover:text-blue-600"
+                className='hover:bg-blue-50 hover:text-blue-600'
               >
-                <Pencil className="h-4 w-4" />
+                <Pencil className='h-4 w-4' />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -78,11 +78,11 @@ export default function LecturerActions({ user }: { user: LectureType }) {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    variant="ghost"
-                    size="icon"
-                    className="hover:bg-red-50 hover:text-red-600"
+                    variant='ghost'
+                    size='icon'
+                    className='hover:bg-red-50 hover:text-red-600'
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className='h-4 w-4' />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -95,15 +95,13 @@ export default function LecturerActions({ user }: { user: LectureType }) {
             <AlertDialogHeader>
               <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
               <AlertDialogDescription>
-                Bạn có chắc chắn muốn xóa giảng viên {user.tenGiangVien}? Hành động này không thể hoàn tác.
+                Bạn có chắc chắn muốn xóa giảng viên {user.tenGiangVien}? Hành động này không thể
+                hoàn tác.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Hủy</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={handleDeleteUser}
-                className="bg-red-600 hover:bg-red-700"
-              >
+              <AlertDialogAction onClick={handleDeleteUser} className='bg-red-600 hover:bg-red-700'>
                 Xóa
               </AlertDialogAction>
             </AlertDialogFooter>
