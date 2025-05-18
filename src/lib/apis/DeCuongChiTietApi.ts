@@ -1,11 +1,10 @@
 import baseApi from "./baseApi";
-import { CourseType } from "./types";
 
 export interface DeCuongChiTiet { 
     id?: number;
     mucTieu : string;
     idHocPhan? : number
-    hocPhan? : CourseType[] ; 
+    hocPhan? : number ; 
 } 
 export const getAllDeCuongChiTietAPI = async () => { 
     try { 
@@ -15,9 +14,13 @@ export const getAllDeCuongChiTietAPI = async () => {
         throw new Error(error as string);
     }
 } 
-export const addDeCuongChiTietAPI = async ( { mucTieu }: DeCuongChiTiet) => { 
+export const addDeCuongChiTietAPI = async ( { mucTieu ,idHocPhan}: DeCuongChiTiet) => { 
     try { 
-        const {data} = await baseApi.post<DeCuongChiTiet>('/decuongchitiet', { mucTieu });
+        const newDeCuong  : DeCuongChiTiet = {
+            mucTieu,
+            idHocPhan
+        }
+        const {data} = await baseApi.post<DeCuongChiTiet>('/decuongchitiet', newDeCuong);
         return data;
     } catch (error) {
         throw new Error(error as string);
