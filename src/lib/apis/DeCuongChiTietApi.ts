@@ -15,9 +15,9 @@ export const getAllDeCuongChiTietAPI = async () => {
         throw new Error(error as string);
     }
 } 
-export const addDeCuongChiTietAPI = async (deCuongChiTiet: DeCuongChiTiet) => { 
+export const addDeCuongChiTietAPI = async ( { mucTieu }: DeCuongChiTiet) => { 
     try { 
-        const {data} = await baseApi.post<DeCuongChiTiet>('/decuongchitiet', deCuongChiTiet);
+        const {data} = await baseApi.post<DeCuongChiTiet>('/decuongchitiet', { mucTieu });
         return data;
     } catch (error) {
         throw new Error(error as string);

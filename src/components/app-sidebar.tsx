@@ -118,8 +118,8 @@ const data = {
       icon: BookOpen,
       items: [
         {
-          title: "Hướng dẫn sử dụng",
-          url: "/trangchu/tai-lieu/huong-dan",
+          title: "Đề cương chi tiết",
+          url: "/trangchu/tai-lieu/de-cuong-chi-tiet",
         },
         {
           title: "Tài liệu tham khảo",

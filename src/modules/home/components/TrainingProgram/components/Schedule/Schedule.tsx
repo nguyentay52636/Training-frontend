@@ -12,6 +12,9 @@ import { cn } from '@/lib/utils';
 import { ArrowDownToLine, ArrowUpToLine } from 'lucide-react';
 import DiaLogAddSchedule from './DialogAddSchedule';
 import { useGetAllHocKy, useGetAllKeHoachDayHOcQuery } from './querys';
+import ExportKeHoachDayHoc from './Excel/ExportKeHoachDayHoc';
+import ImportKeHoachDayHoc from './Excel/ImportKeHoachDayHoc';
+import { toast } from 'react-toastify';
 
 const major = {
   idHocPhan: 1,
@@ -66,14 +69,17 @@ export default function Schedule() {
                     <Button className='bg-indigo-700  rounded-xl'>Xóa học phần</Button>
                   </div> */}
                   <div className='flex gap-x-2'>
-                    <Button className='bg-green-700 rounded-xl cursor-pointer '>
-                      {' '}
-                      <ArrowDownToLine /> Xuất Excel
-                    </Button>
-                    <Button className='rounded-xl bg-green-700  cursor-pointer'>
-                      <ArrowUpToLine />
-                      Nhập Excel
-                    </Button>
+                    <ExportKeHoachDayHoc
+                      data={[major]}
+                      tenChuyenNganh={tenChuyenNganh}
+                    />
+                    <ImportKeHoachDayHoc
+                      onImport={(data) => {
+                        console.log('Imported data:', data);
+                        // Handle the imported data here
+                        toast.success('Dữ liệu đã được nhập thành công!');
+                      }}
+                    />
                   </div>
                 </div>
                 <Tabs defaultValue='hocky-1'>
@@ -97,7 +103,7 @@ export default function Schedule() {
                     ))}
                   </TabsList>
                   {danhsachHocKy.map((num) => (
-                    <TabsContent key={num} value={`hocky-${num}`}>
+                    <TabsContent key={`hocky-${num}`} value={`hocky-${num}`}>
                       <MajorTable major={major} />
                     </TabsContent>
                   ))}

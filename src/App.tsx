@@ -20,6 +20,7 @@ import ManagerCourseDetail from './modules/home/components/ManagerKnowAndBlock/c
 import ManagerBlockKnowledge from './modules/home/components/ManagerKnowAndBlock/components/ManagerBlockKnowledge/ManagerBlockKnowledge';
 import ManagerKnowledge from './modules/home/components/ManagerKnowAndBlock/components/ManagerKnowledge/ManagerKnowledge';
 import DashBoardManager from './modules/home/components/Dashboard/DashBoardManager';
+import MucTieuDaoTao from './modules/home/components/MucTieuDaoTao/MucTieuDaoTao';
 
 function App() {
   const router = createBrowserRouter([
@@ -49,6 +50,12 @@ function App() {
               path: 'ke-hoach-mo-nhom',
               element: <ManagerPlanGroup />,
             },
+          ],
+        },
+        {
+          path: 'tai-lieu',
+          children: [
+            { path: 'de-cuong-chi-tiet', element: <MucTieuDaoTao /> },
           ],
         },
         {
