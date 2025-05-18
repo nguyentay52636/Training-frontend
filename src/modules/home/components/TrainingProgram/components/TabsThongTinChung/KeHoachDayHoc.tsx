@@ -1,7 +1,11 @@
-import React from 'react'
+import React from 'react';
+import { TabsContent } from '@/components/ui/tabs';
+import Schedule from '../Schedule/Schedule';
 
 export default function KeHoachDayHoc() {
     return (
-        <div>KeHoachDayHoc</div>
+        <TabsContent value='schedule'>
+            <Schedule />
+        </TabsContent>
     )
 }

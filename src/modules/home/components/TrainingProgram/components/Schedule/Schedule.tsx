@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/accordion';
 import MajorTable from './MajorTable';
 import { cn } from '@/lib/utils';
-import { ArrowDownToLine, ArrowUpToLine } from 'lucide-react';
+
 import DiaLogAddSchedule from './DialogAddSchedule';
 import { useGetAllHocKy, useGetAllKeHoachDayHOcQuery } from './querys';
 import ExportKeHoachDayHoc from './Excel/ExportKeHoachDayHoc';
@@ -86,7 +86,7 @@ export default function Schedule() {
                   <TabsList className='mb-4'>
                     {dataHocKy.map(({ idHocPhan, idHocKy }) => (
                       <TabsTrigger
-                        key={idHocPhan}
+                     
                         value={`hocky-${idHocKy}`}
                         className={cn(
                           'pb-2 relative text-xl mx-6',
