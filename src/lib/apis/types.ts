@@ -151,3 +151,13 @@ export interface LectureType {
   nuoc: string;
   namTotNghiep: string;
 }
+
+interface RoleOption {
+  value: number;
+  label: string;
+}
+
+const roles: RoleOption[] = [
+  { value: 1, label: 'Giảng viên' },
+  { value: 2, label: 'Quản trị viên' },
+];

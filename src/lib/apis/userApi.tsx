@@ -42,7 +42,6 @@ export const addUserAPI = async ({ userName, userEmail, password, role }: UserTy
       userEmail,
       password,
       role,
-  
     }
     const { data } = await baseApi.post('/nguoidung/dangky', newUser);
     return data;
@@ -63,6 +62,35 @@ export const loginAPI = async (userData: { userName: string; password: string })
 };
 
 export const registerAPI = async (userData: {
+  userName: string;
+  userEmail: string;
+  password: string;
+  role: Role;
+}) => {
+  try {
+    const { data } = await baseApi.post('/nguoidung/dangky', userData);
+    return data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const updateUserAPI = async (userId: number, userData: {
+  userName: string;
+  userEmail: string;
+  role: Role;
+}) => {
+  try {
+    const { data } = await baseApi.put<UserType>(`/nguoidung/${userId}`, userData);
+    return data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const addAccount = async (userData: {
   userName: string;
   userEmail: string;
   password: string;
