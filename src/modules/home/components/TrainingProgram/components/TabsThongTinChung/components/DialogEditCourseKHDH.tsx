@@ -106,7 +106,7 @@ export default function DialogEditCourseKHDH({
         // Create new course
         const createdCourse = await createCourse(courseData);
         if (createdCourse && createdCourse.idHocPhan && knowledgeId) {
-          await addCourseToKnowledge(knowledgeId, createdCourse.idHocPhan);
+          await addCourseToKnowledge(Number(knowledgeId), createdCourse.idHocPhan);
           toast.success("Thêm học phần thành công");
         } else {
           throw new Error("Không nhận được thông tin học phần từ hệ thống");

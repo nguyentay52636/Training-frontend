@@ -1,38 +1,51 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Camera } from "lucide-react";
-
-interface Lecturer {
-    maGiangVien: string;
-    hoTenGV: string;
-    chucDanh: string;
-    namPhong: string;
-    trinhDo: string;
-    nuoc: string;
-    namTotNghiep: string;
-}
-
-const lecturerData: Lecturer = {
-    maGiangVien: "TienHoang004",
-    hoTenGV: "Đặng Tiến Hoàn",
-    chucDanh: "Virus",
-    namPhong: "2025",
-    trinhDo: "Đạo diễn",
-    nuoc: "Việt nam",
-    namTotNghiep: "2024",
-};
+import { LectureType } from "@/lib/apis/types";
+import { useAppSelector, useAppDispatch } from "@/redux/hooks/hooks";
+import { RootState } from "@/redux/store";
+import { getLectureByIdAPI, updateLectureAPI } from "@/lib/apis/lectureApi";
+import { toast } from "react-toastify";
+import { updateUser } from "@/redux/slices/authSlice";
 
 export const LecturerEditProfile: React.FC = () => {
-    // State for lecturer data
-    const [lecturer, setLecturer] = useState<Lecturer>(lecturerData);
+    const dispatch = useAppDispatch();
+    const auth = useAppSelector((state: RootState) => state.auth);
 
-    // State for avatar (using maGiangVien as a seed for the placeholder image)
-    const [avatar, setAvatar] = useState<string>(
-        `https://i.pravatar.cc/150?u=${lecturerData.maGiangVien}`
-    );
+    // State for lecturer data
+    const [lecturer, setLecturer] = useState<LectureType>({
+        maGiangVien: auth.user?.userName || "",
+        tenGiangVien: auth.user?.userName || "",
+        chucDanh: "",
+        namPhong: "",
+        trinhDo: "",
+        nuoc: "",
+        namTotNghiep: ""
+    });
+
+    // State for avatar
+    const [avatar, setAvatar] = useState<string>("https://github.com/shadcn.png");
+
+    useEffect(() => {
+        const fetchLecturerData = async () => {
+            try {
+                if (auth.user?.id) {
+                    const data = await getLectureByIdAPI(auth.user.id);
+                    setLecturer(data);
+                    // Nếu có avatar từ API thì sử dụng, nếu không thì giữ nguyên avatar mặc định
+                    if (data.avatar) {
+                        setAvatar(data.avatar);
+                    }
+                }
+            } catch (error) {
+                toast.error("Không thể tải thông tin giảng viên");
+            }
+        };
+        fetchLecturerData();
+    }, [auth.user?.id]);
 
     // Handle input changes
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,17 +53,36 @@ export const LecturerEditProfile: React.FC = () => {
         setLecturer((prev) => ({ ...prev, [name]: value }));
     };
 
-    // Handle avatar upload (placeholder functionality)
+    // Handle avatar upload
     const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
             const imageUrl = URL.createObjectURL(file);
             setAvatar(imageUrl);
+            // TODO: Implement avatar upload to server
+            toast.info("Tính năng upload avatar đang được phát triển");
         }
     };
 
-    // Split hoTenGV into first and last names for display (simplified approach)
-    const nameParts = lecturer.hoTenGV.split(" ");
+    // Handle save profile
+    const handleSaveProfile = async () => {
+        try {
+            if (auth.user?.id) {
+                const updatedData = await updateLectureAPI(auth.user.id, lecturer);
+                // Update Redux state with new data
+                dispatch(updateUser({
+                    ...auth.user,
+                    userName: lecturer.tenGiangVien
+                }));
+                toast.success("Cập nhật thông tin thành công");
+            }
+        } catch (error) {
+            toast.error("Không thể cập nhật thông tin");
+        }
+    };
+
+    // Split tenGiangVien into first and last names for display
+    const nameParts = lecturer.tenGiangVien.split(" ");
     const firstName = nameParts[0];
     const lastName = nameParts.slice(1).join(" ") || "";
 
@@ -58,16 +90,16 @@ export const LecturerEditProfile: React.FC = () => {
         <div className="container mx-auto py-8 max-w-md">
             {/* Header */}
             <div className="flex items-center gap-2 mb-6">
-                <h1 className="text-lg font-semibold text-gray-500">My profile</h1>
+                <h1 className="text-lg font-semibold text-gray-500">Hồ sơ của tôi</h1>
                 <span className="text-gray-400"></span>
-                <h1 className="text-lg font-semibold text-gray-700">Edit Profile</h1>
+                <h1 className="text-lg font-semibold text-gray-700">Chỉnh sửa hồ sơ</h1>
             </div>
 
             {/* Avatar Section */}
             <div className="relative flex justify-center mb-6">
                 <Avatar className="h-24 w-24">
-                    <AvatarImage src={avatar} alt={lecturer.hoTenGV} />
-                    <AvatarFallback>
+                    <AvatarImage src={avatar} alt={lecturer.tenGiangVien} />
+                    <AvatarFallback className="bg-gray-100 text-gray-600">
                         {firstName[0]}
                         {lastName[0] || firstName[1]}
                     </AvatarFallback>
@@ -93,7 +125,7 @@ export const LecturerEditProfile: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4">
                     <div>
                         <Label htmlFor="firstName" className="text-sm font-medium text-gray-600">
-                            First Name
+                            Tên
                         </Label>
                         <Input
                             id="firstName"
@@ -102,7 +134,7 @@ export const LecturerEditProfile: React.FC = () => {
                             onChange={(e) =>
                                 setLecturer((prev) => ({
                                     ...prev,
-                                    hoTenGV: `${e.target.value} ${lastName}`,
+                                    tenGiangVien: `${e.target.value} ${lastName}`,
                                 }))
                             }
                             className="mt-1 h-10"
@@ -110,7 +142,7 @@ export const LecturerEditProfile: React.FC = () => {
                     </div>
                     <div>
                         <Label htmlFor="lastName" className="text-sm font-medium text-gray-600">
-                            Last Name
+                            Họ
                         </Label>
                         <Input
                             id="lastName"
@@ -119,7 +151,7 @@ export const LecturerEditProfile: React.FC = () => {
                             onChange={(e) =>
                                 setLecturer((prev) => ({
                                     ...prev,
-                                    hoTenGV: `${firstName} ${e.target.value}`,
+                                    tenGiangVien: `${firstName} ${e.target.value}`,
                                 }))
                             }
                             className="mt-1 h-10"
@@ -127,10 +159,10 @@ export const LecturerEditProfile: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Password (unchanged from previous UI) */}
+                {/* Password */}
                 <div>
                     <Label htmlFor="password" className="text-sm font-medium text-gray-600">
-                        Password
+                        Mật khẩu
                     </Label>
                     <div className="flex items-center gap-2">
                         <Input
@@ -144,7 +176,7 @@ export const LecturerEditProfile: React.FC = () => {
                             variant="link"
                             className="text-green-500 hover:text-green-600 text-sm font-medium"
                         >
-                            CHANGE PASSWORD
+                            ĐỔI MẬT KHẨU
                         </Button>
                     </div>
                 </div>
@@ -152,7 +184,7 @@ export const LecturerEditProfile: React.FC = () => {
                 {/* Mã Giảng Viên */}
                 <div>
                     <Label htmlFor="maGiangVien" className="text-sm font-medium text-gray-600">
-                        Lecturer ID
+                        Mã giảng viên
                     </Label>
                     <Input
                         id="maGiangVien"
@@ -166,7 +198,7 @@ export const LecturerEditProfile: React.FC = () => {
                 {/* Chức Danh */}
                 <div>
                     <Label htmlFor="chucDanh" className="text-sm font-medium text-gray-600">
-                        Title
+                        Chức danh
                     </Label>
                     <Input
                         id="chucDanh"
@@ -180,7 +212,7 @@ export const LecturerEditProfile: React.FC = () => {
                 {/* Trình Độ */}
                 <div>
                     <Label htmlFor="trinhDo" className="text-sm font-medium text-gray-600">
-                        Degree
+                        Trình độ
                     </Label>
                     <Input
                         id="trinhDo"
@@ -194,7 +226,7 @@ export const LecturerEditProfile: React.FC = () => {
                 {/* Năm Phong */}
                 <div>
                     <Label htmlFor="namPhong" className="text-sm font-medium text-gray-600">
-                        Year of Appointment
+                        Năm phong
                     </Label>
                     <Input
                         id="namPhong"
@@ -208,7 +240,7 @@ export const LecturerEditProfile: React.FC = () => {
                 {/* Nước */}
                 <div>
                     <Label htmlFor="nuoc" className="text-sm font-medium text-gray-600">
-                        Nation
+                        Quốc gia
                     </Label>
                     <Input
                         id="nuoc"
@@ -222,7 +254,7 @@ export const LecturerEditProfile: React.FC = () => {
                 {/* Năm Tốt Nghiệp */}
                 <div>
                     <Label htmlFor="namTotNghiep" className="text-sm font-medium text-gray-600">
-                        Graduation Year
+                        Năm tốt nghiệp
                     </Label>
                     <Input
                         id="namTotNghiep"
@@ -236,8 +268,11 @@ export const LecturerEditProfile: React.FC = () => {
 
             {/* Save Button */}
             <div className="flex justify-end mt-6">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2">
-                    Save
+                <Button
+                    onClick={handleSaveProfile}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2"
+                >
+                    Lưu
                 </Button>
             </div>
         </div>
