@@ -1,5 +1,6 @@
+import { data } from 'react-router-dom';
 import baseApi from './baseApi';
-import { CourseType } from './types';
+import { CourseType, IThongTinChungDataType } from './types';
 
 // Read operations
 export const getAllCourse = async () => {
@@ -97,5 +98,63 @@ export const addKeHoachDayHocAPI = async () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     throw new Error(error);
+  }
+};
+
+export const getThongTinChung = async () => {
+  try {
+    const { data } = await baseApi.get('/thongtinchung');
+    return data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(error.message || 'Lỗi khi lấy thông tin chung.');
+  }
+};
+
+export const addThongTinChung = async ({
+  dataThongTinChung, // Đã sửa lại chính tả
+}: {
+  dataThongTinChung: IThongTinChungDataType;
+}) => {
+  try {
+    const { data } = await baseApi.post<IThongTinChungDataType>(
+      `/thongtinchung`, // Sửa đường dẫn API cho đúng format
+      dataThongTinChung,
+    );
+    return data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(error.message || 'Lỗi khi thêm thông tin chung.');
+  }
+};
+
+export const editThongTinChung = async ({
+  idThongTin,
+  newData,
+}: {
+  idThongTin: string;
+  newData: IThongTinChungDataType;
+}) => {
+  try {
+    const { data } = await baseApi.put<IThongTinChungDataType>(
+      `/thongtinchung/${idThongTin}`, // Sửa đường dẫn API cho đúng format
+      newData,
+    );
+    return data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(error.message || 'Lỗi khi cập nhật thông tin chung.');
+  }
+};
+
+export const deleteThongTinChung = async ({ idThongTin }: { idThongTin: string }) => {
+  try {
+    const { data } = await baseApi.delete<IThongTinChungDataType>(
+      `/thongtinchung/${idThongTin}`, // Sửa đường dẫn API cho đúng format
+    );
+    return data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(error.message || 'Lỗi khi xoá thông tin chung.');
   }
 };
