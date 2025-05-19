@@ -45,7 +45,7 @@ export default function DialogAddAccount() {
       userName: '',
       userEmail: '',
       password: '',
-      role: Role.User,
+      role: Role.GiangVien,
     },
   });
 
@@ -144,7 +144,7 @@ export default function DialogAddAccount() {
                     </FormControl>
                     <SelectContent>
                       <SelectItem value={Role.Admin.toString()}>Quản trị viên</SelectItem>
-                      <SelectItem value={Role.User.toString()}>Người dùng</SelectItem>
+
                       <SelectItem value={Role.GiangVien.toString()}>Giảng viên</SelectItem>
                     </SelectContent>
                   </Select>

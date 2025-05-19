@@ -21,7 +21,7 @@ export default function EditUserDialog({ user }: { user: UserType }) {
 
   const form = useForm({
     defaultValues: {
-      maTaiKhoan: user.id || '',
+
       hoTen: user.userName || '',
       email: user.userEmail || '',
       sdt: user.role || '',
@@ -44,17 +44,7 @@ export default function EditUserDialog({ user }: { user: UserType }) {
         </DialogHeader>
         <form onSubmit={form.handleSubmit(handleEditUser)}>
           <div className='grid gap-5 py-4'>
-            <div className='grid grid-cols-4 items-center gap-4'>
-              <Label htmlFor='maTaiKhoan' className='text-right font-medium text-gray-700'>
-                Mã Tài Khoản
-              </Label>
-              <Input
-                id='maTaiKhoan'
-                {...form.register('maTaiKhoan')}
-                className='col-span-3 rounded-lg border-gray-200 focus:ring-blue-400'
-                placeholder='VD: TK004'
-              />
-            </div>
+
             <div className='grid grid-cols-4 items-center gap-4'>
               <Label htmlFor='hoTen' className='text-right font-medium text-gray-700'>
                 Họ Tên

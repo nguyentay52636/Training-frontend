@@ -1,6 +1,5 @@
 import { Plus, Edit } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { trainingPrograms } from '../components/DataThongTinChung';
 import { useGetAllStudySectionQuery } from '../components/querys';
 import PaginationTraningProgram from '../components/ProgramContent/components/CourseDetails/components/PaginationTraningProgram';
 import { useState, useMemo } from 'react';
@@ -16,6 +15,7 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import FilterAndSearch from '../components/FilterAndSearch';
 import { PropramData, ThongTinChung } from '@/lib/apis/types';
+import DialogViewProgram from '../components/ProgramContent/components/CourseDetails/components/DialogViewProgram';
 
 export default function TrainingProgramManager() {
   const navigate = useNavigate();
@@ -173,14 +173,7 @@ export default function TrainingProgramManager() {
                           )}
                           {visibleColumns.includes('actions') && (
                             <TableCell>
-                              <Button
-                                variant='outline'
-                                size='sm'
-                                className='gap-2 border-blue-300 text-blue-600 hover:bg-blue-50 hover:text-blue-700'
-                              >
-                                <Edit className='w-4 h-4' />
-                                Xem chi tiết
-                              </Button>
+                              <DialogViewProgram data={program} />
                             </TableCell>
                           )}
                         </TableRow>
