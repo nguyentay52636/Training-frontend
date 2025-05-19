@@ -21,6 +21,7 @@ import ManagerBlockKnowledge from './modules/home/components/ManagerKnowAndBlock
 import ManagerKnowledge from './modules/home/components/ManagerKnowAndBlock/components/ManagerKnowledge/ManagerKnowledge';
 import DashBoardManager from './modules/home/components/Dashboard/DashBoardManager';
 import MucTieuDaoTao from './modules/home/components/MucTieuDaoTao/MucTieuDaoTao';
+import AuthGuard from './guard/AuthGuard';
 
 function App() {
   const router = createBrowserRouter([
@@ -34,7 +35,11 @@ function App() {
     },
     {
       path: '/trangchu',
-      element: <AdminPages />,
+      element: (
+        <AuthGuard>
+          <AdminPages />
+        </AuthGuard>
+      ),
       children: [
         {
           index: true,
@@ -54,9 +59,7 @@ function App() {
         },
         {
           path: 'tai-lieu',
-          children: [
-            { path: 'de-cuong-chi-tiet', element: <MucTieuDaoTao /> },
-          ],
+          children: [{ path: 'de-cuong-chi-tiet', element: <MucTieuDaoTao /> }],
         },
         {
           path: 'quan-ly-khoi',
@@ -104,6 +107,7 @@ function App() {
   return (
     <>
       <RouterProvider router={router} />
+
       <ToastContainer
         position='top-right'
         autoClose={3000}

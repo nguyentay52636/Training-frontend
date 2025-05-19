@@ -1,6 +1,6 @@
 import { addLectureAPI, deleteLectureAPI } from '@/lib/apis/lectureApi';
 import { UserType } from '@/lib/apis/types';
-import { QueryFilters, useMutation, useQueryClient } from '@tanstack/react-query';
+import {  useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useRemoveTeacherMutation = () => {
   const queryClient = useQueryClient();
