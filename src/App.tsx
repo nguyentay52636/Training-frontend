@@ -23,6 +23,7 @@ import DashBoardManager from './modules/home/components/Dashboard/DashBoardManag
 import MucTieuDaoTao from './modules/home/components/MucTieuDaoTao/MucTieuDaoTao';
 import AuthGuard from './guard/AuthGuard';
 import ManagerMajor from './modules/home/components/ManagerMajor/ManagerMajor';
+import ManagerThongTinChung from './modules/home/components/ManagerThongTinChung/ManagerThongTinChung';
 
 function App() {
   const router = createBrowserRouter([
@@ -60,7 +61,9 @@ function App() {
         },
         {
           path: 'tai-lieu',
-          children: [{ path: 'de-cuong-chi-tiet', element: <MucTieuDaoTao /> }],
+          children: [{ path: 'de-cuong-chi-tiet', element: <MucTieuDaoTao /> },
+          { path: 'thong-tin-chung', element: <ManagerThongTinChung /> },
+          ],
         },
         {
           path: 'quan-ly-khoi',
