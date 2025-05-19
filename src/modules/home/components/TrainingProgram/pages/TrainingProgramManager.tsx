@@ -23,8 +23,17 @@ export default function TrainingProgramManager() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [visibleColumns, setVisibleColumns] = useState<string[]>([
-    'id', 'tenChuongTrinh', 'bac', 'loaiBang', 'loaiHinhDaoTao',
-    'thoiGian', 'soTinChi', 'khoaQuanLy', 'ngonNgu', 'khoaTuyen', 'actions'
+    'id',
+    'tenChuongTrinh',
+    'bac',
+    'loaiBang',
+    'loaiHinhDaoTao',
+    'thoiGian',
+    'soTinChi',
+    'khoaQuanLy',
+    'ngonNgu',
+    'khoaTuyen',
+    'actions',
   ]);
 
   const { data: queryData } = useGetAllStudySectionQuery();
@@ -38,10 +47,10 @@ export default function TrainingProgramManager() {
     return queryData.filter((thongtin: PropramData) =>
       thongtin.thongTinChung.some((program: ThongTinChung) => {
         // Tìm kiếm trong tất cả các trường
-        return Object.values(program).some(value =>
-          value?.toString().toLowerCase().includes(searchKeyword.toLowerCase())
+        return Object.values(program).some((value) =>
+          value?.toString().toLowerCase().includes(searchKeyword.toLowerCase()),
         );
-      })
+      }),
     );
   }, [queryData, searchKeyword]);
 
@@ -97,17 +106,39 @@ export default function TrainingProgramManager() {
                 <Table>
                   <TableHeader>
                     <TableRow className='bg-blue-600 hover:bg-blue-600'>
-                      {visibleColumns.includes('id') && <TableHead className='text-white'>ID</TableHead>}
-                      {visibleColumns.includes('tenChuongTrinh') && <TableHead className='text-white'>Tên chương trình</TableHead>}
-                      {visibleColumns.includes('bac') && <TableHead className='text-white'>Bậc</TableHead>}
-                      {visibleColumns.includes('loaiBang') && <TableHead className='text-white'>Loại bằng</TableHead>}
-                      {visibleColumns.includes('loaiHinhDaoTao') && <TableHead className='text-white'>Loại hình đào tạo</TableHead>}
-                      {visibleColumns.includes('thoiGian') && <TableHead className='text-white'>Thời gian</TableHead>}
-                      {visibleColumns.includes('soTinChi') && <TableHead className='text-white'>Số tín chỉ</TableHead>}
-                      {visibleColumns.includes('khoaQuanLy') && <TableHead className='text-white'>Khoa quản lý</TableHead>}
-                      {visibleColumns.includes('ngonNgu') && <TableHead className='text-white'>Ngôn ngữ</TableHead>}
-                      {visibleColumns.includes('khoaTuyen') && <TableHead className='text-white'>Khóa tuyển</TableHead>}
-                      {visibleColumns.includes('actions') && <TableHead className='text-white'>Hành động</TableHead>}
+                      {visibleColumns.includes('id') && (
+                        <TableHead className='text-white'>ID</TableHead>
+                      )}
+                      {visibleColumns.includes('tenChuongTrinh') && (
+                        <TableHead className='text-white'>Tên chương trình</TableHead>
+                      )}
+                      {visibleColumns.includes('bac') && (
+                        <TableHead className='text-white'>Bậc</TableHead>
+                      )}
+                      {visibleColumns.includes('loaiBang') && (
+                        <TableHead className='text-white'>Loại bằng</TableHead>
+                      )}
+                      {visibleColumns.includes('loaiHinhDaoTao') && (
+                        <TableHead className='text-white'>Loại hình đào tạo</TableHead>
+                      )}
+                      {visibleColumns.includes('thoiGian') && (
+                        <TableHead className='text-white'>Thời gian</TableHead>
+                      )}
+                      {visibleColumns.includes('soTinChi') && (
+                        <TableHead className='text-white'>Số tín chỉ</TableHead>
+                      )}
+                      {visibleColumns.includes('khoaQuanLy') && (
+                        <TableHead className='text-white'>Khoa quản lý</TableHead>
+                      )}
+                      {visibleColumns.includes('ngonNgu') && (
+                        <TableHead className='text-white'>Ngôn ngữ</TableHead>
+                      )}
+                      {visibleColumns.includes('khoaTuyen') && (
+                        <TableHead className='text-white'>Khóa tuyển</TableHead>
+                      )}
+                      {visibleColumns.includes('actions') && (
+                        <TableHead className='text-white'>Hành động</TableHead>
+                      )}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -115,15 +146,31 @@ export default function TrainingProgramManager() {
                       thongtin.thongTinChung.map((program: ThongTinChung) => (
                         <TableRow key={program.id} className='hover:bg-gray-50'>
                           {visibleColumns.includes('id') && <TableCell>{program.id}</TableCell>}
-                          {visibleColumns.includes('tenChuongTrinh') && <TableCell>{program.tenChuongTrinh}</TableCell>}
+                          {visibleColumns.includes('tenChuongTrinh') && (
+                            <TableCell>{program.tenChuongTrinh}</TableCell>
+                          )}
                           {visibleColumns.includes('bac') && <TableCell>{program.bac}</TableCell>}
-                          {visibleColumns.includes('loaiBang') && <TableCell>{program.loaiBang}</TableCell>}
-                          {visibleColumns.includes('loaiHinhDaoTao') && <TableCell>{program.loaiHinhDaoTao}</TableCell>}
-                          {visibleColumns.includes('thoiGian') && <TableCell>{program.thoiGian}</TableCell>}
-                          {visibleColumns.includes('soTinChi') && <TableCell>{program.soTinChi}</TableCell>}
-                          {visibleColumns.includes('khoaQuanLy') && <TableCell>{program.khoaQuanLy}</TableCell>}
-                          {visibleColumns.includes('ngonNgu') && <TableCell>{program.ngonNgu}</TableCell>}
-                          {visibleColumns.includes('khoaTuyen') && <TableCell>{program.khoaTuyen}</TableCell>}
+                          {visibleColumns.includes('loaiBang') && (
+                            <TableCell>{program.loaiBang}</TableCell>
+                          )}
+                          {visibleColumns.includes('loaiHinhDaoTao') && (
+                            <TableCell>{program.loaiHinhDaoTao}</TableCell>
+                          )}
+                          {visibleColumns.includes('thoiGian') && (
+                            <TableCell>{program.thoiGian}</TableCell>
+                          )}
+                          {visibleColumns.includes('soTinChi') && (
+                            <TableCell>{program.soTinChi}</TableCell>
+                          )}
+                          {visibleColumns.includes('khoaQuanLy') && (
+                            <TableCell>{program.khoaQuanLy}</TableCell>
+                          )}
+                          {visibleColumns.includes('ngonNgu') && (
+                            <TableCell>{program.ngonNgu}</TableCell>
+                          )}
+                          {visibleColumns.includes('khoaTuyen') && (
+                            <TableCell>{program.khoaTuyen}</TableCell>
+                          )}
                           {visibleColumns.includes('actions') && (
                             <TableCell>
                               <Button
