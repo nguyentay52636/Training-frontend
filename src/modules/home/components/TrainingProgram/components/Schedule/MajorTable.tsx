@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -47,16 +48,16 @@ export default function MajorTable({
           <TableCell className='text-center'>{major.soTietThucHanh}</TableCell>
           <TableCell>
             <div className='flex gap-2 justify-center'>
-              <button className='text-blue-600 hover:text-blue-800 cursor-pointer'>
+              <Button className='text-blue-600 hover:text-blue-800 cursor-pointer' variant='ghost'>
                 <Pencil size={20} />
-              </button>
-              <button className='text-red-600 hover:text-red-800 cursor-pointer'>
+              </Button>
+              <Button className='text-red-600 hover:text-red-800 cursor-pointer' variant='ghost'>
                 <Trash2 size={20} />
-              </button>
+              </Button>
             </div>
           </TableCell>
         </TableRow>
       </TableBody>
-    </Table>
+    </Table >
   );
 }

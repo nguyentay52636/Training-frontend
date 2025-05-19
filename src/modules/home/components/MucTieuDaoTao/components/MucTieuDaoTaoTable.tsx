@@ -63,12 +63,14 @@ export default function MucTieuDaoTaoTable({ data, onEdit, onRefresh }: MucTieuD
                                     <div className="flex justify-end gap-2">
                                         <Button
                                             variant="ghost"
+                                            className='cursor-pointer text-blue-600 hover:text-blue-700'
                                             size="icon"
                                             onClick={() => onEdit(item)}
                                         >
                                             <Pencil className="h-4 w-4" />
                                         </Button>
                                         <Button
+                                            className='cursor-pointer text-red-600 hover:text-red-700'
                                             variant="ghost"
                                             size="icon"
                                             onClick={() => setDeleteId(item.id!)}

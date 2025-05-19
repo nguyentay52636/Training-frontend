@@ -27,7 +27,7 @@ export function NavProjects({
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Dự án</SidebarGroupLabel>
+      <SidebarGroupLabel>Tổng quan</SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
@@ -35,10 +35,9 @@ export function NavProjects({
               <NavLink
                 to={item.url}
                 className={({ isActive }) =>
-                  `flex items-center gap-2 w-full px-2 py-1.5 rounded-md transition-colors ${
-                    isActive
-                      ? "bg-muted text-primary font-semibold"
-                      : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                  `flex items-center gap-2 w-full px-2 py-1.5 rounded-md transition-colors ${isActive
+                    ? "bg-muted text-primary font-semibold"
+                    : "text-muted-foreground hover:text-foreground hover:bg-accent"
                   }`
                 }
               >
@@ -48,12 +47,7 @@ export function NavProjects({
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
-        <SidebarMenuItem>
-          <SidebarMenuButton className="text-sidebar-foreground/70">
-            <MoreHorizontal className="text-sidebar-foreground/70" />
-            <span>Thêm</span>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
+
       </SidebarMenu>
     </SidebarGroup>
   );

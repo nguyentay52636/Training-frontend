@@ -122,8 +122,8 @@ const data = {
           url: "/trangchu/tai-lieu/de-cuong-chi-tiet",
         },
         {
-          title: "Tài liệu tham khảo",
-          url: "/trangchu/tai-lieu/tham-khao",
+          title: "Thông tin chung",
+          url: "/trangchu/tai-lieu/thong-tin-chung",
         },
         {
           title: "Câu hỏi thường gặp",
@@ -160,8 +160,8 @@ const data = {
       icon: Home,
     },
     {
-      name: "Quản lý điểm",
-      url: "/trangchu/quan-ly-diem",
+      name: "Quản lý chuyên ngành",
+      url: "/trangchu/quan-ly-chuyen-nganh",
       icon: FileText,
     },
     {

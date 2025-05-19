@@ -55,12 +55,12 @@ export default function DialogAddMucTieuDaoTao({ open, onOpenChange, onSuccess }
                     <div className="flex justify-end gap-2">
                         <Button
                             type="button"
-                            variant="outline"
+                            className='bg-red-600 hover:bg-red-700 cursor-pointer'
                             onClick={() => onOpenChange(false)}
                         >
                             Hủy
                         </Button>
-                        <Button type="submit" disabled={isLoading}>
+                        <Button className='bg-blue-700 cursor-pointer hover:bg-blue-700' type="submit" disabled={isLoading}>
                             {isLoading ? 'Đang thêm...' : 'Thêm'}
                         </Button>
                     </div>

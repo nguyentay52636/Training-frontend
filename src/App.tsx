@@ -22,6 +22,7 @@ import ManagerKnowledge from './modules/home/components/ManagerKnowAndBlock/comp
 import DashBoardManager from './modules/home/components/Dashboard/DashBoardManager';
 import MucTieuDaoTao from './modules/home/components/MucTieuDaoTao/MucTieuDaoTao';
 import AuthGuard from './guard/AuthGuard';
+import ManagerMajor from './modules/home/components/ManagerMajor/ManagerMajor';
 
 function App() {
   const router = createBrowserRouter([
@@ -73,7 +74,12 @@ function App() {
           ],
         },
         {
+          path: 'quan-ly-chuyen-nganh',
+          element: <ManagerMajor />,
+        },
+        {
           path: 'quan-ly-diem',
+
 
           children: [
             { path: 'thong-ke-diem', element: <DashBoardManager /> },

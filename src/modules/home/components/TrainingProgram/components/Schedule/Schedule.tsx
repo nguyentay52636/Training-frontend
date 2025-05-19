@@ -29,7 +29,7 @@ const major = {
   heSoHocPhan: 1,
 };
 
-const danhsachHocKy = [1, 2, 3, 4, 5];
+const danhsachHocKy = [1, 2, 3, 4, 5, 6, 7, 8];
 
 export default function Schedule() {
   const { data } = useGetAllKeHoachDayHOcQuery();
@@ -86,7 +86,7 @@ export default function Schedule() {
                   <TabsList className='mb-4'>
                     {dataHocKy.map(({ idHocPhan, idHocKy }) => (
                       <TabsTrigger
-                     
+
                         value={`hocky-${idHocKy}`}
                         className={cn(
                           'pb-2 relative text-xl mx-6',
