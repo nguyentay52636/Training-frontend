@@ -18,8 +18,8 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import { CourseType } from '@/lib/apis/types'
-import { createCourse, updateCourse } from '@/lib/apis/CourseApi'
-import { Plus, Save } from 'lucide-react'
+import { updateCourse } from '@/lib/apis/CourseApi'
+import { Save } from 'lucide-react'
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -40,26 +40,26 @@ const formSchema = z.object({
     soTietLyThuyet: z.number().min(0, "Số tiết lý thuyết phải lớn hơn hoặc bằng 0"),
     soTietThucHanh: z.number().min(0, "Số tiết thực hành phải lớn hơn hoặc bằng 0"),
     soTietThucTap: z.number().min(0, "Số tiết thực tập phải lớn hơn hoặc bằng 0"),
-    loaiHocPhan: z.number().min(0, "Loại học phần không được để trống").max(2, "Loại học phần không hợp lệ"),
+    loaiHocPhan: z.number().min(0, "Loại học phần không được để trống").max(3, "Loại học phần không hợp lệ"),
     heSoHocPhan: z.number().min(0, "Hệ số học phần phải lớn hơn hoặc bằng 0"),
     tongSoTiet: z.number().min(0, "Tổng số tiết phải lớn hơn hoặc bằng 0"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-interface DialogAddManagerCourseProps {
+interface DialogEditManagerCourseProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    editingCourse: CourseType | null;
+    editingCourse: CourseType;
     onSuccess: () => void;
 }
 
-export default function DialogAddManagerCourse({
+export default function DialogEditManagerCourse({
     open,
     onOpenChange,
     editingCourse,
     onSuccess
-}: DialogAddManagerCourseProps) {
+}: DialogEditManagerCourseProps) {
     const [loading, setLoading] = useState(false)
 
     const form = useForm<FormValues>({
@@ -80,18 +80,6 @@ export default function DialogAddManagerCourse({
     useEffect(() => {
         if (open && editingCourse) {
             form.reset(editingCourse);
-        } else if (open) {
-            form.reset({
-                maHP: "",
-                tenHP: "",
-                soTinChi: undefined,
-                soTietLyThuyet: undefined,
-                soTietThucHanh: undefined,
-                soTietThucTap: undefined,
-                loaiHocPhan: 0,
-                heSoHocPhan: undefined,
-                tongSoTiet: 0,
-            });
         }
     }, [open, editingCourse, form]);
 
@@ -107,7 +95,6 @@ export default function DialogAddManagerCourse({
         form.setValue("tongSoTiet", total);
     };
 
-    // Thêm useEffect để theo dõi thay đổi của các trường số tiết
     useEffect(() => {
         const subscription = form.watch((value, { name }) => {
             if (name === "soTietLyThuyet" || name === "soTietThucHanh" || name === "soTietThucTap") {
@@ -123,29 +110,21 @@ export default function DialogAddManagerCourse({
             const updatedFormData = {
                 ...values,
                 tongSoTiet: calculateTotalHours(),
-                loaiHocPhan: Number(values.loaiHocPhan)
+                loaiHocPhan: Number(values.loaiHocPhan),
+                heSoHocPhan: Number(values.heSoHocPhan)
             };
 
-            if (editingCourse?.idHocPhan) {
-                await updateCourse(editingCourse.idHocPhan, updatedFormData as CourseType);
-                toast.success('Cập nhật học phần thành công', {
-                    description: 'Thông tin học phần đã được cập nhật'
-                });
-            } else {
-                const response = await createCourse(updatedFormData as CourseType);
-                if (response) {
-                    toast.success('Thêm học phần mới thành công', {
-                        description: 'Học phần mới đã được thêm vào hệ thống'
-                    });
-                    onSuccess();
-                    onOpenChange(false);
-                }
-            }
+            await updateCourse(editingCourse.idHocPhan!, updatedFormData as CourseType);
+            toast.success('Cập nhật học phần thành công', {
+                description: 'Thông tin học phần đã được cập nhật'
+            });
+            onSuccess();
+            onOpenChange(false);
         } catch (error: any) {
-            toast.error('Không thể lưu học phần', {
+            toast.error('Không thể cập nhật học phần', {
                 description: error.message || 'Đã xảy ra lỗi. Vui lòng thử lại sau'
             });
-            console.error('Error saving course:', error);
+            console.error('Error updating course:', error);
         } finally {
             setLoading(false);
         }
@@ -156,7 +135,7 @@ export default function DialogAddManagerCourse({
             <DialogContent className="sm:max-w-[550px]">
                 <DialogHeader>
                     <DialogTitle className="text-xl font-bold">
-                        {editingCourse ? 'Chỉnh sửa học phần' : 'Thêm học phần mới'}
+                        Chỉnh sửa học phần
                     </DialogTitle>
                 </DialogHeader>
 
@@ -393,7 +372,8 @@ export default function DialogAddManagerCourse({
                             <Input
                                 id="tongSoTiet"
                                 value={calculateTotalHours()}
-
+                                readOnly
+                                disabled
                                 className="rounded-full border-gray-300 bg-gray-100 py-3 px-6 text-base transition-all duration-200 w-full"
                             />
                         </div>
@@ -419,8 +399,8 @@ export default function DialogAddManagerCourse({
                                     </div>
                                 ) : (
                                     <div className="flex items-center">
-                                        {editingCourse ? <Save className="mr-2 h-4 w-4" /> : <Plus className="mr-2 h-4 w-4" />}
-                                        {editingCourse ? 'Lưu thay đổi' : 'Thêm mới'}
+                                        <Save className="mr-2 h-4 w-4" />
+                                        Lưu thay đổi
                                     </div>
                                 )}
                             </Button>

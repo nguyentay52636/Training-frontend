@@ -53,9 +53,30 @@ export const createCourse = async ({
 };
 
 // Update operation
-export const updateCourse = async (id: number, course: CourseType) => {
+export const updateCourse = async (id: number, {
+  maHP,
+  tenHP,
+  soTinChi,
+  soTietLyThuyet,
+  soTietThucHanh,
+  soTietThucTap,
+  loaiHocPhan,
+  tongSoTiet,
+  heSoHocPhan,
+}: CourseType) => {
   try {
-    const { data } = await baseApi.put<CourseType>(`/hocphan/${id}`, course);
+    const updateCourse : CourseType = { 
+      maHP,
+      tenHP,
+      soTinChi,
+      soTietLyThuyet,
+      soTietThucHanh,
+      soTietThucTap,
+      loaiHocPhan,
+      tongSoTiet,
+      heSoHocPhan,
+    } 
+    const { data } = await baseApi.put<CourseType>(`/hocphan/${id}`, updateCourse);
     return data;
   } catch (error) {
     throw new Error(error as string);
