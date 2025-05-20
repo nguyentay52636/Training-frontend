@@ -141,6 +141,18 @@ export interface LectureType {
   namTotNghiep: string;
 }
 
+export interface IThongTinChungDataType {
+  id: number;
+  tenChuongTrinh: string;
+  bac: string;
+  loaiBang: string;
+  loaiHinhDaoTao: string;
+  thoiGian: string;
+  soTinChi: number;
+  khoaQuanLy: string;
+  ngonNgu: string;
+  khoaTuyen: string;
+}
 interface RoleOption {
   value: number;
   label: string;
