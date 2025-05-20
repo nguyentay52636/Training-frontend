@@ -4,6 +4,7 @@ import { Plus } from 'lucide-react';
 import { CourseType } from '@/lib/apis/types';
 import TableManagerCourse from './components/TableManagerCourse/TableManagerCourse';
 import DialogAddManagerCourse from './components/DialogAddManagerCourse';
+import DialogEditManagerCourse from './components/TableManagerCourse/DialogEditManagerCourse';
 import { Toaster } from 'sonner';
 import { Select, SelectContent, SelectItem } from '@/components/ui/select';
 
@@ -62,6 +63,15 @@ export default function ManagerCourseDetail() {
         editingCourse={editingCourse}
         onSuccess={handleSuccessAdd}
       />
+
+      {editingCourse && (
+        <DialogEditManagerCourse
+          open={isAddDialogOpen}
+          onOpenChange={setIsAddDialogOpen}
+          editingCourse={editingCourse}
+          onSuccess={handleSuccessAdd}
+        />
+      )}
 
       <Toaster position='top-right' richColors />
     </div>
