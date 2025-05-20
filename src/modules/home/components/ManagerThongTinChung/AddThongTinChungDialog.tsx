@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Form, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,20 +16,29 @@ import { useForm } from 'react-hook-form';
 import { useAddThongTinChungMutation } from '../TrainingProgram/components/mutations';
 import { useState } from 'react';
 
-export default function AddThongTinChungDialog() {
+export default function AddThongTinChungDialog({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
+  const handleCloseDialog = (isOpen: boolean) => {
+    if (!isOpen) {
+      onClose();
+    }
+  };
+
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button>Thêm thông tin chung</Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={handleCloseDialog}>
       <DialogContent className='max-w-3xl w-3xl min-w-3xl '>
-        <AddThongTinChungForm />
+        <AddThongTinChungForm onClose={onClose} />
       </DialogContent>
     </Dialog>
   );
 }
 
-const AddThongTinChungForm = () => {
+const AddThongTinChungForm = ({ onClose }: { onClose: () => void }) => {
   const years = [2020, 2021, 2022, 2023];
 
   const { mutate } = useAddThongTinChungMutation();
@@ -60,10 +69,17 @@ const AddThongTinChungForm = () => {
   };
 
   const handleThemChuongTrinh = (value: IThongTinChungDataType) => {
-    mutate({
-      ...value,
-      thoiGian: selectedYears.length.toString(),
-    });
+    mutate(
+      {
+        ...value,
+        thoiGian: selectedYears.length.toString(),
+      },
+      {
+        onSuccess: () => {
+          onClose();
+        },
+      },
+    );
   };
 
   return (

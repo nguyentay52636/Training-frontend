@@ -53,19 +53,22 @@ export const createCourse = async ({
 };
 
 // Update operation
-export const updateCourse = async (id: number, {
-  maHP,
-  tenHP,
-  soTinChi,
-  soTietLyThuyet,
-  soTietThucHanh,
-  soTietThucTap,
-  loaiHocPhan,
-  tongSoTiet,
-  heSoHocPhan,
-}: CourseType) => {
+export const updateCourse = async (
+  id: number,
+  {
+    maHP,
+    tenHP,
+    soTinChi,
+    soTietLyThuyet,
+    soTietThucHanh,
+    soTietThucTap,
+    loaiHocPhan,
+    tongSoTiet,
+    heSoHocPhan,
+  }: CourseType,
+) => {
   try {
-    const updateCourse : CourseType = { 
+    const updateCourse: CourseType = {
       maHP,
       tenHP,
       soTinChi,
@@ -75,7 +78,7 @@ export const updateCourse = async (id: number, {
       loaiHocPhan,
       tongSoTiet,
       heSoHocPhan,
-    } 
+    };
     const { data } = await baseApi.put<CourseType>(`/hocphan/${id}`, updateCourse);
     return data;
   } catch (error) {
@@ -153,7 +156,7 @@ export const editThongTinChung = async ({
   idThongTin,
   newData,
 }: {
-  idThongTin: string;
+  idThongTin: number;
   newData: IThongTinChungDataType;
 }) => {
   try {

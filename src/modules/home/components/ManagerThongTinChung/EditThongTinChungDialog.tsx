@@ -14,7 +14,7 @@ import {
 import { IThongTinChungDataType } from '@/lib/apis/types';
 import { Pencil } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { useAddThongTinChungMutation } from '../TrainingProgram/components/mutations';
+import { useEditPhanCongGiangDayMutation } from '../ManagerLecturer/ TeachingAssignment/components/AddTeachingSchedule/mutations';
 
 export default function EditThongTinChungDialog({
   dataThongTinChung,
@@ -51,10 +51,10 @@ const EditThongTinChungForm = ({ thongTinChung }: { thongTinChung: IThongTinChun
     },
   });
 
-  const { mutate } = useAddThongTinChungMutation();
+  const { mutate } = useEditPhanCongGiangDayMutation();
 
   const handleThemChuongTrinh = (value: IThongTinChungDataType) => {
-    mutate(value);
+    mutate({ id: thongTinChung.id, data: value });
   };
 
   return (
