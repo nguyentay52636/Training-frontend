@@ -5,10 +5,12 @@ import { CourseType } from '@/lib/apis/types';
 import TableManagerCourse from './components/TableManagerCourse/TableManagerCourse';
 import DialogAddManagerCourse from './components/DialogAddManagerCourse';
 import { Toaster } from 'sonner';
+import { Select, SelectContent, SelectItem } from '@/components/ui/select';
 
 export default function ManagerCourseDetail() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState<CourseType | null>(null);
+  const [selectedFilter, setSelectedFilter] = useState('all');
 
   const handleAddClick = () => {
     setEditingCourse(null);
@@ -24,6 +26,10 @@ export default function ManagerCourseDetail() {
     // Will trigger refetch in TableManagerCourse
   };
 
+  const handleFilterChange = (value: string) => {
+    setSelectedFilter(value);
+  };
+
   return (
     <div className='container p-6 mx-auto'>
       <div className='mb-6 flex justify-between items-center'>
@@ -35,6 +41,17 @@ export default function ManagerCourseDetail() {
           <Plus className='h-5 w-5' />
           Thêm học phần mới
         </Button>
+      </div>
+
+      <div className='mb-4'>
+        <Select value={selectedFilter} onValueChange={handleFilterChange}>
+          <SelectContent>
+            <SelectItem value='all'>Tất cả</SelectItem>
+            <SelectItem value='0'>Bắt buộc</SelectItem>
+            <SelectItem value='1'>Tự chọn</SelectItem>
+            <SelectItem value='2'>Thực tập</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <TableManagerCourse onEdit={handleEditClick} />

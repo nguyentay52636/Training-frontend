@@ -11,6 +11,7 @@ import {
     TableRow,
 } from '@/components/ui/table'
 import { Search, Pencil, Trash2, FileSymlink } from 'lucide-react'
+import { getLoaiHocPhanDisplay, getLoaiHocPhanBadgeColor } from '@/lib/utils/courseHelpers'
 
 import {
     Select,
@@ -192,13 +193,8 @@ export default function TableManagerKnowledge({ onEditKnowledge }: TableManagerK
                                         </TableCell>
                                         <TableCell>{item.tenKienThuc}</TableCell>
                                         <TableCell>
-                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${item.loaiHocPhan === 'BẮT BUỘC'
-                                                ? 'bg-blue-100 text-blue-800'
-                                                : item.loaiHocPhan === 'TỰ CHỌN'
-                                                    ? 'bg-green-100 text-green-800'
-                                                    : 'bg-purple-100 text-purple-800'
-                                                }`}>
-                                                {item.loaiHocPhan}
+                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getLoaiHocPhanBadgeColor(item.loaiHocPhan)}`}>
+                                                {getLoaiHocPhanDisplay(item.loaiHocPhan)}
                                             </span>
                                         </TableCell>
                                         <TableCell className="text-center">

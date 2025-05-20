@@ -38,6 +38,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import PaginationCourse from '../PaginationCourse';
+import { getLoaiHocPhanDisplay, getLoaiHocPhanBadgeColor } from '@/lib/utils/courseHelpers';
 
 interface TableManagerCourseProps {
   onEdit: (course: CourseType) => void;
@@ -118,7 +119,7 @@ export default function TableManagerCourse({ onEdit }: TableManagerCourseProps) 
       course.maHP?.toLowerCase().includes(searchTerm.toLowerCase());
 
     if (selectedFilter === 'all') return matchesSearch;
-    return matchesSearch && course.loaiHocPhan === selectedFilter;
+    return matchesSearch && course.loaiHocPhan === Number(selectedFilter);
   });
 
   // Tính toán dữ liệu phân trang
@@ -158,9 +159,9 @@ export default function TableManagerCourse({ onEdit }: TableManagerCourseProps) 
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='all'>Tất cả</SelectItem>
-              <SelectItem value='BẮT BUỘC'>Bắt buộc</SelectItem>
-              <SelectItem value='TỰ CHỌN'>Tự chọn</SelectItem>
-              <SelectItem value='THỰC TẬP'>Thực tập</SelectItem>
+              <SelectItem value='0'>Bắt buộc</SelectItem>
+              <SelectItem value='1'>Tự chọn</SelectItem>
+              <SelectItem value='2'>Thực tập</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -177,6 +178,7 @@ export default function TableManagerCourse({ onEdit }: TableManagerCourseProps) 
                 <TableHead className='font-bold text-center'>Lý thuyết</TableHead>
                 <TableHead className='font-bold text-center'>Thực hành</TableHead>
                 <TableHead className='font-bold text-center'>Loại</TableHead>
+                <TableHead className='font-bold text-center'>Hệ số</TableHead>
                 <TableHead className='font-bold text-center'>Thao tác</TableHead>
               </TableRow>
             </TableHeader>
@@ -207,15 +209,9 @@ export default function TableManagerCourse({ onEdit }: TableManagerCourseProps) 
                     <TableCell className='text-center'>{course.soTietThucHanh}</TableCell>
                     <TableCell className='text-center'>
                       <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          course.loaiHocPhan === 'BẮT BUỘC'
-                            ? 'bg-blue-100 text-blue-800'
-                            : course.loaiHocPhan === 'TỰ CHỌN'
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-purple-100 text-purple-800'
-                        }`}
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${getLoaiHocPhanBadgeColor(course.loaiHocPhan)}`}
                       >
-                        {course.loaiHocPhan}
+                        {getLoaiHocPhanDisplay(course.loaiHocPhan)}
                       </span>
                     </TableCell>
                     <TableCell>

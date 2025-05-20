@@ -22,14 +22,15 @@ export interface PointType {
   lop: string;
 }
 export interface CourseType {
+  idHocPhan?: number;
   maHP: string;
   tenHP: string;
   soTinChi: number;
   soTietLyThuyet: number;
   soTietThucHanh: number;
   soTietThucTap: number;
-  loaiHocPhan: string;
   tongSoTiet: number;
+  loaiHocPhan: number;
   heSoHocPhan: number;
 }
 export interface SpecializedType {
@@ -54,18 +55,6 @@ export interface knowledgeType {
   idHocPhan: number[];
   loaiHocPhan: string;
   hocPhanList: CourseType[];
-}
-export interface CourseType {
-  idHocPhan?: number;
-  maHP: string;
-  tenHP: string;
-  soTinChi: number;
-  soTietLyThuyet: number;
-  soTietThucHanh: number;
-  soTietThucTap: number;
-  tongSoTiet: number;
-  loaiHocPhan: string;
-  heSoHocPhan: number;
 }
 
 export interface PropramData {

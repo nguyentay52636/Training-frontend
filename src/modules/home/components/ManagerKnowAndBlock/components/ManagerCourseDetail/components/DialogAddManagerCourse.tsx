@@ -40,7 +40,7 @@ const formSchema = z.object({
     soTietLyThuyet: z.number().min(0, "Số tiết lý thuyết phải lớn hơn hoặc bằng 0"),
     soTietThucHanh: z.number().min(0, "Số tiết thực hành phải lớn hơn hoặc bằng 0"),
     soTietThucTap: z.number().min(0, "Số tiết thực tập phải lớn hơn hoặc bằng 0"),
-    loaiHocPhan: z.string().min(1, "Loại học phần không được để trống"),
+    loaiHocPhan: z.number().min(0, "Loại học phần không được để trống"),
     heSoHocPhan: z.number().min(0, "Hệ số học phần phải lớn hơn hoặc bằng 0"),
     tongSoTiet: z.number().min(0, "Tổng số tiết phải lớn hơn hoặc bằng 0"),
 });
@@ -71,7 +71,7 @@ export default function DialogAddManagerCourse({
             soTietLyThuyet: undefined,
             soTietThucHanh: undefined,
             soTietThucTap: undefined,
-            loaiHocPhan: "",
+            loaiHocPhan: 0,
             heSoHocPhan: undefined,
             tongSoTiet: 0,
         },
@@ -88,7 +88,7 @@ export default function DialogAddManagerCourse({
                 soTietLyThuyet: undefined,
                 soTietThucHanh: undefined,
                 soTietThucTap: undefined,
-                loaiHocPhan: "",
+                loaiHocPhan: 0,
                 heSoHocPhan: undefined,
                 tongSoTiet: 0,
             });
@@ -122,7 +122,8 @@ export default function DialogAddManagerCourse({
         try {
             const updatedFormData = {
                 ...values,
-                tongSoTiet: calculateTotalHours()
+                tongSoTiet: calculateTotalHours(),
+                loaiHocPhan: Number(values.loaiHocPhan)
             };
 
             if (editingCourse?.idHocPhan) {
@@ -343,16 +344,16 @@ export default function DialogAddManagerCourse({
                                             <div className="flex flex-col gap-3">
                                                 <FormLabel className="text-lg font-semibold text-gray-800">Loại học phần</FormLabel>
                                                 <Select
-                                                    value={field.value}
-                                                    onValueChange={field.onChange}
+                                                    value={String(field.value)}
+                                                    onValueChange={(value) => field.onChange(Number(value))}
                                                 >
                                                     <SelectTrigger className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full">
                                                         <SelectValue placeholder="Chọn loại" />
                                                     </SelectTrigger>
                                                     <SelectContent>
-                                                        <SelectItem value="BẮT BUỘC">Bắt buộc</SelectItem>
-                                                        <SelectItem value="TỰ CHỌN">Tự chọn</SelectItem>
-                                                        <SelectItem value="THỰC TẬP">Thực tập</SelectItem>
+                                                        <SelectItem value="0">Bắt buộc</SelectItem>
+                                                        <SelectItem value="1">Tự chọn</SelectItem>
+                                                        <SelectItem value="2">Thực tập</SelectItem>
                                                     </SelectContent>
                                                 </Select>
                                             </div>
