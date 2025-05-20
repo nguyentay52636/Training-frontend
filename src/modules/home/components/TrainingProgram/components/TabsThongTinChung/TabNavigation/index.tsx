@@ -10,7 +10,7 @@ export default function TabNavigation() {
                     1. Thông tin chung
                 </TabsTrigger>
                 <TabsTrigger value='objective' className={cn('pb-2 relative text-xl mx-6', 'data-[state=active]:text-indigo-600 data-[state=active]:font-semibold', 'data-[state=inactive]:text-gray-600 data-[state=inactive]:hover:text-indigo-600 data-[state=inactive]:transition-all', 'cursor-pointer hover:scale-105 transition-transform duration-200', 'after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-indigo-600', 'after:opacity-0 after:transition-opacity after:duration-300', 'data-[state=active]:after:opacity-100')}>
-                    2. Mục tiêu đào tạo
+                    2. Đề cương chi tiết
                 </TabsTrigger>
                 <TabsTrigger value='curriculum' className={cn('pb-2 relative text-xl mx-6', 'data-[state=active]:text-indigo-600 data-[state=active]:font-semibold', 'data-[state=inactive]:text-gray-600 data-[state=inactive]:hover:text-indigo-600 data-[state=inactive]:transition-all', 'cursor-pointer hover:scale-105 transition-transform duration-200', 'after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-indigo-600', 'after:opacity-0 after:transition-opacity after:duration-300', 'data-[state=active]:after:opacity-100')}>
                     3. Nội dung chương trình

@@ -103,7 +103,7 @@ export const addKeHoachDayHocAPI = async () => {
 
 export const getThongTinChung = async () => {
   try {
-    const { data } = await baseApi.get('/thongtinchung');
+    const { data } = await baseApi.get<IThongTinChungDataType[]>('/thongtinchung');
     return data;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
@@ -147,7 +147,7 @@ export const editThongTinChung = async ({
   }
 };
 
-export const deleteThongTinChung = async ({ idThongTin }: { idThongTin: string }) => {
+export const deleteThongTinChung = async ({ idThongTin }: { idThongTin: number }) => {
   try {
     const { data } = await baseApi.delete<IThongTinChungDataType>(
       `/thongtinchung/${idThongTin}`, // Sửa đường dẫn API cho đúng format

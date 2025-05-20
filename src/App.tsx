@@ -61,8 +61,9 @@ function App() {
         },
         {
           path: 'tai-lieu',
-          children: [{ path: 'de-cuong-chi-tiet', element: <MucTieuDaoTao /> },
-          { path: 'thong-tin-chung', element: <ManagerThongTinChung /> },
+          children: [
+            { path: 'de-cuong-chi-tiet', element: <MucTieuDaoTao /> },
+            { path: 'thong-tin-chung', element: <ManagerThongTinChung /> },
           ],
         },
         {
@@ -82,7 +83,6 @@ function App() {
         },
         {
           path: 'quan-ly-diem',
-
 
           children: [
             { path: 'thong-ke-diem', element: <DashBoardManager /> },

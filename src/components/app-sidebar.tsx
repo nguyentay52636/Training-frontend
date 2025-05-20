@@ -186,11 +186,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const auth = useAppSelector((state: RootState) => state.auth);
   return (
     <Sidebar
-      className="fixed font-semibold border-r shadow-md z-50"
+      className="fixed font-semibold border-r shadow-md z-50 h-screen overflow-y-auto"
       collapsible="offcanvas"
       {...props}
     >
-      <SidebarHeader className="text-black py-8">
+      <SidebarHeader className="text-black py-8 sticky top-0 bg-white z-10">
         <TeamSwitcher teams={data.teams} />
         <>
           <div className="flex flex-col items-center mt-10">
@@ -211,12 +211,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </div>
         </>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="overflow-y-auto">
         <NavProjects projects={data.projects} />
         <NavMain items={data.navMain} />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
+      <SidebarFooter className="sticky bottom-0 bg-white z-10">
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

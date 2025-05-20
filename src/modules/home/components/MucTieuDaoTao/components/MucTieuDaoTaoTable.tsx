@@ -45,32 +45,38 @@ export default function MucTieuDaoTaoTable({ data, onEdit, onRefresh }: MucTieuD
 
     return (
         <>
-            <div className="rounded-md border">
+            <div className="rounded-md border bg-white">
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="w-[50px]">STT</TableHead>
-                            <TableHead className="w-[70%]">Mục tiêu</TableHead>
-                            <TableHead className="text-right">Thao tác</TableHead>
+                            <TableHead className="w-[60px] text-center">STT</TableHead>
+                            <TableHead className="w-[200px] text-center">Học phần</TableHead>
+                            <TableHead className="w-[60%] px-4">Mục tiêu</TableHead>
+                            <TableHead className="text-right w-[140px] pr-6">Thao tác</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {data.map((item, index) => (
-                            <TableRow key={item.id}>
-                                <TableCell>{index + 1}</TableCell>
-                                <TableCell className="whitespace-pre-wrap">{item.mucTieu}</TableCell>
-                                <TableCell className="text-right">
+                            <TableRow key={item.id} className="hover:bg-gray-50 transition-colors group">
+                                <TableCell className="text-center align-middle font-medium">{index + 1}</TableCell>
+                                <TableCell className="text-center align-middle">
+                                    {item.hocPhan && typeof item.hocPhan === 'object' && 'maHP' in item.hocPhan && 'tenHP' in item.hocPhan
+                                        ? `${(item.hocPhan as { maHP: string; tenHP: string }).maHP} - ${(item.hocPhan as { maHP: string; tenHP: string }).tenHP}`
+                                        : (item.idHocPhan || '-')}
+                                </TableCell>
+                                <TableCell className="whitespace-pre-wrap px-4 align-middle">{item.mucTieu}</TableCell>
+                                <TableCell className="text-right align-middle pr-6">
                                     <div className="flex justify-end gap-2">
                                         <Button
                                             variant="ghost"
-                                            className='cursor-pointer text-blue-600 hover:text-blue-700'
+                                            className='cursor-pointer text-blue-600 hover:text-blue-700 rounded-full p-2 h-8 w-8 flex items-center justify-center'
                                             size="icon"
                                             onClick={() => onEdit(item)}
                                         >
                                             <Pencil className="h-4 w-4" />
                                         </Button>
                                         <Button
-                                            className='cursor-pointer text-red-600 hover:text-red-700'
+                                            className='cursor-pointer text-red-600 hover:text-red-700 rounded-full p-2 h-8 w-8 flex items-center justify-center'
                                             variant="ghost"
                                             size="icon"
                                             onClick={() => setDeleteId(item.id!)}

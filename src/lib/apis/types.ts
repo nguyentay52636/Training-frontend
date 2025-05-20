@@ -1,12 +1,12 @@
 export interface UserType {
-  id: number;
+  id?: number;
   userName: string;
   userEmail: string;
   password: string;
   role: number;
-  admin: boolean;
-  giangVien: boolean;
-  user: Role;
+  admin?: boolean;
+  giangVien?: boolean;
+  user?: boolean;
 }
 export interface PointType {
   idCotDiem?: number;
@@ -39,7 +39,6 @@ export interface SpecializedType {
 }
 
 export enum Role {
-  User = 0,
   GiangVien = 1,
   Admin = 2,
 }
@@ -165,3 +164,12 @@ export interface IThongTinChungDataType {
   ngonNgu: string;
   khoaTuyen: string;
 }
+interface RoleOption {
+  value: number;
+  label: string;
+}
+
+const roles: RoleOption[] = [
+  { value: 1, label: 'Giảng viên' },
+  { value: 2, label: 'Quản trị viên' },
+];

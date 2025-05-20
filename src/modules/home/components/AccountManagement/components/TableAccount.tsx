@@ -16,6 +16,17 @@ interface TableAccountProps {
   data: UserType[];
 }
 
+const getRoleName = (roleId: number) => {
+  switch (roleId) {
+    case 1:
+      return 'Giảng viên';
+    case 2:
+      return 'Quản trị viên';
+    default:
+      return 'Không xác định';
+  }
+};
+
 export default function TableAccount({ data }: TableAccountProps) {
   const { mutate } = useDeleteUserMutation();
 
@@ -41,7 +52,7 @@ export default function TableAccount({ data }: TableAccountProps) {
                 <TableCell className='py-4'>{user.id}</TableCell>
                 <TableCell className='py-4'>{user.userName}</TableCell>
                 <TableCell className='py-4'>{user.userEmail}</TableCell>
-                <TableCell className='py-4'>{user.role}</TableCell>
+                <TableCell className='py-4'>{getRoleName(user.role)}</TableCell>
                 <TableCell className='py-4'>
                   <div className='flex gap-2'>
                     <EditUserDialog user={user} />

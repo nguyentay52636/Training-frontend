@@ -31,37 +31,58 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+
+interface RoleOption {
+  value: number;
+  label: string;
+}
+
+const roles: RoleOption[] = [
+  { value: 1, label: 'Giảng viên' },
+  { value: 2, label: 'Quản trị viên' },
+];
 
 interface FormValues {
   userName: string;
   userEmail: string;
   password: string;
-  role: Role;
+  role: number;
 }
 
 export default function DialogAddAccount() {
+  const [open, setOpen] = useState(false);
   const form = useForm<FormValues>({
     defaultValues: {
       userName: '',
       userEmail: '',
       password: '',
-      role: Role.User,
+      role: roles[0].value,
     },
   });
 
   const addUserMutation = useAddUserMutation();
 
-  const onSubmit = (data: FormValues) => {
-    addUserMutation.mutate({
-      userName: data.userName,
-      userEmail: data.userEmail,
-      password: data.password,
-      role: data.role,
-    });
+  const onSubmit = async (data: FormValues) => {
+    try {
+      await addUserMutation.mutateAsync({
+        userName: data.userName,
+        userEmail: data.userEmail,
+        password: data.password,
+        role: data.role,
+      });
+
+      toast.success('Thêm tài khoản thành công!');
+      form.reset();
+      setOpen(false);
+    } catch (error) {
+      toast.error('Có lỗi xảy ra khi thêm tài khoản');
+    }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className='bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-full shadow-md'>
           <Plus className='mr-2 h-5 w-5' /> Thêm Tài Khoản
@@ -136,16 +157,23 @@ export default function DialogAddAccount() {
               render={({ field }) => (
                 <FormItem className='grid grid-cols-4 items-center gap-4'>
                   <FormLabel className='text-right font-medium text-gray-700'>Vai trò</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value.toString()}>
+                  <Select
+                    onValueChange={(value) => {
+                      field.onChange(Number(value));
+                    }}
+                    value={field.value.toString()}
+                  >
                     <FormControl>
                       <SelectTrigger className='col-span-3'>
                         <SelectValue placeholder='Chọn vai trò' />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value={Role.Admin.toString()}>Quản trị viên</SelectItem>
-                      <SelectItem value={Role.User.toString()}>Người dùng</SelectItem>
-                      <SelectItem value={Role.GiangVien.toString()}>Giảng viên</SelectItem>
+                      {roles.map((role) => (
+                        <SelectItem key={role.value} value={role.value.toString()}>
+                          {role.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -156,8 +184,9 @@ export default function DialogAddAccount() {
               <Button
                 type='submit'
                 className='bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 rounded-lg'
+                disabled={addUserMutation.isPending}
               >
-                Thêm Tài Khoản
+                {addUserMutation.isPending ? 'Đang thêm...' : 'Thêm Tài Khoản'}
               </Button>
             </DialogFooter>
           </form>

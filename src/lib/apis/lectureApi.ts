@@ -9,8 +9,14 @@ export const getLectureAPI = async () => {
     throw new Error(error as string);
   }
 };
-
-
+export const getLectureByIdAPI = async (id: number) => {    
+  try {
+    const { data } = await baseApi.get(`/giangvien/${id}`);
+    return data;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
 export const addLectureAPI = async (lecture: {
   maGiangVien: string;
   tenGiangVien: string;

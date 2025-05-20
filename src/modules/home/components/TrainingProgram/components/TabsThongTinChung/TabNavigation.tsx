@@ -33,7 +33,7 @@ export default function TabNavigation() {
                         'data-[state=active]:after:opacity-100',
                     )}
                 >
-                    2. Mục tiêu đào tạo
+                    2. Đề cương chi tiết
                 </TabsTrigger>
 
                 <TabsTrigger

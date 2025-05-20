@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Dialog,
     DialogContent,
@@ -8,7 +8,15 @@ import {
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { addDeCuongChiTietAPI } from '@/lib/apis/DeCuongChiTietApi'
-import { useState } from 'react'
+import { getAllCourse } from '@/lib/apis/CourseApi'
+import { CourseType } from '@/lib/apis/types'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
 interface DialogAddMucTieuDaoTaoProps {
     open: boolean
@@ -18,16 +26,34 @@ interface DialogAddMucTieuDaoTaoProps {
 
 export default function DialogAddMucTieuDaoTao({ open, onOpenChange, onSuccess }: DialogAddMucTieuDaoTaoProps) {
     const [mucTieu, setMucTieu] = useState('')
+    const [selectedCourseId, setSelectedCourseId] = useState<string>('')
+    const [courses, setCourses] = useState<CourseType[]>([])
     const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const data = await getAllCourse()
+                setCourses(data)
+            } catch (error) {
+                console.error('Error fetching courses:', error)
+            }
+        }
+        fetchCourses()
+    }, [])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsLoading(true)
         try {
-            await addDeCuongChiTietAPI({ mucTieu })
+            await addDeCuongChiTietAPI({
+                mucTieu,
+                idHocPhan: selectedCourseId ? parseInt(selectedCourseId) : undefined
+            })
             await onSuccess()
             onOpenChange(false)
             setMucTieu('')
+            setSelectedCourseId('')
         } catch (error) {
             console.error('Error adding item:', error)
         } finally {
@@ -42,6 +68,21 @@ export default function DialogAddMucTieuDaoTao({ open, onOpenChange, onSuccess }
                     <DialogTitle>Thêm mục tiêu đào tạo</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Học phần</label>
+                        <Select value={selectedCourseId} onValueChange={setSelectedCourseId}>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Chọn học phần" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {courses.map((course) => (
+                                    <SelectItem key={course.idHocPhan} value={course.idHocPhan?.toString() || ''}>
+                                        {course.maHP} - {course.tenHP}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
                     <div className="space-y-2">
                         <label className="text-sm font-medium">Mục tiêu</label>
                         <Textarea
