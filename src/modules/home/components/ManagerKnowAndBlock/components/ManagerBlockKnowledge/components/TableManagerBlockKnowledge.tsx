@@ -39,6 +39,8 @@ interface TableManagerBlockKnowledgeProps {
     onPageSizeChange?: (pageSize: number) => void
     pageSize?: number
     totalItems: number
+    selectedItems?: number[]
+    onDelete: (items: number[]) => Promise<void>
 }
 
 export default function TableManagerBlockKnowledge({
@@ -50,18 +52,19 @@ export default function TableManagerBlockKnowledge({
     refetchData,
     onPageSizeChange,
     pageSize = 10,
-    totalItems
+    totalItems,
+    selectedItems = [],
+    onDelete
 }: TableManagerBlockKnowledgeProps) {
-    const [selectedItems, setSelectedItems] = useState<number[]>([])
     const [openBulkDeleteDialog, setOpenBulkDeleteDialog] = useState(false)
     const [isDeleting, setIsDeleting] = useState(false)
     const [deleteProgress, setDeleteProgress] = useState(0)
 
     const handleSelectAll = () => {
         if (selectedItems.length === data.length) {
-            setSelectedItems([])
+            onDelete([])
         } else {
-            setSelectedItems(data.filter(item => item.idKhoiKienThuc).map(item => item.idKhoiKienThuc!) as number[])
+            onDelete(data.filter(item => item.idKhoiKienThuc).map(item => item.idKhoiKienThuc!) as number[])
         }
     }
 
@@ -69,9 +72,9 @@ export default function TableManagerBlockKnowledge({
         if (!id) return
 
         if (selectedItems.includes(id)) {
-            setSelectedItems(selectedItems.filter(item => item !== id))
+            onDelete(selectedItems.filter(item => item !== id))
         } else {
-            setSelectedItems([...selectedItems, id])
+            onDelete([...selectedItems, id])
         }
     }
 
@@ -127,7 +130,7 @@ export default function TableManagerBlockKnowledge({
                 toast.error(`${errorCount} khối kiến thức xóa thất bại`);
             }
 
-            setSelectedItems([])
+            onDelete([])
             refetchData()
         } catch (error) {
             console.error('Error in bulk delete:', error);
