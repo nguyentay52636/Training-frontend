@@ -14,13 +14,14 @@ import {
 import { IThongTinChungDataType } from '@/lib/apis/types';
 import { useForm } from 'react-hook-form';
 import { useAddThongTinChungMutation } from '../TrainingProgram/components/mutations';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { toast } from 'sonner';
 
 export default function AddThongTinChungDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Thêm thông tin chung</Button>
+        <Button className=' cursor-pointer bg-blue-800'>Thêm thông tin chung</Button>
       </DialogTrigger>
       <DialogContent className='max-w-3xl w-3xl min-w-3xl '>
         <AddThongTinChungForm />
@@ -32,9 +33,11 @@ export default function AddThongTinChungDialog() {
 const AddThongTinChungForm = () => {
   const years = [2020, 2021, 2022, 2023];
 
-  const { mutate } = useAddThongTinChungMutation();
+  const { mutate, isPending } = useAddThongTinChungMutation();
 
   const [selectedYears, setSelectedYears] = useState<number[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isToastVisible, setIsToastVisible] = useState(false);
 
   const form = useForm<IThongTinChungDataType>({
     defaultValues: {
@@ -59,12 +62,37 @@ const AddThongTinChungForm = () => {
     form.setValue('thoiGian', updatedYears.length.toString());
   };
 
-  const handleThemChuongTrinh = (value: IThongTinChungDataType) => {
+  const handleThemChuongTrinh = useCallback((value: IThongTinChungDataType) => {
+    if (isSubmitting || isToastVisible) return;
+
+    setIsSubmitting(true);
     mutate({
       ...value,
       thoiGian: selectedYears.length.toString(),
+    }, {
+      onSuccess: () => {
+        setIsToastVisible(true);
+        toast.success('Thêm thông tin chung thành công', {
+          onDismiss: () => {
+            setIsToastVisible(false);
+            setIsSubmitting(false);
+            form.reset();
+            setSelectedYears([]);
+          },
+          duration: 2000,
+        });
+      },
+      onError: () => {
+        toast.error('Có lỗi xảy ra khi thêm thông tin chung', {
+          onDismiss: () => {
+            setIsToastVisible(false);
+            setIsSubmitting(false);
+          },
+          duration: 2000,
+        });
+      }
     });
-  };
+  }, [isSubmitting, isToastVisible, mutate, selectedYears.length, form]);
 
   return (
     <Form {...form}>
@@ -204,8 +232,12 @@ const AddThongTinChungForm = () => {
         </div>
 
         {/* Submit */}
-        <Button className='w-full mt-4' type='submit'>
-          Thêm
+        <Button
+          className='w-full mt-4 cursor-pointer bg-blue-800'
+          type='submit'
+          disabled={isPending || isSubmitting || isToastVisible}
+        >
+          {isPending || isSubmitting ? 'Đang xử lý...' : 'Thêm'}
         </Button>
       </form>
     </Form>

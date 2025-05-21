@@ -17,6 +17,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { toast } from 'sonner'
 
 interface DialogEditMucTieuDaoTaoProps {
     open: boolean
@@ -38,6 +39,7 @@ export default function DialogEditMucTieuDaoTao({ open, onOpenChange, data, onSu
                 setCourses(data)
             } catch (error) {
                 console.error('Error fetching courses:', error)
+                toast.error('Có lỗi xảy ra khi tải danh sách học phần')
             }
         }
         fetchCourses()
@@ -61,8 +63,10 @@ export default function DialogEditMucTieuDaoTao({ open, onOpenChange, data, onSu
             })
             await onSuccess()
             onOpenChange(false)
+            toast.success('Cập nhật mục tiêu đào tạo thành công')
         } catch (error) {
             console.error('Error updating item:', error)
+            toast.error('Có lỗi xảy ra khi cập nhật mục tiêu đào tạo')
         } finally {
             setIsLoading(false)
         }

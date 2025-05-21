@@ -107,24 +107,26 @@ export default function DialogEditManagerCourse({
     const handleSubmit = async (values: FormValues) => {
         setLoading(true);
         try {
-            const updatedFormData = {
-                ...values,
-                tongSoTiet: calculateTotalHours(),
-                loaiHocPhan: Number(values.loaiHocPhan),
-                heSoHocPhan: Number(values.heSoHocPhan)
-            };
+            // Convert string values to numbers and ensure proper data types
 
-            await updateCourse(editingCourse.idHocPhan!, updatedFormData as CourseType);
+
+            if (!editingCourse.idHocPhan) {
+                throw new Error('Không tìm thấy ID học phần');
+            }
+
+            await updateCourse(editingCourse.idHocPhan, values as CourseType);
+
             toast.success('Cập nhật học phần thành công', {
                 description: 'Thông tin học phần đã được cập nhật'
             });
+
             onSuccess();
             onOpenChange(false);
         } catch (error: any) {
+            console.error('Error updating course:', error);
             toast.error('Không thể cập nhật học phần', {
                 description: error.message || 'Đã xảy ra lỗi. Vui lòng thử lại sau'
             });
-            console.error('Error updating course:', error);
         } finally {
             setLoading(false);
         }
@@ -171,17 +173,11 @@ export default function DialogEditManagerCourse({
                                             <div className="flex flex-col gap-3">
                                                 <FormLabel className="text-lg font-semibold text-gray-800">Số tín chỉ</FormLabel>
                                                 <Input
-                                                    type="number"
-                                                    min="0"
-                                                    max="20"
+
+
                                                     className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
                                                     {...field}
-                                                    onChange={(e) => {
-                                                        const value = e.target.value;
-                                                        if (value === '' || /^\d+$/.test(value)) {
-                                                            field.onChange(parseInt(value) || undefined);
-                                                        }
-                                                    }}
+
                                                     placeholder="VD: 3"
                                                 />
                                             </div>
@@ -227,13 +223,7 @@ export default function DialogEditManagerCourse({
                                                     max="100"
                                                     className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
                                                     {...field}
-                                                    onChange={(e) => {
-                                                        const value = e.target.value;
-                                                        if (value === '' || /^\d+$/.test(value)) {
-                                                            field.onChange(parseInt(value) || undefined);
-                                                            updateTotalHours();
-                                                        }
-                                                    }}
+
                                                     onBlur={() => {
                                                         updateTotalHours();
                                                     }}
@@ -256,17 +246,10 @@ export default function DialogEditManagerCourse({
                                                 <FormLabel className="text-lg font-semibold text-gray-800">Số tiết thực hành</FormLabel>
                                                 <Input
                                                     type="number"
-                                                    min="0"
-                                                    max="100"
+
                                                     className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
                                                     {...field}
-                                                    onChange={(e) => {
-                                                        const value = e.target.value;
-                                                        if (value === '' || /^\d+$/.test(value)) {
-                                                            field.onChange(parseInt(value) || undefined);
-                                                            updateTotalHours();
-                                                        }
-                                                    }}
+
                                                     onBlur={() => {
                                                         updateTotalHours();
                                                     }}
@@ -293,13 +276,7 @@ export default function DialogEditManagerCourse({
                                                     max="100"
                                                     className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
                                                     {...field}
-                                                    onChange={(e) => {
-                                                        const value = e.target.value;
-                                                        if (value === '' || /^\d+$/.test(value)) {
-                                                            field.onChange(parseInt(value) || undefined);
-                                                            updateTotalHours();
-                                                        }
-                                                    }}
+
                                                     onBlur={() => {
                                                         updateTotalHours();
                                                     }}
@@ -324,7 +301,7 @@ export default function DialogEditManagerCourse({
                                                 <FormLabel className="text-lg font-semibold text-gray-800">Loại học phần</FormLabel>
                                                 <Select
                                                     value={String(field.value)}
-                                                    onValueChange={(value) => field.onChange(Number(value))}
+
                                                 >
                                                     <SelectTrigger className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full">
                                                         <SelectValue placeholder="Chọn loại" />
@@ -352,10 +329,10 @@ export default function DialogEditManagerCourse({
                                                 <FormLabel className="text-lg font-semibold text-gray-800">Hệ số học phần</FormLabel>
                                                 <Input
                                                     type="number"
-                                                    step="0.1"
+
                                                     className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
                                                     {...field}
-                                                    onChange={(e) => field.onChange(parseFloat(e.target.value) || undefined)}
+
                                                     placeholder="VD: 1.0"
                                                 />
                                             </div>
