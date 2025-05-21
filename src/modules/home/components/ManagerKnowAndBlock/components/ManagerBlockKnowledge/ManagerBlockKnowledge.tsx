@@ -168,14 +168,14 @@ export default function ManagerBlockKnowledge() {
             </div>
 
             {/* sperate dashboard  */}
-            <DashBoardManagerBlockKnowledge
+            {/* <DashBoardManagerBlockKnowledge
                 totalBlocks={totalBlocks}
                 totalKnowledges={totalKnowledges}
                 emptyBlocks={emptyBlocks}
                 avgKnowledgePerBlock={avgKnowledgePerBlock}
                 filteredCount={filteredKnowledges.length}
                 isLoading={isLoading}
-            />
+            /> */}
 
             <div className="bg-white rounded-lg shadow p-6">
                 <Tabs defaultValue="all" className="w-full">
@@ -195,22 +195,7 @@ export default function ManagerBlockKnowledge() {
                                     onChange={handleSearchChange}
                                 />
                             </div>
-                            <div className="flex items-center gap-2">
-                                <Select onValueChange={handleSortChange} defaultValue="idAsc">
-                                    <SelectTrigger className="w-[160px]">
-                                        <Filter className="h-4 w-4 mr-2" />
-                                        <SelectValue placeholder="Sắp xếp" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="idAsc">ID tăng dần</SelectItem>
-                                        <SelectItem value="idDesc">ID giảm dần</SelectItem>
-                                        <SelectItem value="nameAsc">Tên A-Z</SelectItem>
-                                        <SelectItem value="nameDesc">Tên Z-A</SelectItem>
-                                        <SelectItem value="countAsc">Số kiến thức tăng</SelectItem>
-                                        <SelectItem value="countDesc">Số kiến thức giảm</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
+                      
                         </div>
                     </div>
 

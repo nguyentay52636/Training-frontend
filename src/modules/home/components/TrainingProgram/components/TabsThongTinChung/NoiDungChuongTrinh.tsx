@@ -27,6 +27,7 @@ import DialogAddKienThucVaoKhoi from '../ProgramContent/components/AddBlocKnowle
 import { getBlockKnows } from '@/lib/apis/blockKnowApi';
 import { getHocPhanByKienThucId } from '@/lib/apis/KnowsApi';
 import { BlockKnowType, knowledgeType as KnowledgeType } from '@/lib/apis/types';
+import ActionsDeleteEditBlock from './ActionsDeleteEditBlock';
 
 export default function NoiDungChuongTrinh() {
     const [blockKnows, setBlockKnows] = useState<BlockKnowType[]>([]);
@@ -202,20 +203,11 @@ export default function NoiDungChuongTrinh() {
                                                     <TableCell className='text-center'>
                                                         <div className='flex justify-center'>
                                                             <BlocknowledgeActions blockKnowId={blockKnow.idKhoiKienThuc || 0} />
-                                                            <Button
-                                                                className='text-blue-600 hover:text-blue-800 cursor-pointer text-center p-3'
-                                                                title='Chỉnh sửa'
-                                                                variant='ghost'
-                                                            >
-                                                                <Pencil size={24} />
-                                                            </Button>
-                                                            <Button
-                                                                className='text-red-600 hover:text-red-800 cursor-pointer text-center p-3'
-                                                                title='Xóa'
-                                                                variant='ghost'
-                                                            >
-                                                                <Trash2 size={24} />
-                                                            </Button>
+                                                            <ActionsDeleteEditBlock
+                                                                blockId={blockKnow.idKhoiKienThuc || 0}
+                                                                blockName={blockKnow.tenKhoiKienThuc || ''}
+                                                                onUpdateSuccess={handleUpdateSuccess}
+                                                            />
                                                         </div>
                                                     </TableCell>
                                                 </TableRow>

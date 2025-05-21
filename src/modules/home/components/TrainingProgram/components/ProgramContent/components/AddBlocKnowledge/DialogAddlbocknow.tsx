@@ -13,6 +13,8 @@ import { addBlockKnow } from "@/lib/apis/blockKnowApi";
 import { BlockKnowType } from "@/lib/apis/types";
 import { toast } from 'react-toastify';
 
+const API_TIMEOUT = 10000; // 10 seconds timeout
+
 const showToast = (type: 'success' | 'error', message: string) => {
     const toastConfig = {
         position: "top-right" as const,
@@ -51,13 +53,26 @@ export default function DialogAddBlockNow() {
                 kienThucList: []
             };
 
-            await addBlockKnow(newBlockKnow);
+            // Add timeout to API call
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('Request timeout')), API_TIMEOUT);
+            });
+
+            await Promise.race([
+                addBlockKnow(newBlockKnow),
+                timeoutPromise
+            ]);
+
             showToast('success', "Thêm khối kiến thức thành công");
             setTenKhoiKienThuc(""); // Reset form
             setOpen(false); // Close dialog
         } catch (error) {
             console.error("Error adding block knowledge:", error);
-            showToast('error', "Có lỗi xảy ra khi thêm khối kiến thức");
+            if (error instanceof Error && error.message === 'Request timeout') {
+                showToast('error', "Yêu cầu quá thời gian chờ. Vui lòng thử lại.");
+            } else {
+                showToast('error', "Có lỗi xảy ra khi thêm khối kiến thức");
+            }
         } finally {
             setLoading(false);
         }

@@ -93,25 +93,7 @@ const data = {
         },
       ],
     },
-    {
-      title: "Thống kê",
-      url: "/trangchu/thong-ke",
-      icon: BarChart,
-      items: [
-        {
-          title: "Thống kê sinh viên",
-          url: "/trangchu/thong-ke/sinh-vien",
-        },
-        {
-          title: "Thống kê giảng viên",
-          url: "/trangchu/thong-ke/giang-vien",
-        },
-        {
-          title: "Thống kê học tập",
-          url: "/trangchu/thong-ke/hoc-tap",
-        },
-      ],
-    },
+
     {
       title: "Tài liệu",
       url: "/trangchu/tai-lieu",
@@ -146,10 +128,7 @@ const data = {
           title: "Hệ thống",
           url: "/trangchu/cai-dat/he-thong",
         },
-        {
-          title: "Thông báo",
-          url: "/trangchu/cai-dat/thong-bao",
-        },
+
       ],
     },
   ],

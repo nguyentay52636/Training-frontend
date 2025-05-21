@@ -20,6 +20,8 @@ import { addKnowInBlockKnow } from "@/lib/apis/blockKnowApi";
 import { getKnows } from "@/lib/apis/KnowsApi";
 import { X } from "lucide-react";
 import DialogNewKnow from "./DialogNewKnow";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
 
 interface DialogAddKienThucVaoKhoiProps {
     blockKnowId: number;
@@ -39,6 +41,10 @@ export default function DialogAddKienThucVaoKhoi({ blockKnowId, open, onOpenChan
     const [availableKnowledge, setAvailableKnowledge] = useState<knowledgeType[]>([]);
     const [selectValue, setSelectValue] = useState<string>("");
     const [isNewKnowDialogOpen, setIsNewKnowDialogOpen] = useState(false);
+
+    const form = useForm({
+        defaultValues: { tenChuongTrinh: "abc" }
+    });
 
     useEffect(() => {
         const fetchKnowledge = async () => {
