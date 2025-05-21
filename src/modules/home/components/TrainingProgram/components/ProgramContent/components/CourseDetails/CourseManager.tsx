@@ -35,14 +35,14 @@ export default function CourseManager({ knowledgeData }: CourseManagerProps = {}
           setSelectedCourseIds([]);
           return;
         }
-    setSelectedCourses(courses);
+        setSelectedCourses(courses);
 
         // Lấy danh sách ID học phần
         const courseIds = courses
           .filter((course) => course.idHocPhan !== undefined)
           .map((course) => course.idHocPhan as number);
         setSelectedCourseIds(courseIds);
-        
+
         // Calculate total pages
         setTotalPages(Math.ceil(courses.length / rowsPerPage));
       } catch (error: any) {
@@ -122,14 +122,14 @@ export default function CourseManager({ knowledgeData }: CourseManagerProps = {}
               preselectedKnowledgeId={idKienThuc}
               onCoursesAdded={handleCoursesAdded}
             />
-            <Button
+            {/* <Button
               variant='outline'
               className='mx-2 cursor-pointer bg-gray-700 text-white hover:bg-gray-800'
               onClick={handleSaveKnowledge}
               disabled={loading}
             >
               {loading ? 'Đang lưu...' : 'Lưu'}
-            </Button>
+            </Button> */}
           </div>
         </div>
         <div>

@@ -40,7 +40,7 @@ const formSchema = z.object({
     soTietLyThuyet: z.number().min(0, "Số tiết lý thuyết phải lớn hơn hoặc bằng 0"),
     soTietThucHanh: z.number().min(0, "Số tiết thực hành phải lớn hơn hoặc bằng 0"),
     soTietThucTap: z.number().min(0, "Số tiết thực tập phải lớn hơn hoặc bằng 0"),
-    loaiHocPhan: z.number().min(0, "Loại học phần không được để trống").max(3, "Loại học phần không hợp lệ"),
+    loaiHocPhan: z.number().min(0, "Loại học phần không được để trống").max(2, "Loại học phần không hợp lệ"),
     heSoHocPhan: z.number().min(0, "Hệ số học phần phải lớn hơn hoặc bằng 0"),
     tongSoTiet: z.number().min(0, "Tổng số tiết phải lớn hơn hoặc bằng 0"),
 });
@@ -333,7 +333,6 @@ export default function DialogEditManagerCourse({
                                                         <SelectItem value="0">Bắt buộc</SelectItem>
                                                         <SelectItem value="1">Tự chọn</SelectItem>
                                                         <SelectItem value="2">Thực tập</SelectItem>
-                                                        <SelectItem value="3">Khóa luận</SelectItem>
                                                     </SelectContent>
                                                 </Select>
                                             </div>

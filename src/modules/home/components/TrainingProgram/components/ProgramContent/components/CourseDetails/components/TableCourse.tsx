@@ -12,6 +12,7 @@ import { Checkbox } from '@radix-ui/react-checkbox';
 import { useEffect, useState } from 'react';
 import { getKnowledgeById } from '@/lib/apis/KnowsApi';
 import { getLoaiHocPhanDisplay } from '@/lib/utils/courseHelpers';
+import ToastContainer from '@/components/ToastContainer';
 
 interface CourseType {
     idHocPhan?: number;
@@ -134,6 +135,7 @@ export default function TableCourse({ onRowClick, courseData = [], knowledgeId }
                     )}
                 </TableBody>
             </Table>
+            <ToastContainer />
         </div>
     );
 }

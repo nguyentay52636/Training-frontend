@@ -58,7 +58,7 @@ export default function MucTieuDaoTao() {
                     className="bg-blue-700 hover:bg-blue-800 text-white"
                 >
                     <Plus className="mr-2 h-4 w-4" />
-                    Thêm mục tiêu
+                    Thêm đề cương chi tiết
                 </Button>
             </div>
 

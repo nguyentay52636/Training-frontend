@@ -159,11 +159,7 @@ const data = {
       url: "/trangchu",
       icon: Home,
     },
-    {
-      name: "Quản lý chuyên ngành",
-      url: "/trangchu/quan-ly-chuyen-nganh",
-      icon: FileText,
-    },
+
     {
       name: "Quản lý giảng viên",
       url: "/trangchu/quan-ly-giang-vien/danh-sach-giang-vien",
@@ -174,11 +170,11 @@ const data = {
       url: "/trangchu/quan-ly-tai-khoan",
       icon: Settings,
     },
-    {
-      name: "Lịch giảng dạy",
-      url: "/trangchu/lich-giang-day",
-      icon: FileText,
-    },
+    // {
+    //   name: "Lịch giảng dạy",
+    //   url: "/trangchu/lich-giang-day",
+    //   icon: FileText,
+    // },
   ],
 };
 
