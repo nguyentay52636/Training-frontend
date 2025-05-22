@@ -1,4 +1,4 @@
-import { getKeHoachDayHocAPI } from '@/lib/apis/CourseApi';
+import { getKeHoachDayHocAPI, getKeHoachDayHocByIdAPI } from '@/lib/apis/CourseApi';
 import { getAllHocKyAPI } from '@/lib/apis/HocKyApi';
 import { useQuery } from '@tanstack/react-query';
 
@@ -24,6 +24,27 @@ export const useGetAllHocKy = () => {
     queryFn: async () => {
       try {
         const data = await getAllHocKyAPI();
+        return data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  });
+
+  return query;
+};
+
+export const useGetAllTeachingPlanByStudySectionId = ({
+  studySectionId,
+}: {
+  studySectionId: number;
+}) => {
+  const query = useQuery({
+    queryKey: ['ke-hoach-day-hoc-by-hoc-ky'],
+    queryFn: async () => {
+      try {
+        const data = await getKeHoachDayHocByIdAPI(studySectionId);
+
         return data;
       } catch (error) {
         console.log(error);
