@@ -27,6 +27,7 @@ import DialogAddKienThucVaoKhoi from '../ProgramContent/components/AddBlocKnowle
 import { getBlockKnows } from '@/lib/apis/blockKnowApi';
 import { getHocPhanByKienThucId } from '@/lib/apis/KnowsApi';
 import { BlockKnowType, knowledgeType as KnowledgeType } from '@/lib/apis/types';
+import ActionsDeleteEditBlock from './ActionsDeleteEditBlock';
 
 export default function NoiDungChuongTrinh() {
   const [blockKnows, setBlockKnows] = useState<BlockKnowType[]>([]);
@@ -168,6 +169,7 @@ export default function NoiDungChuongTrinh() {
                                 </div>
                               </div>
 
+<<<<<<< HEAD
                               {blockKnow.kienThucList && blockKnow.kienThucList.length > 0 ? (
                                 <div className='mt-2'>
                                   <Select onValueChange={handleKnowledgeSelect}>
@@ -187,6 +189,51 @@ export default function NoiDungChuongTrinh() {
                                               </span>
                                             </SelectItem>
                                           ),
+=======
+                                                            {blockKnow.kienThucList && blockKnow.kienThucList.length > 0 ? (
+                                                                <div className='mt-2'>
+                                                                    <Select onValueChange={handleKnowledgeSelect}>
+                                                                        <SelectTrigger className='w-full'>
+                                                                            <SelectValue placeholder='Chọn kiến thức' />
+                                                                        </SelectTrigger>
+                                                                        <SelectContent>
+                                                                            <SelectGroup>
+                                                                                {blockKnow.kienThucList.map(
+                                                                                    (knowledge: KnowledgeType, idx: number) => (
+                                                                                        <SelectItem
+                                                                                            key={knowledge.idKienThuc}
+                                                                                            value={knowledge.idKienThuc?.toString() || ''}
+                                                                                        >
+                                                                                            <span className='font-medium'>
+                                                                                                {idx + 1}. {knowledge.tenKienThuc}
+                                                                                            </span>
+                                                                                        </SelectItem>
+                                                                                    ),
+                                                                                )}
+                                                                            </SelectGroup>
+                                                                        </SelectContent>
+                                                                    </Select>
+                                                                </div>
+                                                            ) : (
+                                                                <div className='text-gray-500 italic text-sm pl-2'>
+                                                                    Chưa có kiến thức nào
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell className='text-center'>
+                                                        <div className='flex justify-center'>
+                                                            <BlocknowledgeActions blockKnowId={blockKnow.idKhoiKienThuc || 0} />
+                                                            <ActionsDeleteEditBlock
+                                                                blockId={blockKnow.idKhoiKienThuc || 0}
+                                                                blockName={blockKnow.tenKhoiKienThuc || ''}
+                                                                onUpdateSuccess={handleUpdateSuccess}
+                                                            />
+                                                        </div>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))
+>>>>>>> 5d1f1e2245ba6402f53fc25438cbeca33823d71d
                                         )}
                                       </SelectGroup>
                                     </SelectContent>

@@ -93,25 +93,7 @@ const data = {
         },
       ],
     },
-    {
-      title: "Thống kê",
-      url: "/trangchu/thong-ke",
-      icon: BarChart,
-      items: [
-        {
-          title: "Thống kê sinh viên",
-          url: "/trangchu/thong-ke/sinh-vien",
-        },
-        {
-          title: "Thống kê giảng viên",
-          url: "/trangchu/thong-ke/giang-vien",
-        },
-        {
-          title: "Thống kê học tập",
-          url: "/trangchu/thong-ke/hoc-tap",
-        },
-      ],
-    },
+
     {
       title: "Tài liệu",
       url: "/trangchu/tai-lieu",
@@ -146,10 +128,7 @@ const data = {
           title: "Hệ thống",
           url: "/trangchu/cai-dat/he-thong",
         },
-        {
-          title: "Thông báo",
-          url: "/trangchu/cai-dat/thong-bao",
-        },
+
       ],
     },
   ],
@@ -159,11 +138,7 @@ const data = {
       url: "/trangchu",
       icon: Home,
     },
-    {
-      name: "Quản lý chuyên ngành",
-      url: "/trangchu/quan-ly-chuyen-nganh",
-      icon: FileText,
-    },
+
     {
       name: "Quản lý giảng viên",
       url: "/trangchu/quan-ly-giang-vien/danh-sach-giang-vien",
@@ -174,11 +149,11 @@ const data = {
       url: "/trangchu/quan-ly-tai-khoan",
       icon: Settings,
     },
-    {
-      name: "Lịch giảng dạy",
-      url: "/trangchu/lich-giang-day",
-      icon: FileText,
-    },
+    // {
+    //   name: "Lịch giảng dạy",
+    //   url: "/trangchu/lich-giang-day",
+    //   icon: FileText,
+    // },
   ],
 };
 

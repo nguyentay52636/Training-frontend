@@ -227,15 +227,7 @@ export default function DialogAddCourse({
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className="flex justify-end mb-4">
-                    <Button
-                        variant="outline"
-                        className="cursor-pointer bg-blue-500 text-white hover:bg-blue-600 hover:text-white"
-                        onClick={() => setIsCreatingCourse(!isCreatingCourse)}
-                    >
-                        {isCreatingCourse ? "Chọn học phần có sẵn" : "Tạo học phần mới"}
-                    </Button>
-                </div>
+
 
                 <CourseForm
                     isCreatingCourse={isCreatingCourse}
@@ -247,10 +239,6 @@ export default function DialogAddCourse({
                     loading={loading}
                     preselectedKnowledgeId={preselectedKnowledgeId}
                     onInputChange={handleInputChange}
-                    onKhoiKienThucChange={(value) => {
-                        setSelectedKhoiId(value);
-                    }}
-                    onKienThucChange={(value) => setSelectedKienThucId(value)}
                     onSelectCourse={handleSelectCourse}
                     onRemoveCourse={handleRemoveCourse}
                     onCreateCourse={handleCreateCourse}

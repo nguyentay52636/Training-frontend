@@ -33,8 +33,8 @@ export default function BlocknowledgeActions({ blockKnowId }: BlocknowledgeActio
                 </DropdownMenuContent>
             </DropdownMenu>
 
-            <DialogAddKienThucVaoKhoi 
-                open={open} 
+            <DialogAddKienThucVaoKhoi
+                open={open}
                 onOpenChange={setOpen}
                 blockKnowId={blockKnowId}
             />

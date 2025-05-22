@@ -26,6 +26,9 @@ import { toast } from 'sonner'
 import { deleteBlockKnow } from '@/lib/apis/blockKnowApi'
 import PaginationManagerBlockKnowledge from './PaginationManagerBlockKnowledge'
 
+const BATCH_SIZE = 5; // Process 5 items at a time
+const API_TIMEOUT = 10000; // 10 seconds timeout
+
 interface TableManagerBlockKnowledgeProps {
     data: BlockKnowType[]
     isLoading: boolean
@@ -36,6 +39,8 @@ interface TableManagerBlockKnowledgeProps {
     onPageSizeChange?: (pageSize: number) => void
     pageSize?: number
     totalItems: number
+    selectedItems?: number[]
+    onDelete: (items: number[]) => Promise<void>
 }
 
 export default function TableManagerBlockKnowledge({
@@ -47,17 +52,19 @@ export default function TableManagerBlockKnowledge({
     refetchData,
     onPageSizeChange,
     pageSize = 10,
-    totalItems
+    totalItems,
+    selectedItems = [],
+    onDelete
 }: TableManagerBlockKnowledgeProps) {
-    const [selectedItems, setSelectedItems] = useState<number[]>([])
     const [openBulkDeleteDialog, setOpenBulkDeleteDialog] = useState(false)
     const [isDeleting, setIsDeleting] = useState(false)
+    const [deleteProgress, setDeleteProgress] = useState(0)
 
     const handleSelectAll = () => {
         if (selectedItems.length === data.length) {
-            setSelectedItems([])
+            onDelete([])
         } else {
-            setSelectedItems(data.filter(item => item.idKhoiKienThuc).map(item => item.idKhoiKienThuc!) as number[])
+            onDelete(data.filter(item => item.idKhoiKienThuc).map(item => item.idKhoiKienThuc!) as number[])
         }
     }
 
@@ -65,11 +72,26 @@ export default function TableManagerBlockKnowledge({
         if (!id) return
 
         if (selectedItems.includes(id)) {
-            setSelectedItems(selectedItems.filter(item => item !== id))
+            onDelete(selectedItems.filter(item => item !== id))
         } else {
-            setSelectedItems([...selectedItems, id])
+            onDelete([...selectedItems, id])
         }
     }
+
+    const processBatch = async (items: number[]): Promise<void> => {
+        const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('Request timeout')), API_TIMEOUT);
+        });
+
+        const deletePromises = items.map(id =>
+            Promise.race([
+                deleteBlockKnow(id),
+                timeoutPromise
+            ])
+        );
+
+        await Promise.all(deletePromises);
+    };
 
     const handleBulkDelete = async () => {
         if (selectedItems.length === 0) {
@@ -79,19 +101,43 @@ export default function TableManagerBlockKnowledge({
 
         try {
             setIsDeleting(true)
+            setDeleteProgress(0)
 
-            // Delete items one by one
-            const deletePromises = selectedItems.map(id => deleteBlockKnow(id))
-            await Promise.all(deletePromises)
+            // Process items in batches
+            const batches = [];
+            for (let i = 0; i < selectedItems.length; i += BATCH_SIZE) {
+                batches.push(selectedItems.slice(i, i + BATCH_SIZE));
+            }
 
-            toast.success(`Đã xóa ${selectedItems.length} khối kiến thức thành công`)
-            setSelectedItems([])
+            let successCount = 0;
+            let errorCount = 0;
+
+            for (const batch of batches) {
+                try {
+                    await processBatch(batch);
+                    successCount += batch.length;
+                } catch (error) {
+                    console.error('Error processing batch:', error);
+                    errorCount += batch.length;
+                }
+                setDeleteProgress(prev => prev + (batch.length / selectedItems.length) * 100);
+            }
+
+            if (successCount > 0) {
+                toast.success(`Đã xóa ${successCount} khối kiến thức thành công`);
+            }
+            if (errorCount > 0) {
+                toast.error(`${errorCount} khối kiến thức xóa thất bại`);
+            }
+
+            onDelete([])
             refetchData()
         } catch (error) {
+            console.error('Error in bulk delete:', error);
             toast.error('Có lỗi xảy ra khi xóa các khối kiến thức')
-            console.error(error)
         } finally {
             setIsDeleting(false)
+            setDeleteProgress(0)
             setOpenBulkDeleteDialog(false)
         }
     }
@@ -116,9 +162,10 @@ export default function TableManagerBlockKnowledge({
                         variant="destructive"
                         size="sm"
                         onClick={() => setOpenBulkDeleteDialog(true)}
+                        disabled={isDeleting}
                     >
                         <Trash2 className="h-4 w-4 mr-2" />
-                        Xóa đã chọn
+                        {isDeleting ? `Đang xóa (${Math.round(deleteProgress)}%)` : 'Xóa đã chọn'}
                     </Button>
                 </div>
             )}
@@ -195,6 +242,19 @@ export default function TableManagerBlockKnowledge({
                         <AlertDialogTitle>Xóa nhiều khối kiến thức</AlertDialogTitle>
                         <AlertDialogDescription>
                             Bạn có chắc chắn muốn xóa {selectedItems.length} khối kiến thức đã chọn? Hành động này không thể hoàn tác.
+                            {isDeleting && (
+                                <div className="mt-4">
+                                    <div className="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div
+                                            className="bg-blue-600 h-2.5 rounded-full"
+                                            style={{ width: `${deleteProgress}%` }}
+                                        ></div>
+                                    </div>
+                                    <p className="text-sm text-gray-500 mt-2">
+                                        Đang xóa... {Math.round(deleteProgress)}%
+                                    </p>
+                                </div>
+                            )}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

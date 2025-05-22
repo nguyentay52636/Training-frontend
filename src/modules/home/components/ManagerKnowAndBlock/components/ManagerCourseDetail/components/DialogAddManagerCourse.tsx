@@ -124,23 +124,16 @@ export default function DialogAddManagerCourse({
                 ...values,
                 tongSoTiet: calculateTotalHours(),
                 loaiHocPhan: Number(values.loaiHocPhan)
-            };
-
-            if (editingCourse?.idHocPhan) {
-                await updateCourse(editingCourse.idHocPhan, updatedFormData as CourseType);
-                toast.success('Cập nhật học phần thành công', {
-                    description: 'Thông tin học phần đã được cập nhật'
-                });
-            } else {
-                const response = await createCourse(updatedFormData as CourseType);
-                if (response) {
-                    toast.success('Thêm học phần mới thành công', {
-                        description: 'Học phần mới đã được thêm vào hệ thống'
-                    });
-                    onSuccess();
-                    onOpenChange(false);
-                }
             }
+            const response = await createCourse(updatedFormData as CourseType);
+            if (response) {
+                toast.success('Thêm học phần mới thành công', {
+                    description: 'Học phần mới đã được thêm vào hệ thống'
+                });
+                onSuccess();
+                onOpenChange(false);
+            }
+
         } catch (error: any) {
             toast.error('Không thể lưu học phần', {
                 description: error.message || 'Đã xảy ra lỗi. Vui lòng thử lại sau'
@@ -193,8 +186,7 @@ export default function DialogAddManagerCourse({
                                                 <FormLabel className="text-lg font-semibold text-gray-800">Số tín chỉ</FormLabel>
                                                 <Input
                                                     type="number"
-                                                    min="0"
-                                                    max="20"
+                                                    max="10"
                                                     className="rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm py-3 px-6 text-base transition-all duration-200 w-full"
                                                     {...field}
                                                     onChange={(e) => {

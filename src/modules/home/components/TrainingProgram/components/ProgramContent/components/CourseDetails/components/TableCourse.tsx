@@ -12,6 +12,21 @@ import { Checkbox } from '@radix-ui/react-checkbox';
 import { useEffect, useState } from 'react';
 import { getKnowledgeById } from '@/lib/apis/KnowsApi';
 import { getLoaiHocPhanDisplay } from '@/lib/utils/courseHelpers';
+import ToastContainer from '@/components/ToastContainer';
+import { Button } from '@/components/ui/button';
+import { Pencil, Trash2 } from 'lucide-react';
+import { toast } from 'react-toastify';
+import { updateCourse, deleteCourse } from '@/lib/apis/CourseApi';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface CourseType {
     idHocPhan?: number;
@@ -22,8 +37,8 @@ interface CourseType {
     soTietThucHanh: number;
     soTietThucTap: number;
     tongSoTiet: number;
-    loaiHocPhan: string | number;
-    heSoHocPhan?: number;
+    loaiHocPhan: number;
+    heSoHocPhan: number;
 }
 
 interface KnowledgeType {
@@ -44,6 +59,9 @@ export default function TableCourse({ onRowClick, courseData = [], knowledgeId }
     const [loadedCourses, setLoadedCourses] = useState<CourseType[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [selectedCourse, setSelectedCourse] = useState<CourseType | null>(null);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
     useEffect(() => {
         const fetchCourses = async () => {
@@ -73,6 +91,31 @@ export default function TableCourse({ onRowClick, courseData = [], knowledgeId }
     // Use provided courseData if available, otherwise use the loaded data
     const displayData = courseData.length > 0 ? courseData : loadedCourses;
 
+    const handleEditCourse = async (course: CourseType) => {
+        setSelectedCourse(course);
+        setIsEditDialogOpen(true);
+    };
+
+    const handleDeleteCourse = async (course: CourseType) => {
+        if (!course.idHocPhan) return;
+        setSelectedCourse(course);
+        setIsDeleteDialogOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!selectedCourse?.idHocPhan) return;
+        try {
+            await deleteCourse(selectedCourse.idHocPhan);
+            setLoadedCourses(prev => prev.filter(course => course.idHocPhan !== selectedCourse.idHocPhan));
+            toast.success('Xóa học phần thành công!');
+        } catch (error) {
+            toast.error('Không thể xóa học phần');
+        } finally {
+            setIsDeleteDialogOpen(false);
+            setSelectedCourse(null);
+        }
+    };
+
     if (loading) {
         return <div className="w-full p-4 bg-white rounded-xl text-center py-8">Đang tải dữ liệu...</div>;
     }
@@ -96,6 +139,7 @@ export default function TableCourse({ onRowClick, courseData = [], knowledgeId }
                         <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Thực tập</TableHead>
                         <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Tổng số tiết</TableHead>
                         <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Loại</TableHead>
+                        <TableHead className="text-lg font-semibold tracking-wide uppercase text-white!">Hành động</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -129,11 +173,55 @@ export default function TableCourse({ onRowClick, courseData = [], knowledgeId }
                                 <TableCell>
                                     {getLoaiHocPhanDisplay(hocPhan.loaiHocPhan)}
                                 </TableCell>
+                                <TableCell>
+                                    <div className="flex gap-2">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleEditCourse(hocPhan);
+                                            }}
+                                        >
+                                            <Pencil className="w-4 h-4" />
+                                        </Button>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="text-red-600 hover:text-red-700"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleDeleteCourse(hocPhan);
+                                            }}
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </Button>
+                                    </div>
+                                </TableCell>
                             </TableRow>
                         ))
                     )}
                 </TableBody>
             </Table>
+
+            <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Bạn có chắc chắn muốn xóa học phần này không? Hành động này không thể hoàn tác.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Hủy</AlertDialogCancel>
+                        <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">
+                            Xóa
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+            <ToastContainer />
         </div>
     );
 }
