@@ -107,10 +107,7 @@ const data = {
           title: "Thông tin chung",
           url: "/trangchu/tai-lieu/thong-tin-chung",
         },
-        {
-          title: "Câu hỏi thường gặp",
-          url: "/trangchu/tai-lieu/cau-hoi",
-        },
+
       ],
     },
 

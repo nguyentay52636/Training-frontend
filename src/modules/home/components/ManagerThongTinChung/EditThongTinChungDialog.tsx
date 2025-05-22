@@ -14,12 +14,8 @@ import {
 import { IThongTinChungDataType } from '@/lib/apis/types';
 import { Pencil } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-<<<<<<< HEAD
-import { useEditPhanCongGiangDayMutation } from '../ManagerLecturer/ TeachingAssignment/components/AddTeachingSchedule/mutations';
-=======
 import { useAddThongTinChungMutation } from '../TrainingProgram/components/mutations';
 import { toast } from 'sonner';
->>>>>>> 5d1f1e2245ba6402f53fc25438cbeca33823d71d
 
 export default function EditThongTinChungDialog({
   dataThongTinChung,
@@ -56,12 +52,6 @@ const EditThongTinChungForm = ({ thongTinChung }: { thongTinChung: IThongTinChun
     },
   });
 
-<<<<<<< HEAD
-  const { mutate } = useEditPhanCongGiangDayMutation();
-
-  const handleThemChuongTrinh = (value: IThongTinChungDataType) => {
-    mutate({ id: thongTinChung.id, data: value });
-=======
   const { mutate, isPending } = useAddThongTinChungMutation();
 
   const handleThemChuongTrinh = (value: IThongTinChungDataType) => {
@@ -73,7 +63,6 @@ const EditThongTinChungForm = ({ thongTinChung }: { thongTinChung: IThongTinChun
         toast.error('Có lỗi xảy ra khi thêm thông tin chung');
       }
     });
->>>>>>> 5d1f1e2245ba6402f53fc25438cbeca33823d71d
   };
 
   return (
