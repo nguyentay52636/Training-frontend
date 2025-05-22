@@ -7,24 +7,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { HocKyList } from '@/lib/apis/types';
 import { Pencil, Trash2 } from 'lucide-react';
 
-export default function MajorTable({
-  major,
-}: {
-  major: {
-    idHocPhan: number;
-    maHP: string;
-    tenHP: string;
-    soTinChi: number;
-    soTietLyThuyet: number;
-    soTietThucHanh: number;
-    soTietThucTap: number;
-    tongSoTiet: number;
-    loaiHocPhan: number;
-    heSoHocPhan: number;
-  };
-}) {
+export default function MajorTable({ major }: { major: HocKyList }) {
   return (
     <Table>
       <TableHeader>
@@ -39,25 +25,30 @@ export default function MajorTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow>
-          <TableCell className='text-center'>{major.idHocPhan}</TableCell>
-          <TableCell>{major.maHP}</TableCell>
-          <TableCell className='text-center'>{major.soTinChi}</TableCell>
-          <TableCell className='text-center'>{major.tongSoTiet}</TableCell>
-          <TableCell className='text-center'>{major.soTietLyThuyet}</TableCell>
-          <TableCell className='text-center'>{major.soTietThucHanh}</TableCell>
-          <TableCell>
-            <div className='flex gap-2 justify-center'>
-              <Button className='text-blue-600 hover:text-blue-800 cursor-pointer' variant='ghost'>
-                <Pencil size={20} />
-              </Button>
-              <Button className='text-red-600 hover:text-red-800 cursor-pointer' variant='ghost'>
-                <Trash2 size={20} />
-              </Button>
-            </div>
-          </TableCell>
-        </TableRow>
+        {major.hocPhanList.map((monHoc) => (
+          <TableRow key={monHoc.heSoHocPhan}>
+            <TableCell className='text-center'>{major.idHocPhan}</TableCell>
+            <TableCell>{monHoc.maHP}</TableCell>
+            <TableCell className='text-center'>{monHoc.soTinChi}</TableCell>
+            <TableCell className='text-center'>{monHoc.tongSoTiet}</TableCell>
+            <TableCell className='text-center'>{monHoc.soTietLyThuyet}</TableCell>
+            <TableCell className='text-center'>{monHoc.soTietThucHanh}</TableCell>
+            <TableCell>
+              <div className='flex gap-2 justify-center'>
+                <Button
+                  className='text-blue-600 hover:text-blue-800 cursor-pointer'
+                  variant='ghost'
+                >
+                  <Pencil size={20} />
+                </Button>
+                <Button className='text-red-600 hover:text-red-800 cursor-pointer' variant='ghost'>
+                  <Trash2 size={20} />
+                </Button>
+              </div>
+            </TableCell>
+          </TableRow>
+        ))}
       </TableBody>
-    </Table >
+    </Table>
   );
 }

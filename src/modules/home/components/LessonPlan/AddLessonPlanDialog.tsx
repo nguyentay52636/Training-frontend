@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Form, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,73 +12,80 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { IThongTinChungDataType } from '@/lib/apis/types';
-import { Pencil } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-<<<<<<< HEAD
-import { useEditPhanCongGiangDayMutation } from '../ManagerLecturer/ TeachingAssignment/components/AddTeachingSchedule/mutations';
-=======
 import { useAddThongTinChungMutation } from '../TrainingProgram/components/mutations';
-import { toast } from 'sonner';
->>>>>>> 5d1f1e2245ba6402f53fc25438cbeca33823d71d
+import { useState } from 'react';
 
-export default function EditThongTinChungDialog({
-  dataThongTinChung,
+export default function AddLessonPlanDialog({
+  open,
+  onClose,
 }: {
-  dataThongTinChung: IThongTinChungDataType;
+  open: boolean;
+  onClose: () => void;
 }) {
+  const handleCloseDialog = (isOpen: boolean) => {
+    if (!isOpen) {
+      onClose();
+    }
+  };
+
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant='outline' size='sm'>
-          <Pencil className='w-4 h-4' />
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={handleCloseDialog}>
       <DialogContent className='max-w-3xl w-3xl min-w-3xl '>
-        <EditThongTinChungForm thongTinChung={dataThongTinChung} />
+        <AddThongTinChungForm onClose={onClose} />
       </DialogContent>
     </Dialog>
   );
 }
 
-const EditThongTinChungForm = ({ thongTinChung }: { thongTinChung: IThongTinChungDataType }) => {
+const AddThongTinChungForm = ({ onClose }: { onClose: () => void }) => {
   const years = [2020, 2021, 2022, 2023];
+
+  const { mutate } = useAddThongTinChungMutation();
+
+  const [selectedYears, setSelectedYears] = useState<number[]>([]);
+
   const form = useForm<IThongTinChungDataType>({
     defaultValues: {
-      tenChuongTrinh: thongTinChung.tenChuongTrinh,
-      bac: thongTinChung.bac,
-      loaiBang: thongTinChung.loaiBang,
-      loaiHinhDaoTao: thongTinChung.loaiHinhDaoTao,
-      thoiGian: thongTinChung.thoiGian,
-      soTinChi: thongTinChung.soTinChi,
-      khoaQuanLy: thongTinChung.khoaQuanLy,
-      ngonNgu: thongTinChung.ngonNgu,
-      khoaTuyen: thongTinChung.khoaTuyen,
+      tenChuongTrinh: '',
+      bac: '',
+      loaiBang: '',
+      loaiHinhDaoTao: '',
+      thoiGian: setSelectedYears.length.toString(),
+      soTinChi: 0,
+      khoaQuanLy: '',
+      ngonNgu: '',
+      khoaTuyen: '',
     },
   });
 
-<<<<<<< HEAD
-  const { mutate } = useEditPhanCongGiangDayMutation();
+  const handleYearChange = (year: number, checked: boolean) => {
+    const updatedYears = checked
+      ? [...selectedYears, year]
+      : selectedYears.filter((y) => y !== year);
+
+    setSelectedYears(updatedYears);
+    form.setValue('thoiGian', updatedYears.length.toString());
+  };
 
   const handleThemChuongTrinh = (value: IThongTinChungDataType) => {
-    mutate({ id: thongTinChung.id, data: value });
-=======
-  const { mutate, isPending } = useAddThongTinChungMutation();
-
-  const handleThemChuongTrinh = (value: IThongTinChungDataType) => {
-    mutate(value, {
-      onSuccess: () => {
-        toast.success('Thêm thông tin chung thành công');
+    mutate(
+      {
+        ...value,
+        thoiGian: selectedYears.length.toString(),
       },
-      onError: () => {
-        toast.error('Có lỗi xảy ra khi thêm thông tin chung');
-      }
-    });
->>>>>>> 5d1f1e2245ba6402f53fc25438cbeca33823d71d
+      {
+        onSuccess: () => {
+          onClose();
+        },
+      },
+    );
   };
 
   return (
     <Form {...form}>
       <form className='space-y-4' onSubmit={form.handleSubmit(handleThemChuongTrinh)}>
+        {/* Tên chương trình */}
         <FormField
           control={form.control}
           name='tenChuongTrinh'
@@ -87,12 +94,26 @@ const EditThongTinChungForm = ({ thongTinChung }: { thongTinChung: IThongTinChun
               <Label className='block text-sm font-medium text-gray-700'>Tên chương trình:</Label>
               <Input
                 {...field}
-                className='mt-1 w-full border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-700 text-gray-900'
+                className='mt-1 w-full border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-gray-900'
+              />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name='khoaTuyen'
+          render={({ field }) => (
+            <FormItem>
+              <Label className='block text-sm font-medium text-gray-700'>Khoa tuyển :</Label>
+              <Input
+                {...field}
+                className='mt-1 w-full border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-gray-900'
               />
             </FormItem>
           )}
         />
 
+        {/* Bậc */}
         <FormField
           control={form.control}
           name='bac'
@@ -100,7 +121,7 @@ const EditThongTinChungForm = ({ thongTinChung }: { thongTinChung: IThongTinChun
             <FormItem>
               <Label className='block text-sm font-medium text-gray-700'>Bậc:</Label>
               <Select onValueChange={field.onChange} value={field.value}>
-                <SelectTrigger className='w-full mt-1 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-700'>
+                <SelectTrigger className='w-full mt-1 border-gray-300 rounded-lg'>
                   <SelectValue placeholder='Chọn bậc' />
                 </SelectTrigger>
                 <SelectContent>
@@ -113,42 +134,45 @@ const EditThongTinChungForm = ({ thongTinChung }: { thongTinChung: IThongTinChun
           )}
         />
 
+        {/* Grid các trường thông tin khác */}
         <div className='grid grid-cols-4 gap-4'>
+          {/* Loại bằng */}
           <div>
             <Label className='block text-sm font-medium text-gray-700'>Loại bằng:</Label>
-            <Select defaultValue='ky-su'>
-              <SelectTrigger className='w-full mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-700'>
+            <Select onValueChange={(value) => form.setValue('loaiBang', value)}>
+              <SelectTrigger className='w-full mt-1 border border-gray-300 rounded-lg'>
                 <SelectValue placeholder='Chọn loại bằng' />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value='ky-su'>Kỹ sư</SelectItem>
-                <SelectItem value='cu-nhan'>Cử nhân</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
+          {/* Số tín chỉ */}
           <div>
             <Label className='block text-sm font-medium text-gray-700'>Số tín chỉ:</Label>
-            <input
-              type='text'
-              defaultValue='155'
-              className='mt-1 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-700 text-gray-900 px-3 py-2'
+            <Input
+              type='number'
+              {...form.register('soTinChi', { valueAsNumber: true })}
+              className='mt-1 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-gray-900'
             />
           </div>
 
+          {/* Khoa quản lý */}
           <div>
             <Label className='block text-sm font-medium text-gray-700'>Khoa quản lý:</Label>
-            <input
-              type='text'
-              defaultValue='CNTT'
-              className='mt-1 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-700 text-gray-900 px-3 py-2'
+            <Input
+              {...form.register('khoaQuanLy')}
+              className='mt-1 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-gray-900'
             />
           </div>
 
+          {/* Ngôn ngữ */}
           <div>
             <Label className='block text-sm font-medium text-gray-700'>Ngôn ngữ:</Label>
-            <Select defaultValue='tieng-viet'>
-              <SelectTrigger className='w-full mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-700'>
+            <Select onValueChange={(value) => form.setValue('ngonNgu', value)}>
+              <SelectTrigger className='w-full mt-1 border border-gray-300 rounded-lg'>
                 <SelectValue placeholder='Chọn ngôn ngữ' />
               </SelectTrigger>
               <SelectContent>
@@ -159,27 +183,33 @@ const EditThongTinChungForm = ({ thongTinChung }: { thongTinChung: IThongTinChun
           </div>
         </div>
 
+        {/* Loại hình đào tạo và Năm */}
         <div className='grid grid-cols-2 gap-4 mt-6'>
+          {/* Loại hình đào tạo */}
           <div>
             <Label className='block text-sm font-medium text-gray-700'>Loại hình đào tạo:</Label>
-            <Select defaultValue='chinh-quy'>
-              <SelectTrigger className='w-full mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-700'>
+            <Select onValueChange={(value) => form.setValue('loaiHinhDaoTao', value)}>
+              <SelectTrigger className='w-full mt-1 border border-gray-300 rounded-lg'>
                 <SelectValue placeholder='Chọn loại hình đào tạo' />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value='chinh-quy'>Chính quy</SelectItem>
-                <SelectItem value='lien-thong'>Liên thông</SelectItem>
-                <SelectItem value='tai-chuc'>Tại chức</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
+          {/* Năm */}
           <div>
             <Label className='block text-sm font-medium text-gray-700'>Năm:</Label>
             <div className='mt-2 flex space-x-4'>
               {years.map((year) => (
                 <div key={year} className='flex items-center'>
-                  <Checkbox defaultChecked={year === 2023} id={`year-${year}`} className='mr-2' />
+                  <Checkbox
+                    checked={selectedYears.includes(year)}
+                    onCheckedChange={(checked) => handleYearChange(year, Boolean(checked))}
+                    id={`year-${year}`}
+                    className='mr-2'
+                  />
                   <label htmlFor={`year-${year}`} className='text-gray-700'>
                     {year}
                   </label>
@@ -188,10 +218,12 @@ const EditThongTinChungForm = ({ thongTinChung }: { thongTinChung: IThongTinChun
             </div>
           </div>
         </div>
-        <Button className='w-full mt-4 cursor-pointer bg-blue-800' disabled={isPending}>
-          {isPending ? 'Đang xử lý...' : 'Sửa'}
+
+        {/* Submit */}
+        <Button className='w-full mt-4' type='submit'>
+          Thêm
         </Button>
       </form>
-    </Form >
+    </Form>
   );
 };

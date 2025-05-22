@@ -1,15 +1,15 @@
-import { deleteThongTinChung, editThongTinChung } from '@/lib/apis/CourseApi';
+import { deleteKeHoachDayHocAPI, editThongTinChung } from '@/lib/apis/CourseApi';
 import { IThongTinChungDataType } from '@/lib/apis/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-export const useDeleteThongTinChung = () => {
+export const useDeleteKeHoachDayHoc = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationKey: ['delete-thong-tin-chung'],
+    mutationKey: ['delete-ke-hoach-day-hoc'],
     mutationFn: async (idThongTin: number) => {
       try {
-        const data = await deleteThongTinChung({ idThongTin });
+        const data = await deleteKeHoachDayHocAPI(idThongTin);
         return data;
       } catch (error) {
         console.log(error);
@@ -25,7 +25,7 @@ export const useDeleteThongTinChung = () => {
   return mutation;
 };
 
-export const useEditThongTinChung = () => {
+export const useEditKeHoachDayHoc = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -47,3 +47,5 @@ export const useEditThongTinChung = () => {
 
   return mutation;
 };
+
+export const useAddKeHoachDayHOc = () => {};

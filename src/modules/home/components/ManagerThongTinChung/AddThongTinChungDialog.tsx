@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Form, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,20 +17,36 @@ import { useAddThongTinChungMutation } from '../TrainingProgram/components/mutat
 import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 
-export default function AddThongTinChungDialog() {
+export default function AddThongTinChungDialog({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
+  const handleCloseDialog = (isOpen: boolean) => {
+    if (!isOpen) {
+      onClose();
+    }
+  };
+
   return (
+<<<<<<< HEAD
+    <Dialog open={open} onOpenChange={handleCloseDialog}>
+=======
     <Dialog>
       <DialogTrigger asChild>
         <Button className=' cursor-pointer bg-blue-800'>Thêm thông tin chung</Button>
       </DialogTrigger>
+>>>>>>> 5d1f1e2245ba6402f53fc25438cbeca33823d71d
       <DialogContent className='max-w-3xl w-3xl min-w-3xl '>
-        <AddThongTinChungForm />
+        <AddThongTinChungForm onClose={onClose} />
       </DialogContent>
     </Dialog>
   );
 }
 
-const AddThongTinChungForm = () => {
+const AddThongTinChungForm = ({ onClose }: { onClose: () => void }) => {
   const years = [2020, 2021, 2022, 2023];
 
   const { mutate, isPending } = useAddThongTinChungMutation();
@@ -62,6 +78,21 @@ const AddThongTinChungForm = () => {
     form.setValue('thoiGian', updatedYears.length.toString());
   };
 
+<<<<<<< HEAD
+  const handleThemChuongTrinh = (value: IThongTinChungDataType) => {
+    mutate(
+      {
+        ...value,
+        thoiGian: selectedYears.length.toString(),
+      },
+      {
+        onSuccess: () => {
+          onClose();
+        },
+      },
+    );
+  };
+=======
   const handleThemChuongTrinh = useCallback((value: IThongTinChungDataType) => {
     if (isSubmitting || isToastVisible) return;
 
@@ -93,6 +124,7 @@ const AddThongTinChungForm = () => {
       }
     });
   }, [isSubmitting, isToastVisible, mutate, selectedYears.length, form]);
+>>>>>>> 5d1f1e2245ba6402f53fc25438cbeca33823d71d
 
   return (
     <Form {...form}>

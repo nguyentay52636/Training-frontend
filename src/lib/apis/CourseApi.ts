@@ -1,6 +1,6 @@
 import { data } from 'react-router-dom';
 import baseApi from './baseApi';
-import { CourseType, IThongTinChungDataType } from './types';
+import { CourseType, IKeHoachDayHocDataType, IThongTinChungDataType } from './types';
 
 // Read operations
 export const getAllCourse = async () => {
@@ -53,19 +53,22 @@ export const createCourse = async ({
 };
 
 // Update operation
-export const updateCourse = async (id: number, {
-  maHP,
-  tenHP,
-  soTinChi,
-  soTietLyThuyet,
-  soTietThucHanh,
-  soTietThucTap,
-  loaiHocPhan,
-  tongSoTiet,
-  heSoHocPhan,
-}: CourseType) => {
+export const updateCourse = async (
+  id: number,
+  {
+    maHP,
+    tenHP,
+    soTinChi,
+    soTietLyThuyet,
+    soTietThucHanh,
+    soTietThucTap,
+    loaiHocPhan,
+    tongSoTiet,
+    heSoHocPhan,
+  }: CourseType,
+) => {
   try {
-    const updateCourse : CourseType = { 
+    const updateCourse: CourseType = {
       maHP,
       tenHP,
       soTinChi,
@@ -75,7 +78,7 @@ export const updateCourse = async (id: number, {
       loaiHocPhan,
       tongSoTiet,
       heSoHocPhan,
-    } 
+    };
     const { data } = await baseApi.put<CourseType>(`/hocphan/${id}`, updateCourse);
     return data;
   } catch (error) {
@@ -93,18 +96,19 @@ export const deleteCourse = async (id: number) => {
   }
 };
 
+export const getKeHoachDayHocByIdAPI = async (keHoachDayHocId: number) => {
+  try {
+    const { data } = await baseApi.get<IKeHoachDayHocDataType>('/kehoachdayhoc/' + keHoachDayHocId);
+    return data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
 export const getKeHoachDayHocAPI = async () => {
   try {
-    const { data } = await baseApi.get<
-      {
-        idChuyenNganh: number;
-        tenChuyenNganh: string;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        idHocKy: any[];
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        hocPhanList: any[];
-      }[]
-    >('/kehoachdayhoc');
+    const { data } = await baseApi.get<IKeHoachDayHocDataType[]>('/kehoachdayhoc');
     return data;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
@@ -115,6 +119,32 @@ export const getKeHoachDayHocAPI = async () => {
 export const addKeHoachDayHocAPI = async () => {
   try {
     const { data } = await baseApi.post('/kehoachdayhoc');
+    return data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+// Xóa kế hoạch dạy học
+export const deleteKeHoachDayHocAPI = async (id: number) => {
+  try {
+    const { data } = await baseApi.delete(`/kehoachdayhoc/${id}`);
+    return data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+// Cập nhật kế hoạch dạy học
+export const updateKeHoachDayHocAPI = async (
+  id: number,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  updatedData: any,
+) => {
+  try {
+    const { data } = await baseApi.put(`/kehoachdayhoc/${id}`, updatedData);
     return data;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
@@ -153,7 +183,7 @@ export const editThongTinChung = async ({
   idThongTin,
   newData,
 }: {
-  idThongTin: string;
+  idThongTin: number;
   newData: IThongTinChungDataType;
 }) => {
   try {

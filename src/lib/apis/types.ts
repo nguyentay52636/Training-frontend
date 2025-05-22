@@ -162,3 +162,30 @@ const roles: RoleOption[] = [
   { value: 1, label: 'Giảng viên' },
   { value: 2, label: 'Quản trị viên' },
 ];
+
+export interface IKeHoachDayHocDataType {
+  idChuyenNganh: number;
+  tenChuyenNganh: string;
+  idHocKy: number[];
+  hocKyList: HocKyList[];
+}
+
+export interface HocKyList {
+  idHocKy: number;
+  tenHocKy: string;
+  idHocPhan: number[];
+  hocPhanList: HocPhanList[];
+}
+
+export interface HocPhanList {
+  idHocPhan: number;
+  maHP: string;
+  tenHP: string;
+  soTinChi: number;
+  soTietLyThuyet: number;
+  soTietThucHanh: number;
+  soTietThucTap: number;
+  tongSoTiet: number;
+  loaiHocPhan: number;
+  heSoHocPhan: number;
+}
