@@ -113,7 +113,7 @@ const data = {
 
 
     {
-      title: "Cài đặt",
+    title: "Cài đặt",
       url: "/trangchu/cai-dat",
       icon: Settings,
       items: [

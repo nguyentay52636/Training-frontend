@@ -24,12 +24,7 @@ export default function BlocknowledgeActions({ blockKnowId }: BlocknowledgeActio
                     <DropdownMenuItem onClick={() => setOpen(true)}>
                         <Plus className="mr-2" /> Thêm
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <Pencil className="mr-2 text-blue-600 hover:text-blue-800" /> Chỉnh sửa
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <Trash2 className="mr-2 text-red-600 hover:text-red-800" /> Xoá
-                    </DropdownMenuItem>
+
                 </DropdownMenuContent>
             </DropdownMenu>
 

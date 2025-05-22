@@ -203,11 +203,11 @@ export default function NoiDungChuongTrinh() {
                                                     <TableCell className='text-center'>
                                                         <div className='flex justify-center'>
                                                             <BlocknowledgeActions blockKnowId={blockKnow.idKhoiKienThuc || 0} />
-                                                            <ActionsDeleteEditBlock
+                                                            {/* <ActionsDeleteEditBlock
                                                                 blockId={blockKnow.idKhoiKienThuc || 0}
                                                                 blockName={blockKnow.tenKhoiKienThuc || ''}
                                                                 onUpdateSuccess={handleUpdateSuccess}
-                                                            />
+                                                            /> */}
                                                         </div>
                                                     </TableCell>
                                                 </TableRow>

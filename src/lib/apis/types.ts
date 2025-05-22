@@ -7,6 +7,7 @@ export interface UserType {
   admin?: boolean;
   giangVien?: boolean;
   user?: boolean;
+  isLocked?: boolean;
 }
 export interface PointType {
   idCotDiem?: number;

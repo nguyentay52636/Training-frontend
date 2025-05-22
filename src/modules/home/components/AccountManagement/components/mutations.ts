@@ -63,3 +63,28 @@ export const useDeleteUserMutation = () => {
     },
   });
 };
+
+export const useLockUserMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (userID: number) => {
+      // Only update frontend state, no API call needed
+      return userID;
+    },
+    onSuccess: (userId) => {
+      queryClient.setQueryData<UserType[]>(['users'], (oldData) => {
+        if (!oldData) return [];
+        return oldData.map((user) => {
+          if (user.id === userId) {
+            return { ...user, isLocked: true };
+          }
+          return user;
+        });
+      });
+    },
+    onError: (error) => {
+      console.error('Error locking user:', error);
+    },
+  });
+};

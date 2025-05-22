@@ -56,7 +56,7 @@ export default function TableAccount({ data }: TableAccountProps) {
                 <TableCell className='py-4'>
                   <div className='flex gap-2'>
                     <EditUserDialog user={user} />
-                    <Button
+                    {/* <Button
                       variant='outline'
                       size='sm'
                       className='text-red-600 hover:text-red-700'
@@ -65,7 +65,7 @@ export default function TableAccount({ data }: TableAccountProps) {
                       }}
                     >
                       <Trash2 className='h-4 w-4' />
-                    </Button>
+                    </Button> */}
                   </div>
                 </TableCell>
               </TableRow>
