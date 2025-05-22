@@ -27,6 +27,12 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectValue,
+} from "@/components/ui/select";
 
 interface CourseType {
     idHocPhan?: number;
@@ -62,6 +68,8 @@ export default function TableCourse({ onRowClick, courseData = [], knowledgeId }
     const [selectedCourse, setSelectedCourse] = useState<CourseType | null>(null);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+    const [formData, setFormData] = useState<CourseType | null>(null);
+    const [courses, setCourses] = useState<CourseType[]>([]);
 
     useEffect(() => {
         const fetchCourses = async () => {
@@ -73,6 +81,7 @@ export default function TableCourse({ onRowClick, courseData = [], knowledgeId }
                 const data = await getKnowledgeById(knowledgeId);
                 if (data && data.hocPhanList) {
                     setLoadedCourses(data.hocPhanList);
+                    setCourses(data.hocPhanList);
                     console.log("Loaded courses:", data.hocPhanList);
                 }
             } catch (err) {

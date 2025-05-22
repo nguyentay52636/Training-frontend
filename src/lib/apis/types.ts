@@ -127,8 +127,23 @@ export interface ChuyenNganhType {
 
 export interface KeHoachMoNhomType {
   id?: number;
+  idHocPhan?: number;
   namHoc: string;
   soNhom: number;
+  hocKy: number;
+  soLuongSinhVien: number;
+  hocPhan?: {
+    idHocPhan: number;
+    maHP: string;
+    tenHP: string;
+    soTinChi: number;
+    soTietLyThuyet: number;
+    soTietThucHanh: number;
+    soTietThucTap: number;
+    tongSoTiet: number;
+    loaiHocPhan: number;
+    heSoHocPhan: number;
+  };
 }
 
 export interface LectureType {
