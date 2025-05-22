@@ -63,3 +63,12 @@ export const xoaHocPhanKhoiHocKy = async (idHocKy: number, idHocPhan: number) =>
     throw new Error(error as string);
   }
 };
+
+export const themHocKyVaoChuyenNganh = async (idChuyenNganh: number) => {
+  try {
+    const { data } = await baseApi.post<HocKyType>(`/kehoachdayhoc/${idChuyenNganh}/hocky`);
+    return data;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};

@@ -15,10 +15,18 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { dataHocPhan, HocPhan } from './dataHocPhanTest';
+import { useGetAllKeHoachDayHOcQuery } from './querys';
+import { toast } from 'react-toastify';
+import { useThemHocPhanVaoHocKy, useThemHocKyVaoChuyenNganh } from './mutation';
 
 export default function DiaLogAddSchedule() {
   const [selectedMaHP, setSelectedMaHP] = useState<string | null>(null);
   const [selectedCourses, setSelectedCourses] = useState<HocPhan[]>([]);
+  const [selectedChuyenNganh, setSelectedChuyenNganh] = useState<string | null>(null);
+  const [selectedHocKy, setSelectedHocKy] = useState<string | null>(null);
+  const { data: dataChuyenNganh } = useGetAllKeHoachDayHOcQuery();
+  const { mutate: themHocPhan, isPending: isAddingCourse } = useThemHocPhanVaoHocKy();
+  const { mutate: themHocKy, isPending: isAddingSemester } = useThemHocKyVaoChuyenNganh();
 
   // Handle adding course immediately when selected
   const handleSelectCourse = (value: string) => {
@@ -27,12 +35,71 @@ export default function DiaLogAddSchedule() {
       setSelectedCourses([...selectedCourses, hocPhan]);
       setSelectedMaHP(null); // Reset the course selection
     } else {
-      console.log('Học phần đã được chọn trước đó!');
+      toast.warning('Học phần đã được chọn trước đó!');
     }
   };
 
   const handleRemoveCourse = (maHP: string) => {
     setSelectedCourses(selectedCourses.filter((course) => course.maHP !== maHP));
+  };
+
+  const handleAddSemester = async () => {
+    if (!selectedChuyenNganh) {
+      toast.error('Vui lòng chọn chuyên ngành!');
+      return;
+    }
+
+    try {
+      await themHocKy(parseInt(selectedChuyenNganh));
+      toast.success('Thêm học kỳ vào chuyên ngành thành công!');
+    } catch (error) {
+      console.error('Error adding semester to major:', error);
+      toast.error('Có lỗi xảy ra khi thêm học kỳ vào chuyên ngành!');
+    }
+  };
+
+  const handleSave = async () => {
+    if (!selectedChuyenNganh) {
+      toast.error('Vui lòng chọn chuyên ngành!');
+      return;
+    }
+
+    if (!selectedHocKy) {
+      toast.error('Vui lòng chọn học kỳ!');
+      return;
+    }
+
+    if (selectedCourses.length === 0) {
+      toast.error('Vui lòng chọn ít nhất một học phần!');
+      return;
+    }
+
+    try {
+      // Add each selected course to the selected semester
+      for (const course of selectedCourses) {
+        await themHocPhan({
+          idHocKy: parseInt(selectedHocKy),
+          idHocPhan: parseInt(course.maHP)
+        });
+      }
+
+      toast.success('Thêm học phần vào học kỳ thành công!');
+      setSelectedCourses([]);
+      setSelectedHocKy(null);
+      setSelectedChuyenNganh(null);
+    } catch (error) {
+      console.error('Error adding courses to semester:', error);
+      toast.error('Có lỗi xảy ra khi thêm học phần vào học kỳ!');
+    }
+  };
+
+  // Get available semesters for selected major
+  const getAvailableSemesters = () => {
+    if (!selectedChuyenNganh || !dataChuyenNganh) return [];
+    const chuyenNganh = dataChuyenNganh.find(
+      (cn) => cn.idChuyenNganh.toString() === selectedChuyenNganh
+    );
+    return chuyenNganh?.hocKyList || [];
   };
 
   return (
@@ -48,18 +115,73 @@ export default function DiaLogAddSchedule() {
           <DialogTitle className='text-[1.8rem]'>Thêm học phần</DialogTitle>
         </DialogHeader>
 
-        <Select onValueChange={(value) => handleSelectCourse(value)}>
-          <SelectTrigger className='w-full mt-4 h-12 text-[1.1rem] text-black'>
-            <SelectValue placeholder='Chọn học phần' />
-          </SelectTrigger>
-          <SelectContent>
-            {dataHocPhan.map((hocPhan) => (
-              <SelectItem key={hocPhan.maHP} value={hocPhan.maHP}>
-                {hocPhan.tenHP} ({hocPhan.maHP})
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className='space-y-4'>
+          <div>
+            <label className='text-sm font-medium mb-2 block'>Chọn chuyên ngành</label>
+            <Select onValueChange={(value) => {
+              setSelectedChuyenNganh(value);
+              setSelectedHocKy(null); // Reset selected semester when major changes
+            }}>
+              <SelectTrigger className='w-full h-12 text-[1.1rem] text-black'>
+                <SelectValue placeholder='Chọn chuyên ngành' />
+              </SelectTrigger>
+              <SelectContent>
+                {dataChuyenNganh?.map((chuyenNganh) => (
+                  <SelectItem key={chuyenNganh.idChuyenNganh} value={chuyenNganh.idChuyenNganh.toString()}>
+                    {chuyenNganh.tenChuyenNganh}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className='flex items-center gap-4'>
+            <div className='flex-1'>
+              <label className='text-sm font-medium mb-2 block'>Chọn học kỳ</label>
+              <Select
+                onValueChange={(value) => setSelectedHocKy(value)}
+                disabled={!selectedChuyenNganh}
+              >
+                <SelectTrigger className='w-full h-12 text-[1.1rem] text-black'>
+                  <SelectValue placeholder='Chọn học kỳ' />
+                </SelectTrigger>
+                <SelectContent>
+                  {getAvailableSemesters().map((hocKy) => (
+                    <SelectItem key={hocKy.idHocKy} value={hocKy.idHocKy.toString()}>
+                      Học kỳ {hocKy.idHocKy}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <Button
+              onClick={handleAddSemester}
+              disabled={!selectedChuyenNganh || isAddingSemester}
+              className='mt-6 bg-green-600 hover:bg-green-700'
+            >
+              {isAddingSemester ? 'Đang thêm...' : 'Thêm học kỳ'}
+            </Button>
+          </div>
+
+          <div>
+            <label className='text-sm font-medium mb-2 block'>Chọn học phần</label>
+            <Select
+              onValueChange={(value) => handleSelectCourse(value)}
+              disabled={!selectedHocKy}
+            >
+              <SelectTrigger className='w-full h-12 text-[1.1rem] text-black'>
+                <SelectValue placeholder='Chọn học phần' />
+              </SelectTrigger>
+              <SelectContent>
+                {dataHocPhan.map((hocPhan) => (
+                  <SelectItem key={hocPhan.maHP} value={hocPhan.maHP}>
+                    {hocPhan.tenHP} ({hocPhan.maHP})
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
 
         {/* Course Section */}
         {selectedCourses.length > 0 && (
@@ -87,13 +209,15 @@ export default function DiaLogAddSchedule() {
             </div>
           </div>
         )}
+
         <div className='flex justify-end mt-4'>
           <Button
-            onClick={() => console.log(selectedCourses[0])}
+            onClick={handleSave}
             variant='default'
             className='cursor-pointer px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700'
+            disabled={isAddingCourse}
           >
-            Lưu
+            {isAddingCourse ? 'Đang lưu...' : 'Lưu'}
           </Button>
         </div>
       </DialogContent>
